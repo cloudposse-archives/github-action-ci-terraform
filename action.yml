@@ -13,7 +13,8 @@ runs:
     - name: "Checkout commit"
       uses: actions/checkout@v2
     - name: "Handle common commands"
-      uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
+      uses: peter-evans/slash-command-dispatch@v2.3.0
+      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
       with:
         token: ${{ inputs.token }}
         reaction-token: ${{ inputs.reaction-token }}
@@ -22,7 +23,8 @@ runs:
         permission: triage
         issue-type: pull-request
     - name: "Run tests"
-      uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
+      uses: peter-evans/slash-command-dispatch@v2.3.0
+      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
       with:
         token: ${{ inputs.token }}
         reaction-token: ${{ inputs.reaction-token }}
