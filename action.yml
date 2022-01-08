@@ -1,5 +1,12 @@
 name: 'terraform-ci'
 description: 'Run chatops github actions'
+inputs:
+  token:
+    description: "public repo access token"
+    required: true
+  reaction-token:
+    description: "github token"
+    reuired: true
 runs:
   using: "composite"
   steps:
@@ -8,8 +15,8 @@ runs:
     - name: "Handle common commands"
       uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
       with:
-        token: ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
-        reaction-token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.token }}
+        reaction-token: ${{ inputs.reaction-token }}
         repository: cloudposse/actions
         commands: rebuild-readme, terraform-fmt
         permission: triage
@@ -17,8 +24,8 @@ runs:
     - name: "Run tests"
       uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
       with:
-        token: ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
-        reaction-token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ inputs.token }}
+        reaction-token: ${{ inputs.reaction-token }}
         repository: cloudposse/actions
         commands: test
         permission: triage
