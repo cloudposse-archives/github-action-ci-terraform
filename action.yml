@@ -17,18 +17,17 @@ runs:
       with:
         token: ${{ inputs.token }}
         reaction-token: ${{ inputs.reaction-token }}
-        reactions: false
         repository: cloudposse/actions
         commands: rebuild-readme, terraform-fmt
         permission: triage
         issue-type: pull-request
-#    - name: "Run tests"
-#      uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
-#      with:
-#        token: ${{ inputs.token }}
-#        reaction-token: ${{ inputs.reaction-token }}
-#        repository: cloudposse/actions
-#        commands: test
-#        permission: triage
-#        issue-type: pull-request
-#        reactions: false
+    - name: "Run tests"
+      uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
+      with:
+        token: ${{ inputs.token }}
+        reaction-token: ${{ inputs.reaction-token }}
+        repository: cloudposse/actions
+        commands: test
+        permission: triage
+        issue-type: pull-request
+        reactions: false
