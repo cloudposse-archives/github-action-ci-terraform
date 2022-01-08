@@ -17,6 +17,7 @@ runs:
       with:
         token: ${{ inputs.token }}
         reaction-token: ${{ inputs.reaction-token }}
+        reactions: false
         repository: cloudposse/actions
         commands: rebuild-readme, terraform-fmt
         permission: triage
