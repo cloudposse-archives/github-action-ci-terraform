@@ -9,27 +9,42 @@ inputs:
     reuired: true
 runs:
   using: "composite"
+#  using: 'docker'
+#  image: 'cloudposse/test-harness:latest'
   steps:
     - name: "Checkout commit"
       uses: actions/checkout@v2
-    - name: "Handle common commands"
-      uses: peter-evans/slash-command-dispatch@v2.3.0
-      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
+    - name: "Test /test"
+      if: ${{ github.event.comment.body == '/test'}}
+      uses: actions/github-script@v4
       with:
-        token: ${{ inputs.token }}
-        reaction-token: ${{ inputs.reaction-token }}
-        repository: cloudposse/actions
-        commands: rebuild-readme, terraform-fmt
-        permission: triage
-        issue-type: pull-request
-    - name: "Run tests"
-      uses: peter-evans/slash-command-dispatch@v2.3.0
-      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
-      with:
-        token: ${{ inputs.token }}
-        reaction-token: ${{ inputs.reaction-token }}
-        repository: cloudposse/actions
-        commands: test
-        permission: triage
-        issue-type: pull-request
-        reactions: false
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: context.payload.comment.id,
+            content: "+1",
+          });
+
+#    - name: "Handle common commands"
+#      uses: peter-evans/slash-command-dispatch@v2.3.0
+#      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
+#      with:
+#        token: ${{ inputs.token }}
+#        reaction-token: ${{ inputs.reaction-token }}
+#        repository: cloudposse/actions
+#        commands: rebuild-readme, terraform-fmt
+#        permission: triage
+#        issue-type: pull-request
+#    - name: "Run tests"
+#      uses: peter-evans/slash-command-dispatch@v2.3.0
+#      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
+#      with:
+#        token: ${{ inputs.token }}
+#        reaction-token: ${{ inputs.reaction-token }}
+#        repository: cloudposse/actions
+#        commands: test
+#        permission: triage
+#        issue-type: pull-request
+#        reactions: false
