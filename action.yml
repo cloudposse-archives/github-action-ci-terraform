@@ -14,19 +14,35 @@ runs:
   steps:
     - name: "Checkout commit"
       uses: actions/checkout@v2
-    - name: "Test /test"
-      if: ${{ github.event.comment.body == '/test'}}
+    - name: "Test /test bats"
+      if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
       env:
         MAKE_INCLUDES: Makefile
         TF_PLUGIN_CACHE_DIR: /tmp
       with:
-        entrypoint: |
-          make -C test/ clean init &&
-          make -C test/ module &&
-          make -C test/ examples/complete
-    - name: "Record successful /test result"
-      if: ${{ github.event.comment.body == '/test' && success() }}
+        entrypoint: make
+        args: "-C test/ clean init"
+    - name: "Test /test bats"
+      if: ${{ github.event.comment.body == '/test bats' and success() }}
+      uses: docker://cloudposse/test-harness:latest
+      env:
+        MAKE_INCLUDES: Makefile
+        TF_PLUGIN_CACHE_DIR: /tmp
+      with:
+        entrypoint: make
+        args: "-C test/ module"
+    - name: "Test /test bats"
+      if: ${{ github.event.comment.body == '/test bats' and success() }}
+      uses: docker://cloudposse/test-harness:latest
+      env:
+        MAKE_INCLUDES: Makefile
+        TF_PLUGIN_CACHE_DIR: /tmp
+      with:
+        entrypoint: make
+        args: "-C test/ examples/complete"
+    - name: "Record successful '/test bats' result"
+      if: ${{ github.event.comment.body == '/test bats' && success() }}
       uses: actions/github-script@v4
       with:
         script: |
@@ -37,8 +53,8 @@ runs:
             comment_id: context.payload.comment.id,
             content: "+1",
           });
-    - name: "Record unsuccessful /test result"
-      if: ${{ github.event.comment.body == '/test' && failure() }}
+    - name: "Record unsuccessful '/test bats' result"
+      if: ${{ github.event.comment.body == '/test bats' && failure() }}
       uses: actions/github-script@v4
       with:
         script: |
