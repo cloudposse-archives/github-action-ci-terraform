@@ -16,6 +16,17 @@ runs:
       uses: actions/checkout@v2
     - name: "Test /test"
       if: ${{ github.event.comment.body == '/test'}}
+      uses: docker://cloudposse/test-harness:latest
+      env:
+        MAKE_INCLUDES: Makefile
+        TF_PLUGIN_CACHE_DIR: /tmp
+      with:
+        entrypoint: |
+          make -C test/ clean init &&
+          make -C test/ module &&
+          make -C test/ examples/complete
+    - name: "Record successful /test result"
+      if: ${{ github.event.comment.body == '/test' && success() }}
       uses: actions/github-script@v4
       with:
         script: |
@@ -25,6 +36,18 @@ runs:
             repo,
             comment_id: context.payload.comment.id,
             content: "+1",
+          });
+    - name: "Record unsuccessful /test result"
+      if: ${{ github.event.comment.body == '/test' && failure() }}
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: context.payload.comment.id,
+            content: "-1",
           });
 
 #    - name: "Handle common commands"
