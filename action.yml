@@ -24,7 +24,7 @@ runs:
         entrypoint: make
         args: "-C test/ clean init"
     - name: "Test /test bats"
-      if: ${{ github.event.comment.body == '/test bats' and success() }}
+      if: ${{ github.event.comment.body == '/test bats' && success() }}
       uses: docker://cloudposse/test-harness:latest
       env:
         MAKE_INCLUDES: Makefile
@@ -33,7 +33,7 @@ runs:
         entrypoint: make
         args: "-C test/ module"
     - name: "Test /test bats"
-      if: ${{ github.event.comment.body == '/test bats' and success() }}
+      if: ${{ github.event.comment.body == '/test bats' && success() }}
       uses: docker://cloudposse/test-harness:latest
       env:
         MAKE_INCLUDES: Makefile
