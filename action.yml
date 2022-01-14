@@ -14,24 +14,7 @@ runs:
   steps:
     - name: "Checkout commit"
       uses: actions/checkout@v2
-    - name: "Probe test-harness1"
-      if: ${{ github.event.comment.body == '/test bats'}}
-      uses: docker://cloudposse/test-harness:latest
-      env:
-        MAKE_INCLUDES: Makefile
-        TF_PLUGIN_CACHE_DIR: /tmp
-      with:
-        entrypoint: pwd
-    - name: "Probe test-harness2"
-      if: ${{ github.event.comment.body == '/test bats'}}
-      uses: docker://cloudposse/test-harness:latest
-      env:
-        MAKE_INCLUDES: Makefile
-        TF_PLUGIN_CACHE_DIR: /tmp
-      with:
-        entrypoint: ls
-        args: "-lhtra"
-    - name: "Test /test bats"
+    - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
       env:
@@ -40,7 +23,7 @@ runs:
       with:
         entrypoint: make
         args: "-C test/ clean init"
-    - name: "Test /test bats"
+    - name: "Execute /test bats 2"
       if: ${{ github.event.comment.body == '/test bats' && success() }}
       uses: docker://cloudposse/test-harness:latest
       env:
@@ -49,7 +32,7 @@ runs:
       with:
         entrypoint: make
         args: "-C test/ module"
-    - name: "Test /test bats"
+    - name: "Execute /test bats 3"
       if: ${{ github.event.comment.body == '/test bats' && success() }}
       uses: docker://cloudposse/test-harness:latest
       env:
