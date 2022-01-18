@@ -10,6 +10,9 @@ inputs:
   test-name:
     description: "name of the github action that will be calling this action as a step"
     required: true
+  sha:
+    description: "SHA hash of the commit whose status will be modified"
+    required: true
 runs:
   using: "composite"
 #  using: 'docker'
