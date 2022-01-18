@@ -6,7 +6,7 @@ inputs:
     required: true
   reaction-token:
     description: "github token"
-    reuired: true
+    required: true
 runs:
   using: "composite"
 #  using: 'docker'
@@ -14,6 +14,27 @@ runs:
   steps:
     - name: "Checkout commit"
       uses: actions/checkout@v2
+    - name: "Acknowledge '/test bats'"
+      if: ${{ github.event.comment.body == '/test bats' }}
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: context.payload.comment.id,
+            content: "+1",
+          });
+    - name: "Record pending '/test bats' result"
+      if: ${{ github.event.comment.body == '/test bats' }}
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{secrets.GITHUB_TOKEN}}
+        context: 'tests-bats'
+        description: 'Computing...'
+        state: 'pending'
+        sha: ${{github.event.pull_request.head.sha || github.sha}}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
@@ -43,28 +64,47 @@ runs:
         args: "-C test/ examples/complete"
     - name: "Record successful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && success() }}
-      uses: actions/github-script@v4
+      uses: Sibz/github-status-action@v1
       with:
-        script: |
-          const {owner, repo} = context.issue
-          github.reactions.createForIssueComment({
-            owner,
-            repo,
-            comment_id: context.payload.comment.id,
-            content: "+1",
-          });
+        authToken: ${{secrets.GITHUB_TOKEN}}
+        context: 'tests-bats'
+        description: 'Passed'
+        state: 'success'
+        sha: ${{github.event.pull_request.head.sha || github.sha}}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && failure() }}
-      uses: actions/github-script@v4
+      uses: Sibz/github-status-action@v1
       with:
-        script: |
-          const {owner, repo} = context.issue
-          github.reactions.createForIssueComment({
-            owner,
-            repo,
-            comment_id: context.payload.comment.id,
-            content: "-1",
-          });
+        authToken: ${{secrets.GITHUB_TOKEN}}
+        context: 'tests-bats'
+        description: 'Failed'
+        state: 'failure'
+        sha: ${{github.event.pull_request.head.sha || github.sha}}
+
+#    - name: "Record successful '/test bats' result"
+#      if: ${{ github.event.comment.body == '/test bats' && success() }}
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.checks.update({
+#            owner,
+#            repo,
+#            ${{ inputs.check_run_id }},
+#            status: "in_progress"
+#          });
+#    - name: "Record unsuccessful '/test bats' result"
+#      if: ${{ github.event.comment.body == '/test bats' && failure() }}
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.reactions.createForIssueComment({
+#            owner,
+#            repo,
+#            comment_id: context.payload.comment.id,
+#            content: "-1",
+#          });
 
 #    - name: "Handle common commands"
 #      uses: peter-evans/slash-command-dispatch@v2.3.0
