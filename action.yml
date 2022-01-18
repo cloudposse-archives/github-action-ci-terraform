@@ -34,10 +34,10 @@ runs:
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.reaction-token }}
-        context: 'tests-bats'
+        context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        sha: ${{github.event.pull_request.head.sha || github.sha}}
+        sha: ${{ inputs.sha }}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
@@ -70,19 +70,19 @@ runs:
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.reaction-token }}
-        context: 'tests-bats'
+        context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
-        sha: ${{github.event.pull_request.head.sha || github.sha}}
+        sha: ${{ inputs.sha }}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && failure() }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.reaction-token }}
-        context: 'tests-bats'
+        context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
-        sha: ${{github.event.pull_request.head.sha || github.sha}}
+        sha: ${{ inputs.sha }}
 
 #    - name: "Record successful '/test bats' result"
 #      if: ${{ github.event.comment.body == '/test bats' && success() }}
