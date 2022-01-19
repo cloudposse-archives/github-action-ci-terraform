@@ -20,6 +20,15 @@ runs:
   steps:
     - name: "Checkout commit"
       uses: actions/checkout@v2
+    - name: "Get SHA of pull request branch"
+      id: pr-sha
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const prUrl = context.payload.issue.pull_request.url;
+          const prDetails = await octokit.request(`GET ${prUrl}`);
+          const headSha = prDetails.data.head.sha;
+          return headSha;
     - name: "Acknowledge '/test bats'"
       if: ${{ github.event.comment.body == '/test bats' }}
       uses: actions/github-script@v4
@@ -40,7 +49,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        sha: ${{ inputs.sha }}
+        sha: ${{ steps.pr-sha.outputs.result }}
+        #sha: ${{ inputs.sha }}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
@@ -76,7 +86,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
-        sha: ${{ inputs.sha }}
+        sha: ${{ steps.pr-sha.outputs.result }}
+        #sha: ${{ inputs.sha }}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && failure() }}
       uses: Sibz/github-status-action@v1
@@ -85,7 +96,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
-        sha: ${{ inputs.sha }}
+        sha: ${{ steps.pr-sha.outputs.result }}
+        #sha: ${{ inputs.sha }}
 
 #    - name: "Record successful '/test bats' result"
 #      if: ${{ github.event.comment.body == '/test bats' && success() }}
