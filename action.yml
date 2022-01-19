@@ -29,9 +29,10 @@ runs:
         script: |
           const prUrl = context.payload.issue.pull_request.url;
           const prDetails = await github.request(`GET ${prUrl}`);
-          const headSha = prDetails.data.head.sha;
-          let cleanSha = headSha.replace(/["]+/g, '');
+          let headSha = prDetails.data.head.sha;
+          let cleanSha = headSha.replace(/^"(.*)"$/, '$1');
           return cleanSha;
+      #let cleanSha = headSha.replace(/["]+/g, '');
     - name: "Debug"
       shell: bash
       run: |
