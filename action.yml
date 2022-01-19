@@ -18,8 +18,6 @@ runs:
 #  using: 'docker'
 #  image: 'cloudposse/test-harness:latest'
   steps:
-    - name: "Checkout commit"
-      uses: actions/checkout@v2
     - name: "Get SHA of pull request branch"
       id: pr-sha
       uses: actions/github-script@v4
@@ -29,6 +27,10 @@ runs:
           const prDetails = await github.request(`GET ${prUrl}`);
           const headSha = prDetails.data.head.sha;
           return headSha;
+    - name: "Checkout commit"
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ steps.pr-sha.outputs.result }}
     - name: "Acknowledge '/test bats'"
       if: ${{ github.event.comment.body == '/test bats' }}
       uses: actions/github-script@v4
