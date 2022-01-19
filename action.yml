@@ -33,6 +33,7 @@ runs:
           let cleanSha = headSha.replace(/["]+/g, '');
           return cleanSha;
     - name: "Debug"
+      shell: bash
       run: |
         echo ${{ steps.pr-sha.outputs.result }}
     - name: "Acknowledge '/test bats'"
