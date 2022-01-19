@@ -34,9 +34,12 @@ runs:
           return cleanSha;
       #let cleanSha = headSha.replace(/["]+/g, '');
     - name: "Debug"
+      id: debug
       shell: bash
       run: |
-        echo ${{ steps.pr-sha.outputs.result }}
+        SHA=$(echo ${{ steps.pr-sha.outputs.result }} | tr -d '"')
+        echo $SHA
+        echo "::set-output name=clean-sha::$SHA"
     - name: "Acknowledge '/test bats'"
       if: ${{ github.event.comment.body == '/test bats' }}
       uses: actions/github-script@v4
@@ -57,7 +60,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        sha: ${{ steps.pr-sha.outputs.result }}
+        sha: ${{ steps.debug.outputs.clean-sha }}
+        #sha: ${{ steps.pr-sha.outputs.result }}
         #sha: ${{ inputs.sha }}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
