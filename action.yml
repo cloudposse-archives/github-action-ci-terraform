@@ -30,11 +30,12 @@ runs:
           const prUrl = context.payload.issue.pull_request.url;
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
-          let cleanSha = headSha.replace(/^"(.*)"$/, '$1');
-          return cleanSha;
+          return headSha;
       #let cleanSha = headSha.replace(/["]+/g, '');
-    - name: "Debug"
-      id: debug
+      #let cleanSha = headSha.replace(/^"(.*)"$/, '$1');
+      #return cleanSha;
+    - name: "Remove quotes from pr-sha"
+      id: pr-sha-no-quotes
       shell: bash
       run: |
         SHA=$(echo ${{ steps.pr-sha.outputs.result }} | tr -d '"')
@@ -60,7 +61,7 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        sha: ${{ steps.debug.outputs.clean-sha }}
+        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
         #sha: ${{ steps.pr-sha.outputs.result }}
         #sha: ${{ inputs.sha }}
     - name: "Execute /test bats 1"
@@ -98,7 +99,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
-        sha: ${{ steps.pr-sha.outputs.result }}
+        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        #sha: ${{ steps.pr-sha.outputs.result }}
         #sha: ${{ inputs.sha }}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && failure() }}
@@ -108,7 +110,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
-        sha: ${{ steps.pr-sha.outputs.result }}
+        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        #sha: ${{ steps.pr-sha.outputs.result }}
         #sha: ${{ inputs.sha }}
 
 #    - name: "Record successful '/test bats' result"
