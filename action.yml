@@ -32,6 +32,9 @@ runs:
           const headSha = prDetails.data.head.sha;
           let cleanSha = headSha.replace(/["]+/g, '');
           return cleanSha;
+    - name: "Debug"
+      run: |
+        echo ${{ steps.pr-sha.outputs.result }}
     - name: "Acknowledge '/test bats'"
       if: ${{ github.event.comment.body == '/test bats' }}
       uses: actions/github-script@v4
