@@ -26,7 +26,7 @@ runs:
       with:
         script: |
           const prUrl = context.payload.issue.pull_request.url;
-          const prDetails = await octokit.request(`GET ${prUrl}`);
+          const prDetails = await github.request(`GET ${prUrl}`);
           const headSha = prDetails.data.head.sha;
           return headSha;
     - name: "Acknowledge '/test bats'"
