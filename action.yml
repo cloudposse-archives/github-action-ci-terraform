@@ -16,8 +16,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Checkout commit"
-      uses: actions/checkout@v2
     - name: "Get SHA of pull request branch"
       id: pr-sha
       uses: actions/github-script@v4
@@ -34,6 +32,10 @@ runs:
         SHA=$(echo ${{ steps.pr-sha.outputs.result }} | tr -d '"')
         echo $SHA
         echo "::set-output name=clean-sha::$SHA"
+    - name: "Checkout commit"
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
     - name: "Acknowledge '/test bats'"
       if: ${{ github.event.comment.body == '/test bats' }}
       uses: actions/github-script@v4
@@ -46,15 +48,15 @@ runs:
             comment_id: context.payload.comment.id,
             content: "+1",
           });
-    - name: "Record pending '/test bats' result"
-      if: ${{ github.event.comment.body == '/test bats' }}
-      uses: Sibz/github-status-action@v1
-      with:
-        authToken: ${{ inputs.reaction-token }}
-        context: ${{ inputs.test-name }}
-        description: 'Computing...'
-        state: 'pending'
-        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+#    - name: "Record pending '/test bats' result"
+#      if: ${{ github.event.comment.body == '/test bats' }}
+#      uses: Sibz/github-status-action@v1
+#      with:
+#        authToken: ${{ inputs.reaction-token }}
+#        context: ${{ inputs.test-name }}
+#        description: 'Computing...'
+#        state: 'pending'
+#        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
@@ -82,24 +84,24 @@ runs:
       with:
         entrypoint: make
         args: "-C test/ examples/complete"
-    - name: "Record successful '/test bats' result"
-      if: ${{ github.event.comment.body == '/test bats' && success() }}
-      uses: Sibz/github-status-action@v1
-      with:
-        authToken: ${{ inputs.reaction-token }}
-        context: ${{ inputs.test-name }}
-        description: 'Passed'
-        state: 'success'
-        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
-    - name: "Record unsuccessful '/test bats' result"
-      if: ${{ github.event.comment.body == '/test bats' && failure() }}
-      uses: Sibz/github-status-action@v1
-      with:
-        authToken: ${{ inputs.reaction-token }}
-        context: ${{ inputs.test-name }}
-        description: 'Failed'
-        state: 'failure'
-        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+#    - name: "Record successful '/test bats' result"
+#      if: ${{ github.event.comment.body == '/test bats' && success() }}
+#      uses: Sibz/github-status-action@v1
+#      with:
+#        authToken: ${{ inputs.reaction-token }}
+#        context: ${{ inputs.test-name }}
+#        description: 'Passed'
+#        state: 'success'
+#        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+#    - name: "Record unsuccessful '/test bats' result"
+#      if: ${{ github.event.comment.body == '/test bats' && failure() }}
+#      uses: Sibz/github-status-action@v1
+#      with:
+#        authToken: ${{ inputs.reaction-token }}
+#        context: ${{ inputs.test-name }}
+#        description: 'Failed'
+#        state: 'failure'
+#        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
 
 #    - name: "Handle common commands"
 #      uses: peter-evans/slash-command-dispatch@v2.3.0
