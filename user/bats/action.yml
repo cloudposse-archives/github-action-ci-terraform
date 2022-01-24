@@ -31,7 +31,7 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        sha: ${{ inputs.sha }}
     - name: "Execute /test bats 1"
       uses: docker://cloudposse/test-harness:latest
       env:
@@ -66,7 +66,7 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
-        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        sha: ${{ inputs.sha }}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ failure() }}
       uses: Sibz/github-status-action@v1
@@ -75,4 +75,4 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
-        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        sha: ${{ inputs.sha }}
