@@ -26,7 +26,7 @@ runs:
           core.setOutput("pr-sha", headSha);
     - name: "/test bats"
       if: ${{ github.event.comment.body == '/test bats' }}
-      uses: cloudposse/github-action-terraform-ci/bats@main
+      uses: cloudposse/github-action-terraform-ci/user/bats@main
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}
