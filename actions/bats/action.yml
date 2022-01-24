@@ -12,6 +12,9 @@ inputs:
     required: true
 runs:
   using: "composite"
+  env:
+    MAKE_INCLUDES: Makefile
+    TF_PLUGIN_CACHE_DIR: /tmp
   steps:
     - name: "Acknowledge '/test bats'"
       uses: actions/github-script@v4
@@ -24,6 +27,7 @@ runs:
             comment_id: context.payload.comment.id,
             content: "+1",
           });
+
     - name: "Record pending '/test bats' result"
       uses: Sibz/github-status-action@v1
       with:
@@ -32,41 +36,26 @@ runs:
         description: 'Computing...'
         state: 'pending'
         sha: ${{ inputs.sha }}
-    - name: "Execute /test bats 1"
+
+    - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
-      env:
-        MAKE_INCLUDES: Makefile
-        TF_PLUGIN_CACHE_DIR: /tmp
       with:
         args: "-C test/ clean init"
-    - name: "Execute /test bats 2"
+
+    - name: "Test the module"
       uses: docker://cloudposse/test-harness:latest
-      env:
-        MAKE_INCLUDES: Makefile
-        TF_PLUGIN_CACHE_DIR: /tmp
       with:
         args: "-C test/ module"
-    - name: "Execute /test bats 3"
+
+    - name: "Test examples/complete"
       uses: docker://cloudposse/test-harness:latest
-      env:
-        MAKE_INCLUDES: Makefile
-        TF_PLUGIN_CACHE_DIR: /tmp
       with:
         args: "-C test/ examples/complete"
-    - name: "Record successful '/test bats' result"
-      uses: Sibz/github-status-action@v1
+
+    - name: "Record status"
+      uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
-        authToken: ${{ inputs.token }}
-        context: ${{ inputs.test-name }}
-        description: 'Passed'
-        state: 'success'
-        sha: ${{ inputs.sha }}
-    - name: "Record unsuccessful '/test bats' result"
-      if: failure()
-      uses: Sibz/github-status-action@v1
-      with:
-        authToken: ${{ inputs.token }}
-        context: ${{ inputs.test-name }}
-        description: 'Failed'
-        state: 'failure'
-        sha: ${{ inputs.sha }}
+        token: ${{ inputs.token }}
+        test-name: "tests-bats"
+        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        status: ${{ github.action_status }}

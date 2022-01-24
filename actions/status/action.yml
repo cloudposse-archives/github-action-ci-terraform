@@ -1,0 +1,45 @@
+name: 'terraform-ci-status'
+description: 'Update the status for a given commit'
+inputs:
+  token:
+    description: "github token"
+    required: true
+  test-name:
+    description: "name of the github action status check that will be calling this action as a step"
+    required: true
+  sha:
+    description: "SHA hash of the commit whose status will be modified"
+    required: true
+  status:
+    description: "Result of status check"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Record successful result"
+      if: inputs.status == "passed"
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: ${{ inputs.test-name }}
+        description: 'Passed'
+        state: 'success'
+        sha: ${{ inputs.sha }}
+    - name: "Record canceled result"
+      if: inputs.status == "canceled"
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: ${{ inputs.test-name }}
+        description: 'Canceled'
+        state: 'canceled'
+        sha: ${{ inputs.sha }}
+    - name: "Record unsuccessful result"
+      if: inputs.status == "failure"
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: ${{ inputs.test-name }}
+        description: 'Failed'
+        state: 'failure'
+        sha: ${{ inputs.sha }}
