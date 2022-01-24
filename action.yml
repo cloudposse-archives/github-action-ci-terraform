@@ -26,7 +26,7 @@ runs:
           const prUrl = context.payload.issue.pull_request.url;
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
-          github.setOutput("pr-sha", headSha);
+          core.setOutput("pr-sha", headSha);
           return headSha;
     - name: "Remove quotes from pr-sha"
       id: pr-sha-no-quotes
