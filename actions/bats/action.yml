@@ -10,11 +10,11 @@ inputs:
   sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
+env:
+  MAKE_INCLUDES: Makefile
+  TF_PLUGIN_CACHE_DIR: /tmp
 runs:
   using: "composite"
-  env:
-    MAKE_INCLUDES: Makefile
-    TF_PLUGIN_CACHE_DIR: /tmp
   steps:
     - name: "Acknowledge '/test bats'"
       uses: actions/github-script@v4
