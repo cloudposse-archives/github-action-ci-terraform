@@ -29,7 +29,7 @@ runs:
           core.setOutput("pr-sha", headSha);
     - name: "/test bats"
       if: ${{ github.event.comment.body == '/test bats' }}
-      uses: ./user/bats
+      uses: cloudposse/github-action-terraform-ci/bats@main
 #    - name: "Acknowledge '/test bats'"
 #      if: ${{ github.event.comment.body == '/test bats' }}
 #      uses: actions/github-script@v4
