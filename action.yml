@@ -57,7 +57,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        #sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        sha: ${{ steps.pr-sha.outputs.pr-sha }}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
       uses: docker://cloudposse/test-harness:latest
@@ -93,7 +94,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
-        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        #sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        sha: ${{ steps.pr-sha.outputs.pr-sha }}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && failure() }}
       uses: Sibz/github-status-action@v1
@@ -102,7 +104,8 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
-        sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        #sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
+        sha: ${{ steps.pr-sha.outputs.pr-sha }}
 
 #    - name: "Handle common commands"
 #      uses: peter-evans/slash-command-dispatch@v2.3.0
