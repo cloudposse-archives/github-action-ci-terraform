@@ -2,9 +2,6 @@ name: 'terraform-ci'
 description: 'Run chatops github actions'
 inputs:
   token:
-    description: "public repo access token"
-    required: true
-  reaction-token:
     description: "github token"
     required: true
   test-name:
@@ -30,7 +27,7 @@ runs:
     - name: "Record pending '/test bats' result"
       uses: Sibz/github-status-action@v1
       with:
-        authToken: ${{ inputs.reaction-token }}
+        authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
@@ -65,7 +62,7 @@ runs:
       if: ${{ success() }}
       uses: Sibz/github-status-action@v1
       with:
-        authToken: ${{ inputs.reaction-token }}
+        authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
@@ -74,7 +71,7 @@ runs:
       if: ${{ failure() }}
       uses: Sibz/github-status-action@v1
       with:
-        authToken: ${{ inputs.reaction-token }}
+        authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
