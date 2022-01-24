@@ -17,7 +17,7 @@ runs:
   using: "composite"
   steps:
     - name: "Record successful result"
-      if: inputs.status == "passed"
+      if: ${{ inputs.status == "passed" }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -26,7 +26,7 @@ runs:
         state: 'success'
         sha: ${{ inputs.sha }}
     - name: "Record canceled result"
-      if: inputs.status == "canceled"
+      if: ${{ inputs.status == "canceled" }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -35,7 +35,7 @@ runs:
         state: 'canceled'
         sha: ${{ inputs.sha }}
     - name: "Record unsuccessful result"
-      if: inputs.status == "failure"
+      if: ${{ inputs.status == "failure" }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
