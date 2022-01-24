@@ -27,16 +27,6 @@ runs:
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
-          return headSha;
-    - name: "Remove quotes from pr-sha"
-      id: pr-sha-no-quotes
-      shell: bash
-      run: |
-        SHA=$(echo ${{ steps.pr-sha.outputs.result }} | tr -d '"')
-        echo $SHA
-        echo "${{ steps.pr-sha.outputs.result }}"
-        echo "${{ steps.pr-sha.outputs.pr-sha }}"
-        echo "::set-output name=clean-sha::$SHA"
     - name: "Acknowledge '/test bats'"
       if: ${{ github.event.comment.body == '/test bats' }}
       uses: actions/github-script@v4
@@ -57,7 +47,6 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Computing...'
         state: 'pending'
-        #sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
     - name: "Execute /test bats 1"
       if: ${{ github.event.comment.body == '/test bats'}}
@@ -94,7 +83,6 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Passed'
         state: 'success'
-        #sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
     - name: "Record unsuccessful '/test bats' result"
       if: ${{ github.event.comment.body == '/test bats' && failure() }}
@@ -104,7 +92,6 @@ runs:
         context: ${{ inputs.test-name }}
         description: 'Failed'
         state: 'failure'
-        #sha: ${{ steps.pr-sha-no-quotes.outputs.clean-sha }}
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
 
 #    - name: "Handle common commands"
