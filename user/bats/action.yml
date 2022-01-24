@@ -5,7 +5,7 @@ inputs:
     description: "github token"
     required: true
   test-name:
-    description: "name of the github action that will be calling this action as a step"
+    description: "name of the github action status check that will be calling this action as a step"
     required: true
   sha:
     description: "SHA hash of the commit whose status will be modified"

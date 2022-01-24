@@ -4,9 +4,6 @@ inputs:
   token:
     description: "github token"
     required: true
-  test-name:
-    description: "name of the github action that will be calling this action as a step"
-    required: true
 runs:
   using: "composite"
   steps:
@@ -26,7 +23,7 @@ runs:
       uses: cloudposse/github-action-terraform-ci/user/bats@main
       with:
         token: ${{ inputs.token }}
-        test-name: ${{ inputs.test-name }}
+        test-name: "tests-bats"
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
 
 #    - name: "Handle common commands"
