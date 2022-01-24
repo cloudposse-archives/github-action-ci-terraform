@@ -38,7 +38,6 @@ runs:
         MAKE_INCLUDES: Makefile
         TF_PLUGIN_CACHE_DIR: /tmp
       with:
-        entrypoint: make
         args: "-C test/ clean init"
     - name: "Execute /test bats 2"
       uses: docker://cloudposse/test-harness:latest
@@ -46,7 +45,6 @@ runs:
         MAKE_INCLUDES: Makefile
         TF_PLUGIN_CACHE_DIR: /tmp
       with:
-        entrypoint: make
         args: "-C test/ module"
     - name: "Execute /test bats 3"
       uses: docker://cloudposse/test-harness:latest
@@ -54,7 +52,6 @@ runs:
         MAKE_INCLUDES: Makefile
         TF_PLUGIN_CACHE_DIR: /tmp
       with:
-        entrypoint: make
         args: "-C test/ examples/complete"
     - name: "Record successful '/test bats' result"
       uses: Sibz/github-status-action@v1
