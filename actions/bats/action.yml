@@ -27,8 +27,8 @@ runs:
       with:
         token: ${{ inputs.token }}
         test-name: "tests-bats"
-        sha: ${{ steps.pr-sha.outputs.pr-sha }}
-        comment_id: ${{ github.comment.id }}
+        sha: ${{ inputs.sha }}
+        comment_id: ${{ github.event.comment.id }}
 
     - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
@@ -50,5 +50,5 @@ runs:
       with:
         token: ${{ inputs.token }}
         test-name: "tests-bats"
-        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        sha: ${{ inputs.sha }}
         status: ${{ github.action_status }}
