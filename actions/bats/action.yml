@@ -18,7 +18,8 @@ runs:
   using: "composite"
   steps:
     - name: "Update ENV"
-      runs: |
+      shell: bash
+      run: |
         echo $INPUT_ENV > $GITHUB_ENV
 
     - name: "Record status"
