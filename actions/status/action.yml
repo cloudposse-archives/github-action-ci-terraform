@@ -43,7 +43,7 @@ runs:
         sha: ${{ inputs.sha }}
 
     - name: "Record successful result"
-      if: ${{ inputs.status == 'passed' }}
+      if: ${{ inputs.status == 'Success' }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -53,7 +53,7 @@ runs:
         sha: ${{ inputs.sha }}
 
     - name: "Record canceled result"
-      if: ${{ inputs.status == 'canceled' }}
+      if: ${{ inputs.status == 'Canceled' }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -63,7 +63,7 @@ runs:
         sha: ${{ inputs.sha }}
 
     - name: "Record unsuccessful result"
-      if: ${{ inputs.status == 'failure' }}
+      if: ${{ inputs.status == 'Failure' }}
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
