@@ -10,32 +10,25 @@ inputs:
   sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
-env:
-  MAKE_INCLUDES: Makefile
-  TF_PLUGIN_CACHE_DIR: /tmp
+  env:
+    default: |
+      MAKE_INCLUDES=Makefile
+      TF_PLUGIN_CACHE_DIR=/tmp
 runs:
   using: "composite"
   steps:
-    - name: "Acknowledge '/test bats'"
-      uses: actions/github-script@v4
-      with:
-        script: |
-          const {owner, repo} = context.issue
-          github.reactions.createForIssueComment({
-            owner,
-            repo,
-            comment_id: context.payload.comment.id,
-            content: "+1",
-          });
+    - name: "Update ENV"
+      runs: |
+        echo $INPUT_ENV > $GITHUB_ENV
 
-    - name: "Record pending '/test bats' result"
-      uses: Sibz/github-status-action@v1
+    - name: "Record status"
+      uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
-        authToken: ${{ inputs.token }}
-        context: ${{ inputs.test-name }}
-        description: 'Computing...'
-        state: 'pending'
-        sha: ${{ inputs.sha }}
+        token: ${{ inputs.token }}
+        test-name: "tests-bats"
+        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        comment_id: ${{ context.payload.comment.id }}
+        status: ${{ github.action_status }}
 
     - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
