@@ -29,7 +29,6 @@ runs:
         test-name: "tests-bats"
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
         comment_id: ${{ github.comment.id }}
-        status: ${{ github.action_status }}
 
     - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
