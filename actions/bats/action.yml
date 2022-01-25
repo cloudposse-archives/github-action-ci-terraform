@@ -28,7 +28,7 @@ runs:
         token: ${{ inputs.token }}
         test-name: "tests-bats"
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
-        comment_id: ${{ context.payload.comment.id }}
+        comment_id: ${{ github.comment.id }}
         status: ${{ github.action_status }}
 
     - name: "Initialize test-harness"
