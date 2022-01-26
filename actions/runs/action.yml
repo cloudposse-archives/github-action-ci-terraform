@@ -1,0 +1,27 @@
+name: 'terraform-ci-runs'
+description: 'Run tests'
+
+on:
+  workflow_call:
+    inputs:
+      tests:
+        required: true
+        type: string
+      pr-shas:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  bats:
+    name: "Run bats tests"
+    runs-on: ubuntu-latest
+    if: contains( inputs.tests, 'bats')
+    steps:
+      - uses: cloudposse/github-action-terraform-ci/actions/bats@main
+        with:
+          token: ${{ inputs.token }}
+          test-name: "tests-bats"
+          sha: ${{ inputs.pr-shas }}
