@@ -32,7 +32,7 @@ runs:
             content: "+1",
           });
 
-    - name: "Record pending '/test bats' result"
+    - name: "Record pending result"
       if: ${{ inputs.comment_id }}
       uses: Sibz/github-status-action@v1
       with:

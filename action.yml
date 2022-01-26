@@ -10,8 +10,8 @@ runs:
     - name: "Checkout commit"
       uses: actions/checkout@v2
 
-    - name: "Get SHA of pull request branch"
-      id: pr-sha
+    - name: "Get metadata (SHA of pull request branch and exact test requested)"
+      id: metadata
       uses: actions/github-script@v4
       with:
         script: |
@@ -19,17 +19,21 @@ runs:
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
+          const commentBody = context.payload.comment.body;
+          core.setOutput("comment-body", commentBody);
 
-    - name: "/test bats"
-      if: github.event.comment.body == '/test bats' || github.event.comment.body == '/test all'
+    - name: "Handle bats command"
+      if: steps.metadata.outputs.comment-body == '/test bats' || steps.metadta.outputs.comment-body == '/test all'
+      #if: github.event.comment.body == '/test bats' || github.event.comment.body == '/test all'
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
       with:
         token: ${{ inputs.token }}
         test-name: "tests-bats"
-        sha: ${{ steps.pr-sha.outputs.pr-sha }}
+        sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
-      if: github.event.comment.body != '/test bats' && github.event.comment.body != '/test all'
+      if: steps.metadata.outputs.comment-body != '/test bats' && steps.metadata.outputs.comment-body != '/test all'
+      #if: github.event.comment.body != '/test bats' && github.event.comment.body != '/test all'
       uses: actions/github-script@v4
       with:
         script: |
