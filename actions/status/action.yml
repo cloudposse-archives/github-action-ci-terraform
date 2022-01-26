@@ -54,7 +54,7 @@ runs:
       with:
         authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
-        description: 'Computing...'
+        description: 'Tests are currently running'
         state: 'pending'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -65,7 +65,7 @@ runs:
       with:
         authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
-        description: 'Passed'
+        description: 'All tests passed'
         state: 'success'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -76,7 +76,7 @@ runs:
       with:
         authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
-        description: 'Canceled'
+        description: 'Tests were cancelled by user'
         state: 'canceled'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -87,7 +87,7 @@ runs:
       with:
         authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
-        description: 'Failed'
+        description: 'One or more tests failed'
         state: 'failure'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
