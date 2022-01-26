@@ -9,6 +9,7 @@ runs:
   steps:
     - name: "Checkout commit"
       uses: actions/checkout@v2
+
     - name: "Get SHA of pull request branch"
       id: pr-sha
       uses: actions/github-script@v4
@@ -18,6 +19,7 @@ runs:
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
+
     - name: "/test bats"
       if: github.event.comment.body == '/test bats' || github.event.comment.body == '/test all'
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
@@ -25,6 +27,20 @@ runs:
         token: ${{ inputs.token }}
         test-name: "tests-bats"
         sha: ${{ steps.pr-sha.outputs.pr-sha }}
+
+    - name: "Unrecognized /test command"
+      if: github.event.comment.body != '/test bats' && github.event.comment.body != '/test all'
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: "${{ github.event.comment.id }}",
+            content: "-1",
+          });
+
 
 #    - name: "Handle common commands"
 #      uses: peter-evans/slash-command-dispatch@v2.3.0
