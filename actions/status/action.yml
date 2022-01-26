@@ -1,26 +1,42 @@
 name: 'terraform-ci-status'
-description: 'Update the status for a given commit'
+description: 'Update the status for a given commit and respond to chatops comments with a thumb up or down'
 inputs:
   token:
     description: "github token"
     required: true
-  test-name:
-    description: "name of the github action status check that will be calling this action as a step"
-    required: true
   sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
+  test-name:
+    description: "name of the github action status check that will be calling this action as a step"
+    required: false
   status:
     description: "Result of status check"
     required: false
   comment_id:
     description: "ID of comment which triggered this action"
     required: false
+  request_understood:
+    description: "Whether the chatops request was understood"
+    required: false
 runs:
   using: "composite"
   steps:
-    - name: "Acknowledge '/test bats' chatops request"
-      if: ${{ inputs.comment_id }}
+    - name: "Acknowledge unintelligible chatops request"
+      if: inputs.comment_id && !inputs.request_understood
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: "${{ inputs.comment_id }}",
+            content: "-1",
+          });
+
+    - name: "Acknowledge understood chatops request"
+      if: inputs.comment_id && inputs.request_understood
       uses: actions/github-script@v4
       with:
         script: |
@@ -33,7 +49,7 @@ runs:
           });
 
     - name: "Record pending result"
-      if: ${{ inputs.comment_id }}
+      if: inputs.comment_id && inputs.request_understood
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}

@@ -43,16 +43,25 @@ runs:
 
     - name: "Unrecognized /test command"
       if: steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
-      uses: actions/github-script@v4
+      uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
-        script: |
-          const {owner, repo} = context.issue
-          github.reactions.createForIssueComment({
-            owner,
-            repo,
-            comment_id: "${{ github.event.comment.id }}",
-            content: "-1",
-          });
+        token: ${{ inputs.token }}
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+        comment_id: ${{ github.event.comment.id }}
+        request_understood: false
+
+#    - name: "Unrecognized /test command"
+#      if: steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.reactions.createForIssueComment({
+#            owner,
+#            repo,
+#            comment_id: "${{ github.event.comment.id }}",
+#            content: "-1",
+#          });
 
 
 #    - name: "Handle common commands"

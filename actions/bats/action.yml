@@ -1,5 +1,5 @@
-name: 'terraform-ci'
-description: 'Run chatops github actions'
+name: 'terraform-ci-bats'
+description: 'Run bats tests'
 inputs:
   token:
     description: "github token"
@@ -29,6 +29,7 @@ runs:
         test-name: "tests-bats"
         sha: ${{ inputs.sha }}
         comment_id: ${{ github.event.comment.id }}
+        request_understood: true
 
     - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
