@@ -23,7 +23,7 @@ runs:
   using: "composite"
   steps:
     - name: "Acknowledge unintelligible chatops request"
-      if: inputs.comment_id && !inputs.request_understood
+      if: inputs.comment_id && inputs.request_understood == 'false'
       uses: actions/github-script@v4
       with:
         script: |
@@ -36,7 +36,7 @@ runs:
           });
 
     - name: "Acknowledge understood chatops request"
-      if: inputs.comment_id && inputs.request_understood
+      if: inputs.comment_id && inputs.request_understood == 'true'
       uses: actions/github-script@v4
       with:
         script: |
@@ -49,7 +49,7 @@ runs:
           });
 
     - name: "Record pending result"
-      if: inputs.comment_id && inputs.request_understood
+      if: inputs.comment_id && inputs.request_understood == 'true'
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
