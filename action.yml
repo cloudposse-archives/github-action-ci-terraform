@@ -24,7 +24,7 @@ runs:
           const commentBody = context.payload.comment.body;
           const testRegex = /^\/test (\S+)\s*$/;
           testMatches = commentBody.match(testRegex);
-          if (typeof testMatches == null) { // this indicates no /test command was found
+          if (testMatches == null) { // this indicates no /test command was found
             core.setOutput("test-name", "none")
           } else if (testMatches[1]) { // this should be the first capture group in a successful match
             core.setOutput("test-name", testMatches[1])
