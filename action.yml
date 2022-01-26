@@ -15,16 +15,24 @@ runs:
       uses: actions/github-script@v4
       with:
         script: |
+          // extract the SHA of the commit at the head of the PR
           const prUrl = context.payload.issue.pull_request.url;
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
+          // extract the name of the test suite to be run
           const commentBody = context.payload.comment.body;
-          core.setOutput("comment-body", commentBody);
+          const testRegex = /^\/test (\S+)\s*$/g;
+          testMatches = commentBody.Match(testRegex);
+          if (typeof testMatches[0] == "undefined") { // this indicates no /test command was found
+            core.setOutput("test-name", "none")
+          } else if (testMatches[1]) { // this should be the first capture group in a successful match
+            core.setOutput("test-name", testMatches[1])
+          }
+      #core.setOutput("comment-body", commentBody);
 
     - name: "Handle bats command"
-      if: steps.metadata.outputs.comment-body == '/test bats' || steps.metadta.outputs.comment-body == '/test all'
-      #if: github.event.comment.body == '/test bats' || github.event.comment.body == '/test all'
+      if: steps.metadata.outputs.test-name == "bats" || steps.metadta.outputs.test-name == "all"
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
       with:
         token: ${{ inputs.token }}
@@ -32,8 +40,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
-      if: steps.metadata.outputs.comment-body != '/test bats' && steps.metadata.outputs.comment-body != '/test all'
-      #if: github.event.comment.body != '/test bats' && github.event.comment.body != '/test all'
+      if: steps.metadata.outputs.test-name != "bats" && steps.metadata.outputs.test-name != "all" && steps.metadata.outputs.test-name != "none"
       uses: actions/github-script@v4
       with:
         script: |
