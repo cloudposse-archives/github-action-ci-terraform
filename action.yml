@@ -34,7 +34,7 @@ runs:
       #core.setOutput("comment-body", commentBody);
 
     - name: "Handle bats command"
-      if: steps.metadata.outputs.test-name == 'bats' || steps.metadta.outputs.test-name == 'all'
+      if: steps.metadata.outputs.test-name == 'bats' || steps.metadata.outputs.test-name == 'all'
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
       with:
         token: ${{ inputs.token }}
