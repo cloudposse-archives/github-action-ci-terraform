@@ -57,6 +57,7 @@ runs:
         description: 'Computing...'
         state: 'pending'
         sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Record successful result"
       if: ${{ inputs.status == 'Success' }}
@@ -67,6 +68,7 @@ runs:
         description: 'Passed'
         state: 'success'
         sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Record canceled result"
       if: ${{ inputs.status == 'Canceled' }}
@@ -77,6 +79,7 @@ runs:
         description: 'Canceled'
         state: 'canceled'
         sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Record unsuccessful result"
       if: ${{ inputs.status == 'Failure' }}
@@ -87,3 +90,4 @@ runs:
         description: 'Failed'
         state: 'failure'
         sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
