@@ -25,3 +25,9 @@ jobs:
           token: ${{ inputs.token }}
           test-name: "tests-bats"
           sha: ${{ inputs.pr-shas }}
+
+      - uses: cloudposse/github-action-terraform-ci/actions/bats@main
+        with:
+          token: ${{ inputs.token }}
+          test-name: "tests-bats"
+          sha: ${{ inputs.pr-shas }}
