@@ -23,7 +23,7 @@ runs:
           // extract the name of the test suite to be run
           const commentBody = context.payload.comment.body;
           const testRegex = /^\/test (\S+)\s*$/g;
-          testMatches = commentBody.Match(testRegex);
+          testMatches = commentBody.match(testRegex);
           if (typeof testMatches[0] == "undefined") { // this indicates no /test command was found
             core.setOutput("test-name", "none")
           } else if (testMatches[1]) { // this should be the first capture group in a successful match
