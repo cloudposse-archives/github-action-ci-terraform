@@ -1,5 +1,5 @@
-name: 'terraform-ci-bats'
-description: 'Run bats tests'
+name: 'terraform-ci-readme'
+description: 'Run readme tests'
 inputs:
   token:
     description: "github token"
@@ -13,7 +13,7 @@ inputs:
   env:
     default: |
       MAKE_INCLUDES=Makefile
-      TF_PLUGIN_CACHE_DIR=/tmp
+      BUILD_HARNESS_BRANCH=master
 runs:
   using: "composite"
   steps:
@@ -31,20 +31,15 @@ runs:
         comment_id: ${{ github.event.comment.id }}
         request_understood: true
 
-    - name: "Initialize test-harness"
+    - name: "Initialize build-harness"
       uses: docker://cloudposse/test-harness:latest
       with:
-        args: "-C test/ clean init"
+        args: "init"
 
-    - name: "Test the module with bats"
+    - name: "Test that README.md was generated from README.yaml"
       uses: docker://cloudposse/test-harness:latest
       with:
-        args: "-C test/ module"
-
-    - name: "Test `examples/complete` with bats"
-      uses: docker://cloudposse/test-harness:latest
-      with:
-        args: "-C test/ examples/complete"
+        args: "readme/lint"
 
     - name: "Record status"
       uses: cloudposse/github-action-terraform-ci/actions/status@main

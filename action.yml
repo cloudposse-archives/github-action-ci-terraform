@@ -32,22 +32,30 @@ runs:
             core.setOutput("test-name", testMatches[1])
           }
 
-    - name: "Handle bats command"
-      if: steps.metadata.outputs.test-name != 'none'
-      uses: cloudposse/github-action-terraform-ci/actions/runs@main
-      with:
-        tests: "bats"
-        shas: ${{ steps.metadata.outputs.pr-sha }}
-      secrets:
-        token: ${{ inputs.token }}
-
-#    - name: "Handle bats command"
-#      if: steps.metadata.outputs.test-name == 'bats' || steps.metadata.outputs.test-name == 'all'
-#      uses: cloudposse/github-action-terraform-ci/actions/bats@main
+#    - name: "Handle all test commands"
+#      if: steps.metadata.outputs.test-name != 'none'
+#      uses: cloudposse/github-action-terraform-ci/actions/runs@main
 #      with:
+#        tests: "bats"
+#        shas: ${{ steps.metadata.outputs.pr-sha }}
+#      secrets:
 #        token: ${{ inputs.token }}
-#        test-name: "tests-bats"
-#        sha: ${{ steps.metadata.outputs.pr-sha }}
+
+    - name: "Handle bats command"
+      if: steps.metadata.outputs.test-name == 'bats' || steps.metadata.outputs.test-name == 'all'
+      uses: cloudposse/github-action-terraform-ci/actions/bats@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-bats"
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+
+    - name: "Handle readme command"
+      if: steps.metadata.outputs.test-name == 'readme' || steps.metadata.outputs.test-name == 'all'
+      uses: cloudposse/github-action-terraform-ci/actions/readme@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-readme"
+        sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
       if: steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
