@@ -58,7 +58,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
-      if: steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
+      if: steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'readme' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
       uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
         token: ${{ inputs.token }}
