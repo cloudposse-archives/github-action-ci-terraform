@@ -19,9 +19,9 @@ jobs:
     steps:
       - uses: cloudposse/github-action-terraform-ci/actions/ping@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.event.secrets.GITHUB_TOKEN }}
           test-name: "tests-ping"
-          sha: ${{ inputs.pr-sha }}
+          sha: ${{ github.event.inputs.pr-sha }}
 
   bats:
     name: "Run bats tests"
