@@ -10,9 +10,6 @@ on:
       pr-sha:
         required: true
         type: string
-    secrets:
-      token:
-        required: true
 
 jobs:
   ping:
@@ -22,7 +19,7 @@ jobs:
     steps:
       - uses: cloudposse/github-action-terraform-ci/actions/ping@main
         with:
-          token: ${{ secrets.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           test-name: "tests-ping"
           sha: ${{ inputs.pr-sha }}
 
@@ -33,7 +30,7 @@ jobs:
     steps:
       - uses: cloudposse/github-action-terraform-ci/actions/bats@main
         with:
-          token: ${{ secrets.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           test-name: "tests-bats"
           sha: ${{ inputs.pr-sha }}
 
@@ -44,6 +41,6 @@ jobs:
     steps:
       - uses: cloudposse/github-action-terraform-ci/actions/readme@main
         with:
-          token: ${{ secrets.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           test-name: "tests-readme"
           sha: ${{ inputs.pr-sha }}

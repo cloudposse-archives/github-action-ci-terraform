@@ -38,8 +38,8 @@ runs:
       with:
         tests: "ping,bats,readme"
         pr-sha: ${{ steps.metadata.outputs.pr-sha }}
-      secrets:
-        token: ${{ inputs.token }}
+      #secrets:
+      #  token: ${{ inputs.token }}
 
 #    - name: "Handle ping command"
 #      if: steps.metadata.outputs.test-name == 'ping' || steps.metadata.outputs.test-name == 'all'
