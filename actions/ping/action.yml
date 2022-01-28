@@ -19,4 +19,4 @@ runs:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}
         sha: ${{ inputs.sha }}
-        status: ${{ github.action_status }}
+        status: "ping"

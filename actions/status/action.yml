@@ -59,6 +59,17 @@ runs:
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
+    - name: "Acknowledge ping test"
+      if: ${{ inputs.status == 'ping' }}
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: ${{ inputs.test-name }}
+        description: 'PONG'
+        state: 'success'
+        sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
     - name: "Record successful result"
       if: ${{ inputs.status == 'Success' }}
       uses: Sibz/github-status-action@v1
