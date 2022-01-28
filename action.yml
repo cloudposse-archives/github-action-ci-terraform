@@ -57,20 +57,20 @@ runs:
         test-name: "tests-bats"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
-    - name: "Handle readme command"
-      if: steps.metadata.outputs.test-name == 'readme' || steps.metadata.outputs.test-name == 'all'
-      uses: cloudposse/github-action-terraform-ci/actions/readme@main
-      with:
-        token: ${{ inputs.token }}
-        test-name: "tests-readme"
-        sha: ${{ steps.metadata.outputs.pr-sha }}
-
     - name: "Handle terratest command"
       if: steps.metadata.outputs.test-name == 'terratest' || steps.metadata.outputs.test-name == 'all'
       uses: cloudposse/github-action-terraform-ci/actions/terratest@main
       with:
         token: ${{ inputs.token }}
         test-name: "tests-terratest"
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+
+    - name: "Handle readme command"
+      if: steps.metadata.outputs.test-name == 'readme' || steps.metadata.outputs.test-name == 'all'
+      uses: cloudposse/github-action-terraform-ci/actions/readme@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-readme"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
