@@ -82,11 +82,11 @@ runs:
             TF014=$(terraform-0.14 version --json | jq -r .terraform_version);
             TF015=$(terraform-0.15 version --json | jq -r .terraform_version);
             TF1=$(terraform-1 version --json | jq -r .terraform_version)
-            FULL_VERSION=$(vert -s "$(terraform-config-inspect --json . | jq -r '.required_core[]')" "$TF012" "$TF013" "$TF014" "$TF015" "$TF1" | head -1) || [[ -n "$VERSION" ]]; # vert exits non-zero if any of the versions are not acceptable, so `|| [[ -n "$VERSION" ]]` for a real error check;
+            FULL_VERSION=$(vert -s "$(terraform-config-inspect --json . | jq -r '.required_core[]')" "$TF012" "$TF013" "$TF014" "$TF015" "$TF1" | head -1) || [[ -n "$VERSION" ]] # vert exits non-zero if any of the versions are not acceptable, so `|| [[ -n "$VERSION" ]]` for a real error check;
             VERSION=${FULL_VERSION:0:4};
             echo Full version to use is ${FULL_VERSION}, setting VERSION to ${VERSION};
           fi
-          OVERRIDE_VERSION=$(grep -Eo '(terraform/[0-9]+\.[x0-9]+|)' <<<${LABELS} | cut -d/ -f2); # Match lables like `terraform/0.12` or nothing (to prevent non-zero exit code). Use [0-9] because \d is not standard part of egrep
+          OVERRIDE_VERSION=$(grep -Eo '(terraform/[0-9]+\.[x0-9]+|)' <<<${LABELS} | cut -d/ -f2) # Match lables like `terraform/0.12` or nothing (to prevent non-zero exit code). Use [0-9] because \d is not standard part of egrep
           if [ -n "${OVERRIDE_VERSION}" ]; then
             VERSION=${OVERRIDE_VERSION};
             echo "Terraform ${VERSION} is required based on labels...";
