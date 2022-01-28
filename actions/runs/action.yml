@@ -7,7 +7,7 @@ on:
       tests:
         required: true
         type: string
-      pr-shas:
+      pr-sha:
         required: true
         type: string
     secrets:
@@ -15,6 +15,17 @@ on:
         required: true
 
 jobs:
+  ping:
+    name: "Run ping test"
+    runs-on: ubuntu-latest
+    if: contains( inputs.tests, 'ping')
+    steps:
+      - uses: cloudposse/github-action-terraform-ci/actions/ping@main
+        with:
+          token: ${{ secrets.token }}
+          test-name: "tests-ping"
+          sha: ${{ inputs.pr-sha }}
+
   bats:
     name: "Run bats tests"
     runs-on: ubuntu-latest
@@ -22,12 +33,17 @@ jobs:
     steps:
       - uses: cloudposse/github-action-terraform-ci/actions/bats@main
         with:
-          token: ${{ inputs.token }}
+          token: ${{ secrets.token }}
           test-name: "tests-bats"
-          sha: ${{ inputs.pr-shas }}
+          sha: ${{ inputs.pr-sha }}
 
-      - uses: cloudposse/github-action-terraform-ci/actions/bats@main
+  readme:
+    name: "Run readme tests"
+    runs-on: ubuntu-latest
+    if: contains( inputs.tests, 'readme')
+    steps:
+      - uses: cloudposse/github-action-terraform-ci/actions/readme@main
         with:
-          token: ${{ inputs.token }}
-          test-name: "tests-bats"
-          sha: ${{ inputs.pr-shas }}
+          token: ${{ secrets.token }}
+          test-name: "tests-readme"
+          sha: ${{ inputs.pr-sha }}
