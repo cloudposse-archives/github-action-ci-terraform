@@ -47,6 +47,7 @@ runs:
         args: "-C test/ examples/complete"
 
     - name: "Record status"
+      if: success() || failure()
       uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
         token: ${{ inputs.token }}
