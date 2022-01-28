@@ -41,6 +41,14 @@ runs:
 #      secrets:
 #        token: ${{ inputs.token }}
 
+    - name: "Handle ping command"
+      if: steps.metadata.outputs.test-name == 'ping' || steps.metadata.outputs.test-name == 'all'
+      uses: cloudposse/github-action-terraform-ci/actions/ping@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-ping"
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+
     - name: "Handle bats command"
       if: steps.metadata.outputs.test-name == 'bats' || steps.metadata.outputs.test-name == 'all'
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
@@ -58,7 +66,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
-      if: steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'readme' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
+      if: steps.metadata.outputs.test-name != 'ping' && steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'readme' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
       uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
         token: ${{ inputs.token }}
