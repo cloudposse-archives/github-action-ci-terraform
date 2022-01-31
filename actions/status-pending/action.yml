@@ -18,7 +18,7 @@ runs:
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
-        context: 'bats'
+        context: 'tests-bats'
         description: 'Tests are currently running'
         state: 'pending'
         sha: ${{ inputs.sha }}
@@ -29,7 +29,7 @@ runs:
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
-        context: 'ping'
+        context: 'tests-ping'
         description: 'Tests are currently running'
         state: 'pending'
         sha: ${{ inputs.sha }}
@@ -40,7 +40,7 @@ runs:
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
-        context: 'readme'
+        context: 'tests-readme'
         description: 'Tests are currently running'
         state: 'pending'
         sha: ${{ inputs.sha }}
@@ -51,7 +51,7 @@ runs:
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
-        context: 'terratest'
+        context: 'tests-terratest'
         description: 'Tests are currently running'
         state: 'pending'
         sha: ${{ inputs.sha }}
