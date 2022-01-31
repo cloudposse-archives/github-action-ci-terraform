@@ -26,20 +26,28 @@ runs:
           // extract the labels attached to this PR
           let prLabels = prDetails.data.labels;
           core.setOutput("pr-labels", prLabels);
-          // extract the name of the test suite to be run
+          // extract the name(s) of the test suite(s) to be run
+          validTests = ['all', 'ping', 'bats', 'terratest', 'readme', 'unrecognized']
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
-          const testRegex = /^\/test (\S+)\s*$/;
+          const testRegex = /^\/test (.+)\s*$/;
+          #const testRegex = /^\/test (\S+)\s*$/;
           testMatches = commentBody.match(testRegex);
           console.log(testMatches)
           if (testMatches == null) { // this indicates no /test command was found
-            core.setOutput("test-name", "none")
+            core.setOutput("tests-names", "none")
           } else if (testMatches[1]) { // this should be the first capture group in a successful match
-            core.setOutput("test-name", testMatches[1])
+            if (validTests.some( test => testMatches[1].includes(test) ) {
+              // at least one valid test specified
+              core.setOutput("tests-names", testMatches[1])
+            } else {
+              // no valid tests specified
+              core.setOutput("tests-names", "unrecognized")
+            }
           }
 
 #    - name: "Handle all test commands"
-#      if: steps.metadata.outputs.test-name == 'all'
+#      if: contains(steps.metadata.outputs.tests-names, 'all')
 #      uses: cloudposse/github-action-terraform-ci/actions/runs@main
 #      with:
 #        tests: "ping,bats,readme"
@@ -48,41 +56,41 @@ runs:
 #      #  token: ${{ inputs.token }}
 
     - name: "Handle ping command"
-      if: steps.metadata.outputs.test-name == 'ping' || steps.metadata.outputs.test-name == 'all'
+      if: contains(steps.metadata.outputs.tests-names, 'ping') || contains(steps.metadata.outputs.tests-names, 'all')
       uses: cloudposse/github-action-terraform-ci/actions/ping@main
       with:
         token: ${{ inputs.token }}
-        test-name: "tests-ping"
+        tests-names: "tests-ping"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle bats command"
-      if: steps.metadata.outputs.test-name == 'bats' || steps.metadata.outputs.test-name == 'all'
+      if: contains(steps.metadata.outputs.tests-names, 'bats') || contains(steps.metadata.outputs.tests-names, 'all')
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
       with:
         token: ${{ inputs.token }}
-        test-name: "tests-bats"
+        tests-names: "tests-bats"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle terratest command"
-      if: steps.metadata.outputs.test-name == 'terratest' || steps.metadata.outputs.test-name == 'all'
+      if: contains(steps.metadata.outputs.tests-names, 'terratest') || contains(steps.metadata.outputs.tests-names, 'all')
       uses: cloudposse/github-action-terraform-ci/actions/terratest@main
       with:
         token: ${{ inputs.token }}
-        test-name: "tests-terratest"
+        tests-names: "tests-terratest"
         sha: ${{ steps.metadata.outputs.pr-sha }}
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
 
     - name: "Handle readme command"
-      if: steps.metadata.outputs.test-name == 'readme' || steps.metadata.outputs.test-name == 'all'
+      if: contains(steps.metadata.outputs.tests-names, 'readme') || contains(steps.metadata.outputs.tests-names, 'all')
       uses: cloudposse/github-action-terraform-ci/actions/readme@main
       with:
         token: ${{ inputs.token }}
-        test-name: "tests-readme"
+        tests-names: "tests-readme"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
-      if: steps.metadata.outputs.test-name != 'ping' && steps.metadata.outputs.test-name != 'bats' && steps.metadata.outputs.test-name != 'readme' && steps.metadata.outputs.test-name != 'terratest' && steps.metadata.outputs.test-name != 'all' && steps.metadata.outputs.test-name != 'none'
+      if: contains(steps.metadata.outputs.tests-names, 'unrecognized')
       uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
         token: ${{ inputs.token }}
