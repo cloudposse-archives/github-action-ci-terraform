@@ -20,14 +20,17 @@ runs:
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
+
           // extract the base branch name that's being merged into
           let prBaseRef = prDetails.data.base.ref;
           core.setOutput("pr-base-ref", prBaseRef);
+
           // extract the labels attached to this PR
           let prLabels = prDetails.data.labels;
           core.setOutput("pr-labels", prLabels);
+
           // extract the name(s) of the test suite(s) to be run
-          validTests = ['all', 'ping', 'bats', 'terratest', 'readme', 'unrecognized']
+          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme', 'unrecognized']
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
           const testRegex = /^\/test (.+)\s*$/;
@@ -37,7 +40,7 @@ runs:
           if (testMatches == null) { // this indicates no /test command was found
             core.setOutput("tests-names", "none")
           } else if (testMatches[1]) { // this should be the first capture group in a successful match
-            if (validTests.some( test => testMatches[1].includes(test) ) {
+            if ( validTests.some( test => testMatches[1].includes(test) ) {
               // at least one valid test specified
               core.setOutput("tests-names", testMatches[1])
             } else {
