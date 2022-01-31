@@ -72,7 +72,7 @@ runs:
     - name: "Output script for `Determine required terraform version` step"
       shell: bash -x -e -o pipefail {0}
       run: |
-        cat << "EOF" > script.sh
+        cat << "EOF" > determine_required_terraform_version.sh
         #!/bin/bash
 
         # Some legacy support is on 0.11 branches and we determine the Terraform version based on the target branch name
@@ -115,7 +115,7 @@ runs:
           exit 1
         fi
         EOF
-        chmod a+x script.sh
+        chmod a+x determine_required_terraform_version.sh
 
     # Determine requied version of terraform based on the target branch of the pull request. Then update the PATH to use it.
     - name: "Determine required terraform version"
@@ -126,7 +126,7 @@ runs:
         LABELS: ${{ join(inputs.labels.*.name, '\n') }}
         # ${{ join(github.event.client_payload.pull_request.labels.*.name, '\n') }}
       with:
-        entrypoint: "/github/workspace/script.sh"
+        entrypoint: "/github/workspace/determine_required_terraform_version.sh"
 
 #    # Initialize the terratest go project
 #    - name: "Initialize terratest Go project, part 1"
