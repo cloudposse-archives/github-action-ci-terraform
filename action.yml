@@ -34,7 +34,6 @@ runs:
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
           const testRegex = /^\/test (.+)\s*$/;
-          // #const testRegex = /^\/test (\S+)\s*$/;
           testMatches = commentBody.match(testRegex);
           console.log(testMatches)
           if (testMatches == null) { // this indicates no /test command was found
@@ -49,6 +48,13 @@ runs:
             }
           }
 
+    - name: "Record pending status for all forthcoming checks"
+      uses: cloudposse/github-action-terraform-ci/actions/status-pending@main
+      with:
+        token: ${{ inputs.token }}
+        test-names: ${{ steps.metadata.outputs.tests-names }}
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+
 #    - name: "Handle all test commands"
 #      if: contains(steps.metadata.outputs.tests-names, 'all')
 #      uses: cloudposse/github-action-terraform-ci/actions/runs@main
@@ -58,6 +64,14 @@ runs:
 #      #secrets:
 #      #  token: ${{ inputs.token }}
 
+    - name: "Handle bats command"
+      if: contains(steps.metadata.outputs.tests-names, 'bats') || contains(steps.metadata.outputs.tests-names, 'all')
+      uses: cloudposse/github-action-terraform-ci/actions/bats@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-bats"
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+
     - name: "Handle ping command"
       if: contains(steps.metadata.outputs.tests-names, 'ping') || contains(steps.metadata.outputs.tests-names, 'all')
       uses: cloudposse/github-action-terraform-ci/actions/ping@main
@@ -66,12 +80,12 @@ runs:
         test-name: "tests-ping"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
-    - name: "Handle bats command"
-      if: contains(steps.metadata.outputs.tests-names, 'bats') || contains(steps.metadata.outputs.tests-names, 'all')
-      uses: cloudposse/github-action-terraform-ci/actions/bats@main
+    - name: "Handle readme command"
+      if: contains(steps.metadata.outputs.tests-names, 'readme') || contains(steps.metadata.outputs.tests-names, 'all')
+      uses: cloudposse/github-action-terraform-ci/actions/readme@main
       with:
         token: ${{ inputs.token }}
-        test-name: "tests-bats"
+        test-name: "tests-readme"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle terratest command"
@@ -84,15 +98,7 @@ runs:
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
 
-    - name: "Handle readme command"
-      if: contains(steps.metadata.outputs.tests-names, 'readme') || contains(steps.metadata.outputs.tests-names, 'all')
-      uses: cloudposse/github-action-terraform-ci/actions/readme@main
-      with:
-        token: ${{ inputs.token }}
-        test-name: "tests-readme"
-        sha: ${{ steps.metadata.outputs.pr-sha }}
-
-    - name: "Unrecognized /test command"
+    - name: "Respond to unrecognized '/test' comments"
       if: contains(steps.metadata.outputs.tests-names, 'unrecognized')
       uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
