@@ -36,10 +36,10 @@ runs:
       with:
         args: "init"
 
-    - name: "Test that README.md was generated from README.yaml"
-      uses: docker://cloudposse/test-harness:latest
-      with:
-        args: "readme/lint"
+#    - name: "Test that README.md was generated from README.yaml"
+#      uses: docker://cloudposse/test-harness:latest
+#      with:
+#        args: "readme/lint"
 
     - name: "Record status"
       if: always()
