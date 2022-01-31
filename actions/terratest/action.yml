@@ -98,6 +98,7 @@ runs:
           exit 1
         fi
         EOF
+        chmod a+x script.sh
 
     # Determine requied version of terraform based on the target branch of the pull request. Then update the PATH to use it.
     - name: "Determine required terraform version"
