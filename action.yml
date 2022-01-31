@@ -10,7 +10,7 @@ runs:
     - name: "Checkout commit"
       uses: actions/checkout@v2
 
-    - name: "Get metadata (SHA of pull request branch and exact test requested)"
+    - name: "Get metadata"
       id: metadata
       uses: actions/github-script@v4
       with:
@@ -21,8 +21,8 @@ runs:
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
           // extract the base branch name that's being merged into
-          let baseRef = prDetails.data.base.ref;
-          core.setOutput("base-ref", baseRef);
+          let prBaseRef = prDetails.data.base.ref;
+          core.setOutput("pr-base-ref", prBaseRef);
           // extract the labels attached to this PR
           let prLabels = prDetails.data.labels;
           core.setOutput("pr-labels", prLabels);
@@ -70,7 +70,7 @@ runs:
         token: ${{ inputs.token }}
         test-name: "tests-terratest"
         sha: ${{ steps.metadata.outputs.pr-sha }}
-        base-ref: ${{ steps.metadata.outputs.base-ref }}
+        base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
 
     - name: "Handle readme command"
