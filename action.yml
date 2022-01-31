@@ -63,7 +63,7 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/ping@main
       with:
         token: ${{ inputs.token }}
-        tests-names: "tests-ping"
+        test-name: "tests-ping"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle bats command"
@@ -71,7 +71,7 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
       with:
         token: ${{ inputs.token }}
-        tests-names: "tests-bats"
+        test-name: "tests-bats"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle terratest command"
@@ -79,7 +79,7 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/terratest@main
       with:
         token: ${{ inputs.token }}
-        tests-names: "tests-terratest"
+        test-name: "tests-terratest"
         sha: ${{ steps.metadata.outputs.pr-sha }}
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
@@ -89,7 +89,7 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/readme@main
       with:
         token: ${{ inputs.token }}
-        tests-names: "tests-readme"
+        test-name: "tests-readme"
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Unrecognized /test command"
