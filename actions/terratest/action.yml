@@ -10,6 +10,12 @@ inputs:
   sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
+  base-ref:
+    description: "Name of the branch into which this PR wants to merge"
+    required: true
+  labels:
+    description: "Labels on this PR, including associated metadata"
+    required: true
   env:
     default: |
       MAKE_INCLUDES=Makefile
@@ -106,8 +112,9 @@ runs:
       uses: docker://cloudposse/test-harness:latest
       env:
         # Pull request target branch
-        BASE_REF: ${{ github.event.client_payload.pull_request.base.ref }}
-        LABELS: ${{ join(github.event.client_payload.pull_request.labels.*.name, '\n') }}
+        BASE_REF: ${{ inputs.base-ref }}
+        LABELS: ${{ join(inputs.labels.*.name, '\n') }}
+        # ${{ join(github.event.client_payload.pull_request.labels.*.name, '\n') }}
       with:
         entrypoint: "/github/workspace/script.sh"
 

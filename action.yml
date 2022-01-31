@@ -20,6 +20,12 @@ runs:
           const prDetails = await github.request(`GET ${prUrl}`);
           let headSha = prDetails.data.head.sha;
           core.setOutput("pr-sha", headSha);
+          // extract the base branch name that's being merged into
+          let baseRef = prDetails.data.base.ref;
+          core.setOutput("base-ref", baseRef);
+          // extract the labels attached to this PR
+          let prLabels = prDetails.data.labels;
+          core.setOutput("pr-labels", prLabels);
           // extract the name of the test suite to be run
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
@@ -64,6 +70,8 @@ runs:
         token: ${{ inputs.token }}
         test-name: "tests-terratest"
         sha: ${{ steps.metadata.outputs.pr-sha }}
+        base-ref: ${{ steps.metadata.outputs.base-ref }}
+        labels: ${{ inputs.pr-labels }}
 
     - name: "Handle readme command"
       if: steps.metadata.outputs.test-name == 'readme' || steps.metadata.outputs.test-name == 'all'
