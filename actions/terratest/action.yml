@@ -104,6 +104,7 @@ runs:
         # Last ditch effort, set a default
         if [ -z "${VERSION}" ]; then
           VERSION=1
+        fi
 
         # Set final path to Terraform binary and confirm its existence
         PATH_TO_TERRAFORM="/usr/local/terraform/${VERSION}/bin"
