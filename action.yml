@@ -34,13 +34,13 @@ runs:
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
           const testRegex = /^\/test (.+)\s*$/;
-          #const testRegex = /^\/test (\S+)\s*$/;
+          // #const testRegex = /^\/test (\S+)\s*$/;
           testMatches = commentBody.match(testRegex);
           console.log(testMatches)
           if (testMatches == null) { // this indicates no /test command was found
             core.setOutput("tests-names", "none")
           } else if (testMatches[1]) { // this should be the first capture group in a successful match
-            if ( validTests.some( test => testMatches[1].includes(test) ) {
+            if ( validTests.some( test => testMatches[1].includes(test) ) ) {
               // at least one valid test specified
               core.setOutput("tests-names", testMatches[1])
             } else {
