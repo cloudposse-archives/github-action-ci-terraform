@@ -67,6 +67,7 @@ runs:
       shell: bash -x -e -o pipefail {0}
       run: |
         cat << "EOF" > script.sh
+        #!/bin/bash
         # Some legacy support is on 0.11 branches and we determine the Terraform version based on the target branch name
         VERSION=$(cut -d/ -f1 <<<${BASE_REF})
         if [[ ${VERSION} != '0.11' ]]; then
