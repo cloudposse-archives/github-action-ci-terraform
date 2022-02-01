@@ -1,0 +1,23 @@
+name: 'terraform-ci-comment-response'
+description: 'Respond to chatops comments to indicate the action being taken'
+inputs:
+  comment_id:
+    description: "ID of comment which triggered this action"
+    required: true
+  comment_response:
+    description: "Response to make to comment (one of https://docs.github.com/en/rest/reference/reactions#reaction-types)"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: "Acknowledge chatops request"
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: "${{ inputs.comment_id }}",
+            content: "${{ inputs.comment_response }}",
+          });

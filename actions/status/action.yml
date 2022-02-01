@@ -22,42 +22,42 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Acknowledge unintelligible chatops request"
-      if: inputs.comment_id && inputs.request_understood == 'false'
-      uses: actions/github-script@v4
-      with:
-        script: |
-          const {owner, repo} = context.issue
-          github.reactions.createForIssueComment({
-            owner,
-            repo,
-            comment_id: "${{ inputs.comment_id }}",
-            content: "-1",
-          });
-
-    - name: "Acknowledge understood chatops request"
-      if: inputs.comment_id && inputs.request_understood == 'true'
-      uses: actions/github-script@v4
-      with:
-        script: |
-          const {owner, repo} = context.issue
-          github.reactions.createForIssueComment({
-            owner,
-            repo,
-            comment_id: "${{ inputs.comment_id }}",
-            content: "+1",
-          });
-
-    - name: "Record pending result"
-      if: inputs.comment_id && inputs.request_understood == 'true'
-      uses: Sibz/github-status-action@v1
-      with:
-        authToken: ${{ inputs.token }}
-        context: ${{ inputs.test-name }}
-        description: 'Tests are currently running'
-        state: 'pending'
-        sha: ${{ inputs.sha }}
-        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+#    - name: "Acknowledge unintelligible chatops request"
+#      if: inputs.comment_id && inputs.request_understood == 'false'
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.reactions.createForIssueComment({
+#            owner,
+#            repo,
+#            comment_id: "${{ inputs.comment_id }}",
+#            content: "-1",
+#          });
+#
+#    - name: "Acknowledge understood chatops request"
+#      if: inputs.comment_id && inputs.request_understood == 'true'
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.reactions.createForIssueComment({
+#            owner,
+#            repo,
+#            comment_id: "${{ inputs.comment_id }}",
+#            content: "+1",
+#          });
+#
+#    - name: "Record pending result"
+#      if: inputs.comment_id && inputs.request_understood == 'true'
+#      uses: Sibz/github-status-action@v1
+#      with:
+#        authToken: ${{ inputs.token }}
+#        context: ${{ inputs.test-name }}
+#        description: 'Tests are currently running'
+#        state: 'pending'
+#        sha: ${{ inputs.sha }}
+#        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Acknowledge ping test"
       if: ${{ inputs.status == 'ping' }}

@@ -30,7 +30,7 @@ runs:
           core.setOutput("pr-labels", prLabels);
 
           // extract the name(s) of the test suite(s) to be run
-          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme', 'unrecognized']
+          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
           const testRegex = /^\/test (.+)\s*$/;
@@ -47,6 +47,20 @@ runs:
               core.setOutput("tests-names", "unrecognized")
             }
           }
+
+    - name: "Respond to chatops comments requesting recognized '/test's"
+      if: !contains(steps.metadata.outputs.tests-names, 'unrecognized') && !contains(steps.metadata.outputs.tests-names, 'none')
+      uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
+      with:
+        comment_id: ${{ github.event.comment.id }}
+        comment_response: "+1"
+
+    - name: "Respond to chatops comments requesting unrecognized '/test's"
+      if: contains(steps.metadata.outputs.tests-names, 'unrecognized')
+      uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
+      with:
+        comment_id: ${{ github.event.comment.id }}
+        comment_response: "-1"
 
     - name: "Record pending status for all forthcoming checks"
       uses: cloudposse/github-action-terraform-ci/actions/status-pending@main
@@ -97,15 +111,6 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
-
-    - name: "Respond to unrecognized '/test' comments"
-      if: contains(steps.metadata.outputs.tests-names, 'unrecognized')
-      uses: cloudposse/github-action-terraform-ci/actions/status@main
-      with:
-        token: ${{ inputs.token }}
-        sha: ${{ steps.metadata.outputs.pr-sha }}
-        comment_id: ${{ github.event.comment.id }}
-        request_understood: false
 
 #    - name: "Handle common commands"
 #      uses: peter-evans/slash-command-dispatch@v2.3.0
