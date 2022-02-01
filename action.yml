@@ -79,7 +79,7 @@ runs:
 #      #  token: ${{ inputs.token }}
 
     - name: "Handle bats command"
-      if: (contains(steps.metadata.outputs.tests-names, 'bats') || contains(steps.metadata.outputs.tests-names, 'all'))
+      if: (contains(steps.metadata.outputs.tests-names, 'bats') || contains(steps.metadata.outputs.tests-names, 'all')) && always()
       uses: cloudposse/github-action-terraform-ci/actions/bats@main
       with:
         token: ${{ inputs.token }}
@@ -87,7 +87,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle ping command"
-      if: contains(steps.metadata.outputs.tests-names, 'ping') || contains(steps.metadata.outputs.tests-names, 'all')
+      if: contains(steps.metadata.outputs.tests-names, 'ping') || contains(steps.metadata.outputs.tests-names, 'all') && always()
       uses: cloudposse/github-action-terraform-ci/actions/ping@main
       with:
         token: ${{ inputs.token }}
@@ -95,7 +95,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle readme command"
-      if: contains(steps.metadata.outputs.tests-names, 'readme') || contains(steps.metadata.outputs.tests-names, 'all')
+      if: contains(steps.metadata.outputs.tests-names, 'readme') || contains(steps.metadata.outputs.tests-names, 'all') && always()
       uses: cloudposse/github-action-terraform-ci/actions/readme@main
       with:
         token: ${{ inputs.token }}
@@ -103,7 +103,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Handle terratest command"
-      if: contains(steps.metadata.outputs.tests-names, 'terratest') || contains(steps.metadata.outputs.tests-names, 'all')
+      if: contains(steps.metadata.outputs.tests-names, 'terratest') || contains(steps.metadata.outputs.tests-names, 'all') && always()
       uses: cloudposse/github-action-terraform-ci/actions/terratest@main
       with:
         token: ${{ inputs.token }}
