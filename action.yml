@@ -49,7 +49,7 @@ runs:
           }
 
     - name: "Respond to chatops comments requesting recognized '/test's"
-      if: "!contains(steps.metadata.outputs.tests-names, 'unrecognized')" && "!contains(steps.metadata.outputs.tests-names, 'none')"
+      if: contains(steps.metadata.outputs.tests-names, 'unrecognized') != true && contains(steps.metadata.outputs.tests-names, 'none') != true
       uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
       with:
         comment_id: ${{ github.event.comment.id }}
