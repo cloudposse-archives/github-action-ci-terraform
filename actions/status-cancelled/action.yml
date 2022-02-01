@@ -20,7 +20,7 @@ runs:
         authToken: ${{ inputs.token }}
         context: 'tests-bats'
         description: 'Tests were cancelled'
-        state: 'cancelled'
+        state: 'error'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -31,7 +31,7 @@ runs:
         authToken: ${{ inputs.token }}
         context: 'tests-ping'
         description: 'Tests were cancelled'
-        state: 'cancelled'
+        state: 'error'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -42,7 +42,7 @@ runs:
         authToken: ${{ inputs.token }}
         context: 'tests-readme'
         description: 'Tests were cancelled'
-        state: 'cancelled'
+        state: 'error'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -53,6 +53,6 @@ runs:
         authToken: ${{ inputs.token }}
         context: 'tests-terratest'
         description: 'Tests were cancelled'
-        state: 'cancelled'
+        state: 'error'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
