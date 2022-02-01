@@ -22,15 +22,6 @@ runs:
       run: |
         echo $INPUT_ENV > $GITHUB_ENV
 
-    - name: "Record status"
-      uses: cloudposse/github-action-terraform-ci/actions/status@main
-      with:
-        token: ${{ inputs.token }}
-        test-name: ${{ inputs.test-name }}
-        sha: ${{ inputs.sha }}
-        comment_id: ${{ github.event.comment.id }}
-        request_understood: true
-
     - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
       with:
