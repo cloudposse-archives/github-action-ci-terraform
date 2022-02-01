@@ -1,5 +1,5 @@
 name: 'terraform-ci'
-description: 'Run chatops github actions'
+description: "Run CI for Terraform (with support for chatops)"
 inputs:
   token:
     description: "github token"
