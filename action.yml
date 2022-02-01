@@ -112,6 +112,14 @@ runs:
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
 
+    - name: "Record cancelled status for all pending checks, if necessary"
+      if: cancelled()
+      uses: cloudposse/github-action-terraform-ci/actions/status-cancelled@main
+      with:
+        token: ${{ inputs.token }}
+        test-names: ${{ steps.metadata.outputs.tests-names }}
+        sha: ${{ steps.metadata.outputs.pr-sha }}
+
 #    - name: "Handle common commands"
 #      uses: peter-evans/slash-command-dispatch@v2.3.0
 #      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
