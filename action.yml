@@ -10,9 +10,44 @@ runs:
     - name: "Checkout commit"
       uses: actions/checkout@v2
 
-    - name: "Get metadata"
+    - name: "Determine Event Type"
+      id: event-type
+      uses: actions/github-script@v4
+      with:
+        script: |
+          if (context.payload.pull_request) {
+            core.setOutput("event-type", "pull-request")
+          } else if (context.paylod.issue) {
+            core.setOutput("event-type", "chatops")
+          }
+
+    - name: "Get metadata pull request"
       id: metadata
       uses: actions/github-script@v4
+      if: steps.event-type.outputs.event-type == "pull-request"
+      with:
+        script: |
+          // extract the SHA of the commit at the head of the PR
+          let headSha = context.payload.pull_request.head.sha
+          core.setOutput("pr-sha", headSha);
+
+          // extract the base branch name that's being merged into
+          let prBaseRef = context.payload.pull_request.base.ref;
+          core.setOutput("pr-base-ref", prBaseRef);
+
+          // extract the labels attached to this PR
+          let prLabels = context.payload.pull_request.labels;
+          core.setOutput("pr-labels", prLabels);
+
+          // run all tests by default
+          // #const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
+          let testNames = "all"
+          core.setOutput("tests-names", testNames)
+
+    - name: "Get metadata chatops"
+      id: metadata
+      uses: actions/github-script@v4
+      if: steps.event-type.outputs.event-type == "chatops"
       with:
         script: |
           // extract the SHA of the commit at the head of the PR
