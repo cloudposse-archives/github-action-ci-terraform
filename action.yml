@@ -63,7 +63,7 @@ runs:
         comment_response: "-1"
 
     - name: "Record pending status for all forthcoming checks"
-      uses: cloudposse/github-action-terraform-ci/actions/status-pending@main
+      uses: cloudposse/github-action-terraform-ci/actions/all-statuses-pending@main
       with:
         token: ${{ inputs.token }}
         test-names: ${{ steps.metadata.outputs.tests-names }}
@@ -112,9 +112,9 @@ runs:
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ inputs.pr-labels }}
 
-    - name: "Record cancelled status for all pending checks, if necessary"
+    - name: "Record cancelled status for all pending and completed checks, if necessary"
       if: cancelled()
-      uses: cloudposse/github-action-terraform-ci/actions/status-cancelled@main
+      uses: cloudposse/github-action-terraform-ci/actions/all-statuses-cancelled@main
       with:
         token: ${{ inputs.token }}
         test-names: ${{ steps.metadata.outputs.tests-names }}

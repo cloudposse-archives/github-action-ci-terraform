@@ -1,4 +1,4 @@
-name: 'terraform-ci-status-cancelled'
+name: 'terraform-ci-all-statuses-cancelled'
 description: 'Update the statuses of all forthcoming and completed checks to cancelled'
 inputs:
   token:

@@ -1,4 +1,4 @@
-name: 'terraform-ci-status-pending'
+name: 'terraform-ci-all-statuses-pending'
 description: 'Update the statuses of all forthcoming checks to pending'
 inputs:
   token:
