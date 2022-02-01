@@ -45,7 +45,7 @@ runs:
         authToken: ${{ inputs.token }}
         context: ${{ inputs.test-name }}
         description: 'Tests were cancelled by user'
-        state: 'canceled'
+        state: 'error'
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
