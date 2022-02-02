@@ -27,6 +27,11 @@ runs:
       with:
         args: "init"
 
+    - name: "Build README.md from README.yaml"
+      uses: docker://cloudposse/test-harness:latest
+      with:
+        args: "readme/build"
+
     - name: "Test that README.md was generated from README.yaml"
       uses: docker://cloudposse/test-harness:latest
       with:
