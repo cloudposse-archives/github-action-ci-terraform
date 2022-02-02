@@ -121,7 +121,7 @@ runs:
 
         # tests-names
         if [ "${{ steps.metadata-chatops.outputs.tests-names }}" ]; then
-          tests_names=${{ steps.metadata-chatops.outputs.tests-names }}
+          tests_names="${{ steps.metadata-chatops.outputs.tests-names }}"
         elif [ "${{ steps.metadata-pull-request.outputs.tests-names}}" ]; then
           tests_names=${{ steps.metadata-pull-request.outputs.tests-names }}
         fi
