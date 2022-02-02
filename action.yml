@@ -85,6 +85,7 @@ runs:
 
     - name: "Reconcile metadata"
       id: metadata
+      shell: bash -x -e -o pipefail {0}
       run: |
         # rename metadata from whichever step was used to extract it
 
