@@ -90,7 +90,7 @@ runs:
         script: |
           // rename metadata from whichever step was used to extract it
 
-         // pr-sha
+          // pr-sha
           if (steps.metadata-chatops.outputs.pr-sha) {
             let prSha = steps.metadata-chatops.outputs.pr-sha
           } else if (steps.metadata-pull-request.outputs.pr-sha) {
@@ -98,7 +98,7 @@ runs:
           }
           core.setOutput("pr-sha", prSha)
 
-         // pr-base-ref
+          // pr-base-ref
           if (steps.metadata-chatops.outputs.pr-base-ref) {
             let prBaseRef = steps.metadata-chatops.outputs.pr-base-ref
           } else if (steps.metadata-pull-request.outputs.pr-base-ref) {
@@ -106,7 +106,7 @@ runs:
           }
           core.setOutput("pr-base-ref", prBaseRef)
 
-         // pr-labels
+          // pr-labels
           if (steps.metadata-chatops.outputs.pr-labels) {
             let prLabels = steps.metadata-chatops.outputs.pr-labels
           } else if (steps.metadata-pull-request.outputs.pr-labels) {
@@ -114,7 +114,7 @@ runs:
           }
           core.setOutput("pr-labels", prLabels)
 
-         // tests-names
+          // tests-names
           if (steps.metadata-chatops.outputs.tests-names) {
             let testsNames = steps.metadata-chatops.outputs.tests-names
           } else if (steps.metadata-pull-request.outputs.tests-names) {
