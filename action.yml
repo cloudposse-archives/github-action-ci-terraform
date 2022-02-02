@@ -11,6 +11,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: "Extract Necessary Metadata"
+      id: metadata
       uses: cloudposse/github-action-terraform-ci/actions/metadata@main
 
     - name: "Respond to chatops comment"
