@@ -12,7 +12,7 @@ outputs:
     value: ${{ steps.metadata.outputs.pr-labels }}
   tests-names:
     description: "Names of the tests to run. Valid values: ['all', 'ping', 'bats', 'terratest', 'readme']"
-    value: ${{ steps.metadata.outputs.tests.names }}
+    value: ${{ steps.metadata.outputs.tests-names }}
 runs:
   using: "composite"
   steps:

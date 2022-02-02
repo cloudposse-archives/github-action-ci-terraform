@@ -29,7 +29,7 @@ runs:
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
     - name: "Run all requested tests"
-      if: contains(steps.metadata.outputs.tests_names, 'unrecognized') != true && contains(steps.metadata.outputs.tests_names, 'none') != true
+      if: contains(steps.metadata.outputs.tests-names, 'unrecognized') != true && contains(steps.metadata.outputs.tests-names, 'none') != true
       uses: cloudposse/github-action-terraform-ci/actions/run-tests@main
       with:
         token: ${{ inputs.token }}
