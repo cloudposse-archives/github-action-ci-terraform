@@ -17,7 +17,7 @@ runs:
         script: |
           if (context.payload.pull_request) {
             core.setOutput("event-type", "pull-request")
-          } else if (context.paylod.issue) {
+          } else if (context.payload.issue) {
             core.setOutput("event-type", "chatops")
           }
 
