@@ -34,7 +34,7 @@ runs:
       with:
         token: ${{ inputs.token }}
         tests-names: ${{ steps.metadata.outputs.tests-names }}
-        sha: ${{ steps.metadata.outputs.pr-sha }}
+        pr-sha: ${{ steps.metadata.outputs.pr-sha }}
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
         labels: ${{ steps.metadata.outputs.pr-labels }}
 

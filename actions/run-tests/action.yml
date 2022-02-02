@@ -7,7 +7,7 @@ inputs:
   tests-names:
     description: "Names of all github action status checks that will be called"
     required: true
-  sha:
+  pr-sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
   base-ref:
