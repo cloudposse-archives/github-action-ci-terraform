@@ -5,7 +5,7 @@ outputs:
     description: "The SHA of the commit at the head of the PR"
     value: ${{ steps.metadata.outputs.pr-sha }}
   pr-base-ref:
-    desription: "The name of the base branch that's being merged into"
+    description: "The name of the base branch that's being merged into"
     value: ${{ steps.metadata.outputs.pr-base-ref }}
   pr-labels:
     description: "The labels attached to this PR"
