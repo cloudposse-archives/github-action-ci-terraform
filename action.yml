@@ -85,42 +85,40 @@ runs:
 
     - name: "Reconcile metadata"
       id: metadata
-      uses: actions/github-script@v4
-      with:
-        script: |
-          // rename metadata from whichever step was used to extract it
+      run: |
+        # rename metadata from whichever step was used to extract it
 
-          // pr-sha
-          if (typeof steps.metadata-chatops.outputs.pr-sha !== 'undefined') {
-            let prSha = steps.metadata-chatops.outputs.pr-sha
-          } else if (typeof steps.metadata-pull-request.outputs.pr-sha !== 'undefined') {
-            let prSha = steps.metadata-pull-request.outputs.pr-sha
-          }
-          core.setOutput("pr-sha", prSha)
+        # pr-sha
+        if [ "${{ steps.metadata-chatops.outputs.pr-sha }}" ]; then
+          pr_sha=${{ steps.metadata-chatops.outputs.pr-sha }}
+        elif [ "${{ steps.metadata-pull-request.outputs.pr-sha}}" ]; then
+          pr_sha=${{ steps.metadata-pull-request.outputs.pr-sha }}
+        fi
+        echo "::set-output name=pr-sha::$pr_sha"
 
-          // pr-base-ref
-          if (steps.metadata-chatops.outputs.pr-base-ref) {
-            let prBaseRef = steps.metadata-chatops.outputs.pr-base-ref
-          } else if (steps.metadata-pull-request.outputs.pr-base-ref) {
-            let prBaseRef = steps.metadata-pull-request.outputs.pr-base-ref
-          }
-          core.setOutput("pr-base-ref", prBaseRef)
+        # pr-base-ref
+        if [ "${{ steps.metadata-chatops.outputs.pr-base-ref }}" ]; then
+          pr_base_ref=${{ steps.metadata-chatops.outputs.pr-base-ref }}
+        elif [ "${{ steps.metadata-pull-request.outputs.pr-base-ref}}" ]; then
+          pr_base_ref=${{ steps.metadata-pull-request.outputs.pr-base-ref }}
+        fi
+        echo "::set-output name=pr-base-ref::$pr_base_ref"
 
-          // pr-labels
-          if (steps.metadata-chatops.outputs.pr-labels) {
-            let prLabels = steps.metadata-chatops.outputs.pr-labels
-          } else if (steps.metadata-pull-request.outputs.pr-labels) {
-            let prLabels = steps.metadata-pull-request.outputs.pr-labels
-          }
-          core.setOutput("pr-labels", prLabels)
+        # pr-labels
+        if [ "${{ steps.metadata-chatops.outputs.pr-labels }}" ]; then
+          pr_labels=${{ steps.metadata-chatops.outputs.pr-labels }}
+        elif [ "${{ steps.metadata-pull-request.outputs.pr-labels}}" ]; then
+          pr_labels=${{ steps.metadata-pull-request.outputs.pr-labels }}
+        fi
+        echo "::set-output name=pr-labels::$pr_labels"
 
-          // tests-names
-          if (steps.metadata-chatops.outputs.tests-names) {
-            let testsNames = steps.metadata-chatops.outputs.tests-names
-          } else if (steps.metadata-pull-request.outputs.tests-names) {
-            let testsNames = steps.metadata-pull-request.outputs.tests-names
-          }
-          core.setOutput("tests-names", testsNames)
+        # tests-names
+        if [ "${{ steps.metadata-chatops.outputs.tests-names }}" ]; then
+          tests_names=${{ steps.metadata-chatops.outputs.tests-names }}
+        elif [ "${{ steps.metadata-pull-request.outputs.tests-names}}" ]; then
+          tests_names=${{ steps.metadata-pull-request.outputs.tests-names }}
+        fi
+        echo "::set-output name=tests-names::$tests_names"
 
     - name: "Respond to chatops comments requesting recognized '/test's"
       if: contains(steps.metadata.outputs.tests-names, 'unrecognized') != true && contains(steps.metadata.outputs.tests-names, 'none') != true
