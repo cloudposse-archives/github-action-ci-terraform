@@ -24,7 +24,7 @@ runs:
     - name: "Get metadata pull request"
       id: metadata-pull-request
       uses: actions/github-script@v4
-      if: steps.event-type.outputs.event-type == "pull-request"
+      if: steps.event-type.outputs.event-type == 'pull-request'
       with:
         script: |
           // extract the SHA of the commit at the head of the PR
@@ -47,7 +47,7 @@ runs:
     - name: "Get metadata chatops"
       id: metadata-chatops
       uses: actions/github-script@v4
-      if: steps.event-type.outputs.event-type == "chatops"
+      if: steps.event-type.outputs.event-type == 'chatops'
       with:
         script: |
           // extract the SHA of the commit at the head of the PR
