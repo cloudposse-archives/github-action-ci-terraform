@@ -91,9 +91,9 @@ runs:
           // rename metadata from whichever step was used to extract it
 
           // pr-sha
-          if (steps.metadata-chatops.outputs.pr-sha) {
+          if (typeof steps.metadata-chatops.outputs.pr-sha !== 'undefined') {
             let prSha = steps.metadata-chatops.outputs.pr-sha
-          } else if (steps.metadata-pull-request.outputs.pr-sha) {
+          } else if (typeof steps.metadata-pull-request.outputs.pr-sha !== 'undefined') {
             let prSha = steps.metadata-pull-request.outputs.pr-sha
           }
           core.setOutput("pr-sha", prSha)
