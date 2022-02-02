@@ -10,130 +10,15 @@ runs:
     - name: "Checkout commit"
       uses: actions/checkout@v2
 
-    - name: "Determine Event Type"
-      id: event-type
-      uses: actions/github-script@v4
-      with:
-        script: |
-          if (context.payload.pull_request) {
-            core.setOutput("event-type", "pull-request")
-          } else if (context.payload.issue) {
-            core.setOutput("event-type", "chatops")
-          }
+    - name: "Extract Necessary Metadata"
+      uses: cloudposse/github-action-terraform-ci/actions/metadata@main
 
-    - name: "Get metadata pull request"
-      id: metadata-pull-request
-      uses: actions/github-script@v4
-      if: steps.event-type.outputs.event-type == 'pull-request'
-      with:
-        script: |
-          // extract the SHA of the commit at the head of the PR
-          let headSha = context.payload.pull_request.head.sha
-          core.setOutput("pr-sha", headSha);
-
-          // extract the base branch name that's being merged into
-          let prBaseRef = context.payload.pull_request.base.ref;
-          core.setOutput("pr-base-ref", prBaseRef);
-
-          // extract the labels attached to this PR
-          let prLabels = context.payload.pull_request.labels;
-          core.setOutput("pr-labels", prLabels);
-
-          // run all tests by default
-          // #const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
-          let testNames = "all"
-          core.setOutput("tests-names", testNames)
-
-    - name: "Get metadata chatops"
-      id: metadata-chatops
-      uses: actions/github-script@v4
-      if: steps.event-type.outputs.event-type == 'chatops'
-      with:
-        script: |
-          // extract the SHA of the commit at the head of the PR
-          const prUrl = context.payload.issue.pull_request.url;
-          const prDetails = await github.request(`GET ${prUrl}`);
-          let headSha = prDetails.data.head.sha;
-          core.setOutput("pr-sha", headSha);
-
-          // extract the base branch name that's being merged into
-          let prBaseRef = prDetails.data.base.ref;
-          core.setOutput("pr-base-ref", prBaseRef);
-
-          // extract the labels attached to this PR
-          let prLabels = prDetails.data.labels;
-          core.setOutput("pr-labels", prLabels);
-
-          // extract the name(s) of the test suite(s) to be run
-          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
-          const commentBody = context.payload.comment.body;
-          console.log(commentBody)
-          const testRegex = /^\/test (.+)\s*$/;
-          testMatches = commentBody.match(testRegex);
-          console.log(testMatches)
-          if (testMatches == null) { // this indicates no /test command was found
-            core.setOutput("tests-names", "none")
-          } else if (testMatches[1]) { // this should be the first capture group in a successful match
-            if ( validTests.some( test => testMatches[1].includes(test) ) ) {
-              // at least one valid test specified
-              core.setOutput("tests-names", testMatches[1])
-            } else {
-              // no valid tests specified
-              core.setOutput("tests-names", "unrecognized")
-            }
-          }
-
-    - name: "Reconcile metadata"
-      id: metadata
-      shell: bash -x -e -o pipefail {0}
-      run: |
-        # rename metadata from whichever step was used to extract it
-
-        # pr-sha
-        if [ "${{ steps.metadata-chatops.outputs.pr-sha }}" ]; then
-          pr_sha=${{ steps.metadata-chatops.outputs.pr-sha }}
-        elif [ "${{ steps.metadata-pull-request.outputs.pr-sha}}" ]; then
-          pr_sha=${{ steps.metadata-pull-request.outputs.pr-sha }}
-        fi
-        echo "::set-output name=pr-sha::$pr_sha"
-
-        # pr-base-ref
-        if [ "${{ steps.metadata-chatops.outputs.pr-base-ref }}" ]; then
-          pr_base_ref=${{ steps.metadata-chatops.outputs.pr-base-ref }}
-        elif [ "${{ steps.metadata-pull-request.outputs.pr-base-ref}}" ]; then
-          pr_base_ref=${{ steps.metadata-pull-request.outputs.pr-base-ref }}
-        fi
-        echo "::set-output name=pr-base-ref::$pr_base_ref"
-
-        # pr-labels
-        if [ "${{ steps.metadata-chatops.outputs.pr-labels }}" ]; then
-          pr_labels=${{ steps.metadata-chatops.outputs.pr-labels }}
-        elif [ "${{ steps.metadata-pull-request.outputs.pr-labels}}" ]; then
-          pr_labels=${{ steps.metadata-pull-request.outputs.pr-labels }}
-        fi
-        echo "::set-output name=pr-labels::$pr_labels"
-
-        # tests-names
-        if [ "${{ steps.metadata-chatops.outputs.tests-names }}" ]; then
-          tests_names=${{ steps.metadata-chatops.outputs.tests-names }}
-        elif [ "${{ steps.metadata-pull-request.outputs.tests-names}}" ]; then
-          tests_names=${{ steps.metadata-pull-request.outputs.tests-names }}
-        fi
-        echo "::set-output name=tests-names::$tests_names"
-
-    - name: "Respond to chatops comments requesting recognized '/test's"
-      if: contains(steps.metadata.outputs.tests-names, 'unrecognized') != true && contains(steps.metadata.outputs.tests-names, 'none') != true
+    - name: "Respond to chatops comment"
+      if: github.event.comment
       uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
       with:
         comment_id: ${{ github.event.comment.id }}
-        comment_response: "+1"
-
-    - name: "Respond to chatops comments requesting unrecognized '/test's"
-      if: contains(steps.metadata.outputs.tests-names, 'unrecognized')
-      uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
-      with:
-        comment_id: ${{ github.event.comment.id }}
-        comment_response: "-1"
+        tests_names: ${{ steps.metadata.outputs.tests-names }}
 
     - name: "Record pending status for all forthcoming checks"
       uses: cloudposse/github-action-terraform-ci/actions/all-statuses-pending@main
@@ -142,48 +27,15 @@ runs:
         test-names: ${{ steps.metadata.outputs.tests-names }}
         sha: ${{ steps.metadata.outputs.pr-sha }}
 
-#    - name: "Handle all test commands"
-#      if: contains(steps.metadata.outputs.tests-names, 'all')
-#      uses: cloudposse/github-action-terraform-ci/actions/runs@main
-#      with:
-#        tests: "ping,bats,readme"
-#        pr-sha: ${{ steps.metadata.outputs.pr-sha }}
-#      #secrets:
-#      #  token: ${{ inputs.token }}
-
-    - name: "Handle bats command"
-      if: (contains(steps.metadata.outputs.tests-names, 'bats') || contains(steps.metadata.outputs.tests-names, 'all')) && (success() || failure())
-      uses: cloudposse/github-action-terraform-ci/actions/bats@main
+    - name: "Run all requested tests"
+      if: contains(steps.metadata.outputs.tests_names, 'unrecognized') != true && contains(steps.metadata.outputs.tests_names, 'none') != true
+      uses: cloudposse/github-action-terraform-ci/actions/run-tests@main
       with:
         token: ${{ inputs.token }}
-        test-name: "tests-bats"
-        sha: ${{ steps.metadata.outputs.pr-sha }}
-
-    - name: "Handle ping command"
-      if: contains(steps.metadata.outputs.tests-names, 'ping') || contains(steps.metadata.outputs.tests-names, 'all') && (success() || failure())
-      uses: cloudposse/github-action-terraform-ci/actions/ping@main
-      with:
-        token: ${{ inputs.token }}
-        test-name: "tests-ping"
-        sha: ${{ steps.metadata.outputs.pr-sha }}
-
-    - name: "Handle readme command"
-      if: contains(steps.metadata.outputs.tests-names, 'readme') || contains(steps.metadata.outputs.tests-names, 'all') && (success() || failure())
-      uses: cloudposse/github-action-terraform-ci/actions/readme@main
-      with:
-        token: ${{ inputs.token }}
-        test-name: "tests-readme"
-        sha: ${{ steps.metadata.outputs.pr-sha }}
-
-    - name: "Handle terratest command"
-      if: contains(steps.metadata.outputs.tests-names, 'terratest') || contains(steps.metadata.outputs.tests-names, 'all') && (success() || failure())
-      uses: cloudposse/github-action-terraform-ci/actions/terratest@main
-      with:
-        token: ${{ inputs.token }}
-        test-name: "tests-terratest"
+        tests-names: ${{ steps.metadata.outputs.tests-names }}
         sha: ${{ steps.metadata.outputs.pr-sha }}
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
-        labels: ${{ inputs.pr-labels }}
+        labels: ${{ steps.metadata.outputs.pr-labels }}
 
     - name: "Record cancelled status for all pending and completed checks, if necessary"
       if: cancelled()

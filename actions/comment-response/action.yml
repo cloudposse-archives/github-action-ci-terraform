@@ -4,13 +4,14 @@ inputs:
   comment_id:
     description: "ID of comment which triggered this action"
     required: true
-  comment_response:
-    description: "Response to make to comment (one of https://docs.github.com/en/rest/reference/reactions#reaction-types)"
-    required: false
+  tests_names:
+    description: "Names of all tests to be run, or 'unrecognized' if no valid tests were requested, or 'none' if comment wasn't a properly formatted chatops request"
+    required: true
 runs:
   using: "composite"
   steps:
-    - name: "Acknowledge chatops request"
+    - name: "Respond to chatops comments requesting recognized '/test's"
+      if: contains(inputs.tests_names, 'unrecognized') != true && contains(inputs.tests_names, 'none') != true
       uses: actions/github-script@v4
       with:
         script: |
@@ -19,5 +20,18 @@ runs:
             owner,
             repo,
             comment_id: "${{ inputs.comment_id }}",
-            content: "${{ inputs.comment_response }}",
+            content: "+1",
+          });
+
+    - name: "Respond to chatops comments requesting unrecognized '/test's"
+      if: contains(inputs.tests_names, 'unrecognized')
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: "${{ inputs.comment_id }}",
+            content: "-1",
           });

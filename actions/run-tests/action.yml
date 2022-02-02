@@ -1,0 +1,54 @@
+name: 'terraform-ci-run-tests'
+description: 'Run all requested tests'
+inputs:
+  token:
+    description: "github token"
+    required: true
+  tests-names:
+    description: "Names of all github action status checks that will be called"
+    required: true
+  sha:
+    description: "SHA hash of the commit whose status will be modified"
+    required: true
+  base-ref:
+    desription: "The name of the base branch that's being merged into"
+    required: true
+  labels:
+    description: "The labels attached to this PR"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Handle bats command"
+      if: (contains(inputs.tests-names, 'bats') || contains(inputs.tests-names, 'all')) && (success() || failure())
+      uses: cloudposse/github-action-terraform-ci/actions/bats@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-bats"
+        sha: ${{ inputs.pr-sha }}
+
+    - name: "Handle ping command"
+      if: contains(inputs.tests-names, 'ping') || contains(inputs.tests-names, 'all') && (success() || failure())
+      uses: cloudposse/github-action-terraform-ci/actions/ping@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-ping"
+        sha: ${{ inputs.pr-sha }}
+
+    - name: "Handle readme command"
+      if: contains(inputs.tests-names, 'readme') || contains(inputs.tests-names, 'all') && (success() || failure())
+      uses: cloudposse/github-action-terraform-ci/actions/readme@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-readme"
+        sha: ${{ inputs.pr-sha }}
+
+    - name: "Handle terratest command"
+      if: contains(inputs.tests-names, 'terratest') || contains(inputs.tests-names, 'all') && (success() || failure())
+      uses: cloudposse/github-action-terraform-ci/actions/terratest@main
+      with:
+        token: ${{ inputs.token }}
+        test-name: "tests-terratest"
+        sha: ${{ inputs.pr-sha }}
+        base-ref: ${{ inputs.base-ref }}
+        labels: ${{ inputs.labels }}
