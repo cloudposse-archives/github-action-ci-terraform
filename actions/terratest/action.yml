@@ -122,8 +122,7 @@ runs:
     - name: "Initialize terratest Go project, part 2"
       uses: docker://cloudposse/test-harness:latest
       with:
-        entrypoint: "/bin/bash"
-        args: "rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl"
+        entrypoint: "rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl"
 
     - name: "Output script for `Inject secrets` step"
       shell: bash -x -e -o pipefail {0}
