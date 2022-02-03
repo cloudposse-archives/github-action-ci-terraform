@@ -84,11 +84,11 @@ runs:
 
           // extract the name(s) of the test suite(s) to be run
           const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
-          //const commentBody = context.payload.comment.body;
-          //console.log(commentBody)
-          //const testRegex = /^\/test (.+)\s*$/;
-          //testMatches = commentBody.match(testRegex);
-          //console.log(testMatches)
+          const commentBody = context.payload.comment.body;
+          console.log(commentBody)
+          const testRegex = /^\/test (.+)\s*$/;
+          testMatches = commentBody.match(testRegex);
+          console.log(testMatches)
           //if (testMatches == null) { // this indicates no /test command was found
             //core.setOutput("tests-names", "none")
           //} else if (testMatches[1]) { // this should be the first capture group in a successful match
