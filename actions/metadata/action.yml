@@ -86,7 +86,7 @@ runs:
           const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
-          const testRegex = /^\/test (.+)\s*$/;
+          const testRegex = /^\/test( .+)\s*$/;
           testMatches = commentBody.match(testRegex);
           console.log(testMatches)
           //if (testMatches == null) { // this indicates no /test command was found
