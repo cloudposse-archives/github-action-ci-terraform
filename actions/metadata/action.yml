@@ -21,7 +21,7 @@ outputs:
     value: ${{ steps.metadata.outputs.recognized-tests }}
   unrecognized-tests:
     description: "Space-separated string of the names of the tests that were requested but are not supported"
-    value: ${{ steps.metadata.outputs.unrecognized-names }}
+    value: ${{ steps.metadata.outputs.unrecognized-tests }}
 runs:
   using: "composite"
   steps:
