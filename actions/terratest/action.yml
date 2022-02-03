@@ -124,11 +124,53 @@ runs:
       uses: docker://cloudposse/test-harness:latest
       with:
         args: "-C test/src clean init"
+
     - name: "Initialize terratest Go project, part 2"
       uses: docker://cloudposse/test-harness:latest
       with:
         entrypoint: "/bin/bash"
         args: "rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl"
+
+    - name: "Output script for `Inject secrets` step"
+      shell: bash -x -e -o pipefail {0}
+      run: |
+        cat << "EOF" > inject_secrets.sh
+        #!/bin/bash
+
+        if [[ "$USES_AWS" == "true" || "$USES_DATADOG" == "true" || "$USES_SPOTINST" == "true" ]]; then
+          printf "%s=%s\n"  AWS_ACCESS_KEY_ID      "$AWS_ACCESS_KEY_ID"      >> "$GITHUB_ENV"
+          printf "%s=%s\n"  AWS_SECRET_ACCESS_KEY  "$AWS_SECRET_ACCESS_KEY"  >> "$GITHUB_ENV"
+          echo exported AWS
+        fi;
+        if [[ "$USES_DATADOG" == "true" ]]; then
+          printf "%s=%s\n"  DD_API_KEY "$DD_API_KEY" >> "$GITHUB_ENV"
+          printf "%s=%s\n"  DD_APP_KEY "$DD_APP_KEY" >> "$GITHUB_ENV"
+          echo exported Datadog
+        fi;
+        if [[ "$USES_GITHUB" == "true" ]]; then
+          printf "%s=%s\n"  GITHUB_TOKEN     "$GITHUB_TOKEN"     >> "$GITHUB_ENV"
+          echo exported GitHub
+        fi;
+        if [[ "$USES_OPSGENIE" == "true" ]]; then
+          printf "%s=%s\n"  OPSGENIE_API_KEY "$OPSGENIE_API_KEY" >> "$GITHUB_ENV"
+          echo exported Opsgenie
+        fi;
+        if [[ "$USES_SPOTINST" == "true" ]]; then
+          printf "%s=%s\n"  SPOTINST_TOKEN   "$SPOTINST_TOKEN"   >> "$GITHUB_ENV"
+          printf "%s=%s\n"  SPOTINST_ACCOUNT "$SPOTINST_ACCOUNT" >> "$GITHUB_ENV"
+          echo exported Spotinst
+        fi;
+        if [[ "$USES_TFE" == "true" ]]; then
+          printf "%s=%s\n"  TFE_TOKEN   "$TFE_TOKEN"   >> "$GITHUB_ENV"
+          echo exported Terraform Cloud
+        fi;
+        if [[ "$USES_CLOUDFLARE" == "true" ]]; then
+          printf "%s=%s\n"  CLOUDFLARE_EMAIL   "$CLOUDFLARE_EMAIL"   >> "$GITHUB_ENV"
+          printf "%s=%s\n"  CLOUDFLARE_API_KEY "$CLOUDFLARE_API_KEY" >> "$GITHUB_ENV"
+          echo exported CloudFlare
+        fi;
+        EOF
+        chmod a+x inject_secrets.sh
 
     - name: "Inject secrets"
       uses: docker://cloudposse/test-harness:latest
@@ -154,53 +196,19 @@ runs:
         USES_CLOUDFLARE: >-
           ${{ contains(github.event.client_payload.github.payload.repository.name, '-cloudflare-')
           ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-cloudflare-provider') }}
-        AWS_ACCESS_KEY_ID:     ${{ inputs.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-        GITHUB_TOKEN:          ${{ inputs.PUBLIC_REPO_ACCESS_TOKEN }}
-        OPSGENIE_API_KEY:      ${{ inputs.OPSGENIE_API_KEY }}
-        DD_API_KEY:            ${{ inputs.DD_API_KEY }}
-        DD_APP_KEY:            ${{ inputs.DD_APP_KEY }}
-        SPOTINST_TOKEN:        ${{ inputs.SPOTINST_TOKEN }}
-        SPOTINST_ACCOUNT:      ${{ inputs.SPOTINST_ACCOUNT }}
-        TFE_TOKEN:             ${{ inputs.TFE_TOKEN }}
-        CLOUDFLARE_EMAIL:      ${{ inputs.CLOUDFLARE_EMAIL }}
-        CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
+        AWS_ACCESS_KEY_ID:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GITHUB_TOKEN:          ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
+        OPSGENIE_API_KEY:      ${{ secrets.OPSGENIE_API_KEY }}
+        DD_API_KEY:            ${{ secrets.DD_API_KEY }}
+        DD_APP_KEY:            ${{ secrets.DD_APP_KEY }}
+        SPOTINST_TOKEN:        ${{ secrets.SPOTINST_TOKEN }}
+        SPOTINST_ACCOUNT:      ${{ secrets.SPOTINST_ACCOUNT }}
+        TFE_TOKEN:             ${{ secrets.TFE_TOKEN }}
+        CLOUDFLARE_EMAIL:      ${{ secrets.CLOUDFLARE_EMAIL }}
+        CLOUDFLARE_API_KEY:    ${{ secrets.CLOUDFLARE_API_KEY }}
       with:
-        entrypoint: "/bin/bash"
-        args: '
-          if [[ "$USES_AWS" == "true" || "$USES_DATADOG" == "true" || "$USES_SPOTINST" == "true" ]]; then
-            printf "%s=%s\n"  AWS_ACCESS_KEY_ID      "$AWS_ACCESS_KEY_ID"      >> "$GITHUB_ENV"
-            printf "%s=%s\n"  AWS_SECRET_ACCESS_KEY  "$AWS_SECRET_ACCESS_KEY"  >> "$GITHUB_ENV"
-            echo exported AWS
-          fi;
-          if [[ "$USES_DATADOG" == "true" ]]; then
-            printf "%s=%s\n"  DD_API_KEY "$DD_API_KEY" >> "$GITHUB_ENV"
-            printf "%s=%s\n"  DD_APP_KEY "$DD_APP_KEY" >> "$GITHUB_ENV"
-            echo exported Datadog
-          fi;
-          if [[ "$USES_GITHUB" == "true" ]]; then
-            printf "%s=%s\n"  GITHUB_TOKEN     "$GITHUB_TOKEN"     >> "$GITHUB_ENV"
-            echo exported GitHub
-          fi;
-          if [[ "$USES_OPSGENIE" == "true" ]]; then
-            printf "%s=%s\n"  OPSGENIE_API_KEY "$OPSGENIE_API_KEY" >> "$GITHUB_ENV"
-            echo exported Opsgenie
-          fi;
-          if [[ "$USES_SPOTINST" == "true" ]]; then
-            printf "%s=%s\n"  SPOTINST_TOKEN   "$SPOTINST_TOKEN"   >> "$GITHUB_ENV"
-            printf "%s=%s\n"  SPOTINST_ACCOUNT "$SPOTINST_ACCOUNT" >> "$GITHUB_ENV"
-            echo exported Spotinst
-          fi;
-          if [[ "$USES_TFE" == "true" ]]; then
-            printf "%s=%s\n"  TFE_TOKEN   "$TFE_TOKEN"   >> "$GITHUB_ENV"
-            echo exported Terraform Cloud
-          fi;
-          if [[ "$USES_CLOUDFLARE" == "true" ]]; then
-            printf "%s=%s\n"  CLOUDFLARE_EMAIL   "$CLOUDFLARE_EMAIL"   >> "$GITHUB_ENV"
-            printf "%s=%s\n"  CLOUDFLARE_API_KEY "$CLOUDFLARE_API_KEY" >> "$GITHUB_ENV"
-            echo exported CloudFlare
-          fi;
-        '
+        entrypoint: "/github/workspace/inject_secrets.sh"
 
     - name: "Test `examples/complete` with terratest"
       uses: docker://cloudposse/test-harness:latest
