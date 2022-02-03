@@ -233,6 +233,7 @@ runs:
         # Test `examples/complete` with terratest
         make -C test/src
         EOF
+        chmod a+x terratest.sh
 
     # Execute all terratest functionality within one container.
     - name: "Determine required terraform version"
