@@ -121,7 +121,7 @@ runs:
           //core.setOutput("comment-id", inputs.commentId);
 
     - name: "Respond to chatops comments requesting a combination of valid and invalid '/test's"
-      if: inputs.recognized_tests == '' && inputs.unrecognized_tests != ''
+      if: inputs.recognized_tests != '' && inputs.unrecognized_tests != ''
       uses: actions/github-script@v4
       with:
         script: |
