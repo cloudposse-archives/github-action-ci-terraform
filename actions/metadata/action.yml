@@ -124,10 +124,16 @@ runs:
 
           // function for forEach loop above, checking valid test names against the string of requested tests
           function testCheck(test_name, index) {
+            console.log("\n")
+            console.log(test_name)
+            console.log(recognizedTests)
+            console.log(unrecognizedTests)
             if ( unrecognizedTests.includes( " " + test_name + " " ) ) {
               recognizedTests += test_name + " "
               unrecognizedTests = unrecognizedTests.replace(test_name,"")
             }
+            console.log(recognizedTests)
+            console.log(unrecognizedTests)
           }
 
           // debugging
