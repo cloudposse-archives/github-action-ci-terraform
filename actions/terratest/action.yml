@@ -23,11 +23,9 @@ inputs:
     required: false
     default: "none"
   AWS_SECRET_ACCESS_KEY:
-    required: false
-    default: "none"
+    required: true
   OPSGENIE_API_KEY:
     required: true
-    default: "none"
   DD_API_KEY:
     required: false
     default: "none"
@@ -39,7 +37,6 @@ inputs:
     default: "none"
   SPOTINST_ACCOUNT:
     required: true
-    default: "none"
   TFE_TOKEN:
     required: false
     default: "none"

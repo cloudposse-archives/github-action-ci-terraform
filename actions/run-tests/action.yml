@@ -20,6 +20,8 @@ inputs:
     required: true
   SPOTINST_ACCOUNT:
     required: true
+  AWS_SECRET_ACCESS_KEY:
+    required: true
 runs:
   using: "composite"
   steps:
@@ -58,3 +60,4 @@ runs:
         labels: ${{ inputs.labels }}
         OPSGENIE_API_KEY: ${{ inputs.OPSGENIE_API_KEY }}
         SPOTINST_ACCOUNT: ${{ inputs.SPOTINST_ACCOUNT }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
