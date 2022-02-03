@@ -112,7 +112,7 @@ runs:
             validTestRequest = "true"
             unrecognizedTests = testMatches[1]
             validTests.forEach(
-              if ( unrecognizedTests.contains(value) ) {
+              if ( unrecognizedTests.includes( " " + value + " " ) ) {
                 recognizedTests += value + " "
                 unrecognizedTests = unrecognizedTests.replace(value,"")
               }
