@@ -10,17 +10,17 @@ inputs:
   sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
-  env:
-    default: |
-      MAKE_INCLUDES=Makefile
-      TF_PLUGIN_CACHE_DIR=/tmp
+#  env:
+#    default: |
+#      MAKE_INCLUDES=Makefile
+#      TF_PLUGIN_CACHE_DIR=/tmp
 runs:
   using: "composite"
   steps:
-    - name: "Update ENV"
-      shell: bash
-      run: |
-        echo $INPUT_ENV > $GITHUB_ENV
+#    - name: "Update ENV"
+#      shell: bash
+#      run: |
+#        echo $INPUT_ENV > $GITHUB_ENV
 
     - name: "Initialize test-harness"
       uses: docker://cloudposse/test-harness:latest
