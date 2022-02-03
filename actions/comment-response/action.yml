@@ -59,7 +59,7 @@ runs:
           commentBody = commentBody + "Valid tests: " + "${{ inputs.recognized_tests }}" + "\n";
           commentBody = commentBody + "The valid tests will now be executed.";
           core.debug(`Comment body: ${commentBody}`);
-          await octokit.issues.updateComment({
+          await github.issues.updateComment({
             owner: owner,
             repo: repo,
             comment_id: "${{ inputs.comment_id }}",
@@ -111,7 +111,7 @@ runs:
           commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
           commentBody = CommentBody + "If you would still like to run these invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
           core.debug(`Comment body: ${commentBody}`);
-          await octokit.issues.updateComment({
+          await github.issues.updateComment({
             owner: owner,
             repo: repo,
             comment_id: "${{ inputs.comment_id }}",
@@ -152,7 +152,7 @@ runs:
           commentBody = commentBody + "Only the valid tests will be executed." + "\n";
           commentBody = CommentBody + "If you would still like to run the invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
           core.debug(`Comment body: ${commentBody}`);
-          await octokit.issues.updateComment({
+          await github.issues.updateComment({
             owner: owner,
             repo: repo,
             comment_id: "${{ inputs.comment_id }}",
