@@ -56,7 +56,7 @@ runs:
           // Make addition to comment body
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "All the requested tests were valid." + "\n";
-          commentBody = commentBody + "Valid tests: " + "${{ inputs.recognized_tests }}" + "\n";
+          commentBody = commentBody + "Valid tests: " + "<b>${{ inputs.recognized_tests }}</b>" + "\n";
           commentBody = commentBody + "The valid tests will now be executed.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
@@ -108,8 +108,8 @@ runs:
           // Make addition to comment body
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "All requested tests are invalid." + "\n";
-          commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
-          commentBody = commentBody + "If you would still like to run these invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
+          commentBody = commentBody + "Invalid tests: " + "<b>${{ inputs.unrecognized_tests }}</b>" + "\n";
+          commentBody = commentBody + "If you would still like to run these invalid tests, please verify that they are supported by this action and were spelled correctly. Then, create another request comment.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
             owner: owner,
@@ -147,10 +147,10 @@ runs:
           // Make addition to comment body
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "There were a mixture of valid and invalid tests requested, as follows." + "\n";
-          commentBody = commentBody + "Valid tests: " + "${{ inputs.recognized_tests }}" + "\n";
-          commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
+          commentBody = commentBody + "Valid tests: " + "<b>${{ inputs.recognized_tests }}</b>" + "\n";
+          commentBody = commentBody + "Invalid tests: " + "<b>${{ inputs.unrecognized_tests }}</b>" + "\n";
           commentBody = commentBody + "Only the valid tests will be executed." + "\n";
-          commentBody = commentBody + "If you would still like to run the invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
+          commentBody = commentBody + "If you would still like to run the invalid tests, please verify that they are supported by this action and were spelled correctly. Then, create another request comment.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
             owner: owner,
