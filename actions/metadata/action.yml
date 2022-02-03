@@ -130,6 +130,11 @@ runs:
             }
           }
 
+          // debugging
+          console.log(validTestRequest)
+          console.log(recognizedTests)
+          console.log(unrecognizedTests)
+
           // outputs
           core.setOutput("valid-test-request", validTestRequest)
           core.setOutput("recognized-tests", recognizedTests)
