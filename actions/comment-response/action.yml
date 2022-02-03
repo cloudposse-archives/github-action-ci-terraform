@@ -109,7 +109,7 @@ runs:
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "All requested tests are invalid." + "\n";
           commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
-          commentBody = CommentBody + "If you would still like to run these invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
+          commentBody = commentBody + "If you would still like to run these invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
             owner: owner,
@@ -150,7 +150,7 @@ runs:
           commentBody = commentBody + "Valid tests: " + "${{ inputs.recognized_tests }}" + "\n";
           commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
           commentBody = commentBody + "Only the valid tests will be executed." + "\n";
-          commentBody = CommentBody + "If you would still like to run the invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
+          commentBody = commentBody + "If you would still like to run the invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
             owner: owner,
