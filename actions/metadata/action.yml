@@ -114,11 +114,11 @@ runs:
             validTests.forEach(testCheck)
             unrecognizedTests = unrecognizedTests.replace(/\s{2,}/g," ")
             // clean up lists of tests, whether they're empty or not
-            if ( !( /\S/.test(recognizedTests) ) ) {
+            if ( ! ( /\S/.test(recognizedTests) ) ) {
               recognizedTests = ""
             } else {
               recognizedTests = recognizedTests.replace(/^\s*/,"")
-            if ( !( /\S/.test(unrecognizedTests) ) ) {
+            if ( ! ( /\S/.test(unrecognizedTests) ) ) {
               unrecognizedTests = ""
             } else {
               unrecognizedTests = unrecognizedTests.replace(/^\s*/,"")
