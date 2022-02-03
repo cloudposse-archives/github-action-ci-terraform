@@ -4,18 +4,39 @@ inputs:
   comment_id:
     description: "ID of comment which triggered this action"
     required: true
-  tests_names:
-    description: "Names of all tests to be run, or 'unrecognized' if no valid tests were requested, or 'none' if comment wasn't a properly formatted chatops request"
+  #tests_names:
+  #  description: "Names of all tests to be run, or 'unrecognized' if no valid tests were requested, or 'none' if comment wasn't a properly formatted chatops request"
+  #  required: true
+  recognized_tests:
+    description: "Names of all tests to be run, or '' if if no valid tests were requested"
+    required: true
+  unrecognized_tests:
+    description: "Names of all invalid tests requested, or '' if no invalid tests were requested"
     required: true
 runs:
   using: "composite"
   steps:
-    - name: "Respond to chatops comments requesting recognized '/test's"
-      if: contains(inputs.tests_names, 'unrecognized') != true && contains(inputs.tests_names, 'none') != true
+#    - name: "Respond to chatops comments requesting recognized '/test's"
+#      if: contains(inputs.tests_names, 'unrecognized') != true && contains(inputs.tests_names, 'none') != true
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.reactions.createForIssueComment({
+#            owner,
+#            repo,
+#            comment_id: "${{ inputs.comment_id }}",
+#            content: "+1",
+#          });
+
+    - name: "Respond to chatops comments requesting only valid '/test's"
+      if: inputs.recognized_tests != '' && inputs.unrecognized_tests == ''
       uses: actions/github-script@v4
       with:
         script: |
           const {owner, repo} = context.issue
+
+          // make emoji response to comment
           github.reactions.createForIssueComment({
             owner,
             repo,
@@ -23,15 +44,119 @@ runs:
             content: "+1",
           });
 
-    - name: "Respond to chatops comments requesting unrecognized '/test's"
-      if: contains(inputs.tests_names, 'unrecognized')
+          // modify original comment
+          var commentBody = "";
+          // Get the comment body
+          const { data: comment } = await github.issues.getComment({
+            owner: owner,
+            repo: repo,
+            comment_id: "${{ inputs.comment_id }}",
+          });
+          commentBody = comment.body + "\n\n";
+          // Make addition to comment body
+          commentBody = commentBody + "terraform-ci GitHub action response:" + "\n";
+          commentBody = commentBody + "All the requested tests were valid." + "\n";
+          commentBody = commentBody + "Valid tests: " + "${{ inputs.recognized_tests }}" + "\n";
+          commentBody = commentBody + "The valid tests will now be executed.";
+          core.debug(`Comment body: ${commentBody}`);
+          await octokit.issues.updateComment({
+            owner: owner,
+            repo: repo,
+            comment_id: "${{ inputs.comment_id }}",
+            body: commentBody,
+          });
+          core.info(`Updated comment id '${{ inputs.comment_id }}'.`);
+          //core.setOutput("comment-id", inputs.commentId);
+
+#    - name: "Respond to chatops comments requesting unrecognized '/test's"
+#      if: contains(inputs.tests_names, 'unrecognized')
+#      uses: actions/github-script@v4
+#      with:
+#        script: |
+#          const {owner, repo} = context.issue
+#          github.reactions.createForIssueComment({
+#            owner,
+#            repo,
+#            comment_id: "${{ inputs.comment_id }}",
+#            content: "-1",
+#          });
+
+    - name: "Respond to chatops comments requesting only invalid '/test's"
+      if: inputs.recognized_tests == '' && inputs.unrecognized_tests != ''
       uses: actions/github-script@v4
       with:
         script: |
           const {owner, repo} = context.issue
+
+          // make emoji response to comment
           github.reactions.createForIssueComment({
             owner,
             repo,
             comment_id: "${{ inputs.comment_id }}",
             content: "-1",
           });
+
+          // modify original comment
+          var commentBody = "";
+          // Get the comment body
+          const { data: comment } = await github.issues.getComment({
+            owner: owner,
+            repo: repo,
+            comment_id: "${{ inputs.comment_id }}",
+          });
+          commentBody = comment.body + "\n\n";
+          // Make addition to comment body
+          commentBody = commentBody + "terraform-ci GitHub action response:" + "\n";
+          commentBody = commentBody + "All requested tests are invalid." + "\n";
+          commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
+          commentBody = CommentBody + "If you would still like to run these invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
+          core.debug(`Comment body: ${commentBody}`);
+          await octokit.issues.updateComment({
+            owner: owner,
+            repo: repo,
+            comment_id: "${{ inputs.comment_id }}",
+            body: commentBody,
+          });
+          core.info(`Updated comment id '${{ inputs.comment_id }}'.`);
+          //core.setOutput("comment-id", inputs.commentId);
+
+    - name: "Respond to chatops comments requesting a combination of valid and invalid '/test's"
+      if: inputs.recognized_tests == '' && inputs.unrecognized_tests != ''
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const {owner, repo} = context.issue
+
+          // make emoji response to comment
+          github.reactions.createForIssueComment({
+            owner,
+            repo,
+            comment_id: "${{ inputs.comment_id }}",
+            content: "confused",
+          });
+
+          // modify original comment
+          var commentBody = "";
+          // Get the comment body
+          const { data: comment } = await github.issues.getComment({
+            owner: owner,
+            repo: repo,
+            comment_id: "${{ inputs.comment_id }}",
+          });
+          commentBody = comment.body + "\n\n";
+          // Make addition to comment body
+          commentBody = commentBody + "terraform-ci GitHub action response:" + "\n";
+          commentBody = commentBody + "There were a mixture of valid and invalid tests requested, as follows." + "\n";
+          commentBody = commentBody + "Valid tests: " + "${{ inputs.recognized_tests }}" + "\n";
+          commentBody = commentBody + "Invalid tests: " + "${{ inputs.unrecognized_tests }}" + "\n";
+          commentBody = commentBody + "Only the valid tests will be executed." + "\n";
+          commentBody = CommentBody + "If you would still like to run the invalid tests, please verify that they are supported by this action and were spelled correctly and then create another comment.";
+          core.debug(`Comment body: ${commentBody}`);
+          await octokit.issues.updateComment({
+            owner: owner,
+            repo: repo,
+            comment_id: "${{ inputs.comment_id }}",
+            body: commentBody,
+          });
+          core.info(`Updated comment id '${{ inputs.comment_id }}'.`);
+          //core.setOutput("comment-id", inputs.commentId);

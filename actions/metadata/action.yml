@@ -10,9 +10,18 @@ outputs:
   pr-labels:
     description: "The labels attached to this PR"
     value: ${{ steps.metadata.outputs.pr-labels }}
-  tests-names:
-    description: "Names of the tests to run. Valid values: ['all', 'ping', 'bats', 'terratest', 'readme']"
-    value: ${{ steps.metadata.outputs.tests-names }}
+#  tests-names:
+#    description: "Names of the tests to run. Valid values: ['all', 'ping', 'bats', 'terratest', 'readme']"
+#    value: ${{ steps.metadata.outputs.tests-names }}
+  valid-test-request:
+    description: "Boolean string. Indicating whether the calling event was a proper /test request."
+    value: ${{ steps.metadata.outputs.valid-test-request }}
+  recognized-tests:
+    description: "Space-separated string of the names of the tests to run. Valid values: ['all', 'ping', 'bats', 'terratest', 'readme']"
+    value: ${{ steps.metadata.outputs.recognized-tests }}
+  unrecognized-tests:
+    description: "Space-separated string of the names of the tests that were requested but are not supported"
+    value: ${{ steps.metadata.outputs.unrecognized-names }}
 runs:
   using: "composite"
   steps:
@@ -48,7 +57,10 @@ runs:
           // run all tests by default
           // #const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
           let testNames = "all"
-          core.setOutput("tests-names", testNames)
+          //core.setOutput("tests-names", testNames)
+          core.setOutput("valid-test-request", "true")
+          core.setOutput("recognized-tests", testNames)
+          core.setOutput("unrecognized-tests", "")
 
     - name: "Get metadata chatops"
       id: metadata-chatops
@@ -72,22 +84,51 @@ runs:
 
           // extract the name(s) of the test suite(s) to be run
           const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
-          const commentBody = context.payload.comment.body;
-          console.log(commentBody)
-          const testRegex = /^\/test (.+)\s*$/;
-          testMatches = commentBody.match(testRegex);
-          console.log(testMatches)
+          //const commentBody = context.payload.comment.body;
+          //console.log(commentBody)
+          //const testRegex = /^\/test (.+)\s*$/;
+          //testMatches = commentBody.match(testRegex);
+          //console.log(testMatches)
+          //if (testMatches == null) { // this indicates no /test command was found
+            //core.setOutput("tests-names", "none")
+          //} else if (testMatches[1]) { // this should be the first capture group in a successful match
+            //if ( validTests.some( test => testMatches[1].includes(test) ) ) {
+              //// at least one valid test specified
+              //core.setOutput("tests-names", testMatches[1])
+            //} else {
+              //// no valid tests specified
+              //core.setOutput("tests-names", "unrecognized")
+            //}
+          //}
+
+          // new loop, where we compare the string against each validTest and then see if there are any non-space characters left
+          let validTestRequest = ""
+          let recognizedTests = ""
+          let unrecognizedTests = ""
           if (testMatches == null) { // this indicates no /test command was found
-            core.setOutput("tests-names", "none")
-          } else if (testMatches[1]) { // this should be the first capture group in a successful match
-            if ( validTests.some( test => testMatches[1].includes(test) ) ) {
-              // at least one valid test specified
-              core.setOutput("tests-names", testMatches[1])
-            } else {
-              // no valid tests specified
-              core.setOutput("tests-names", "unrecognized")
+            //core.setOutput("tests-names", "none")
+            validTestRequest = "false"
+          } else if (testMatches[1]) { // this indicates that we detected a properly-formatted /test request
+            validTestRequest = "true"
+            unrecognizedTests = testMatches[1]
+            validTests.forEach(
+              if ( unrecognizedTests.contains(value) ) {
+                recognizedTests += value + " "
+                unrecognizedTests = unrecognizedTests.replace(value,"")
+              }
+            )
+            unrecognizedTests = unrecognizedTests.replace(/\s{2,}/g," ")
+            // clean up lists of tests, if they're empty
+            if ( !( /\S/.test(recognizedTests) ) ) {
+              recognizedTests = ""
+            }
+            if ( !( /\S/.test(unrecognizedTests) ) ) {
+              unrecognizedTests = ""
             }
           }
+          core.setOutput("valid-test-request", validTestRequest)
+          core.setOutput("recognized-tests", recognizedTests)
+          core.setOutput("unrecognized-tests", unrecognizedTests)
 
     - name: "Reconcile metadata"
       id: metadata
@@ -120,9 +161,33 @@ runs:
         echo "::set-output name=pr-labels::$pr_labels"
 
         # tests-names
-        if [ "${{ steps.metadata-chatops.outputs.tests-names }}" ]; then
-          tests_names="${{ steps.metadata-chatops.outputs.tests-names }}"
-        elif [ "${{ steps.metadata-pull-request.outputs.tests-names}}" ]; then
-          tests_names="${{ steps.metadata-pull-request.outputs.tests-names }}"
+        #if [ "${{ steps.metadata-chatops.outputs.tests-names }}" ]; then
+        #  tests_names="${{ steps.metadata-chatops.outputs.tests-names }}"
+        #elif [ "${{ steps.metadata-pull-request.outputs.tests-names}}" ]; then
+        #  tests_names="${{ steps.metadata-pull-request.outputs.tests-names }}"
+        #fi
+        #echo "::set-output name=tests-names::$tests_names"
+
+        # recognized-tests
+        if [ "${{ steps.metadata-chatops.outputs.recognized-tests }}" ]; then
+          recognized_tests="${{ steps.metadata-chatops.outputs.recognized-tests }}"
+        elif [ "${{ steps.metadata-pull-request.outputs.recognized-tests}}" ]; then
+          recognized_tests="${{ steps.metadata-pull-request.outputs.recognized-tests }}"
         fi
-        echo "::set-output name=tests-names::$tests_names"
+        echo "::set-output name=recognized-tests::$recognized_tests"
+
+        # unrecognized-tests
+        if [ "${{ steps.metadata-chatops.outputs.unrecognized-tests }}" ]; then
+          unrecognized_tests="${{ steps.metadata-chatops.outputs.unrecognized-tests }}"
+        elif [ "${{ steps.metadata-pull-request.outputs.unrecognized-tests}}" ]; then
+          unrecognized_tests="${{ steps.metadata-pull-request.outputs.unrecognized-tests }}"
+        fi
+        echo "::set-output name=unrecognized-tests::$unrecognized_tests"
+
+        # valid-test-request
+        if [ "${{ steps.metadata-chatops.outputs.valid-test-request }}" ]; then
+          valid_test_request="${{ steps.metadata-chatops.outputs.valid-test-request }}"
+        elif [ "${{ steps.metadata-pull-request.outputs.valid-test-request}}" ]; then
+          valid_test_request="${{ steps.metadata-pull-request.outputs.valid-test-request }}"
+        fi
+        echo "::set-output name=valid-test-request::$valid_test_request"
