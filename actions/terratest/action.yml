@@ -38,7 +38,7 @@ inputs:
     required: false
     default: "none"
   SPOTINST_ACCOUNT:
-    required: false
+    required: true
     default: "none"
   TFE_TOKEN:
     required: false

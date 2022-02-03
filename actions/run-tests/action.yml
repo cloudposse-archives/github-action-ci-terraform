@@ -18,6 +18,8 @@ inputs:
     required: true
   OPSGENIE_API_KEY:
     required: true
+  SPOTINST_ACCOUNT:
+    required: true
 runs:
   using: "composite"
   steps:
@@ -55,3 +57,4 @@ runs:
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
         OPSGENIE_API_KEY: ${{ inputs.OPSGENIE_API_KEY }}
+        SPOTINST_ACCOUNT: ${{ inputs.SPOTINST_ACCOUNT }}
