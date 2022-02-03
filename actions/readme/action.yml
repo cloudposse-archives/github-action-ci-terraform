@@ -10,17 +10,17 @@ inputs:
   sha:
     description: "SHA hash of the commit whose status will be modified"
     required: true
-  env:
-    default: |
-      MAKE_INCLUDES=Makefile
-      BUILD_HARNESS_BRANCH=master
+#  env:
+#    default: |
+#      MAKE_INCLUDES=Makefile
+#      BUILD_HARNESS_BRANCH=master
 runs:
   using: "composite"
   steps:
-    - name: "Update ENV"
-      shell: bash
-      run: |
-        echo $INPUT_ENV > $GITHUB_ENV
+#    - name: "Update ENV"
+#      shell: bash
+#      run: |
+#        echo $INPUT_ENV > $GITHUB_ENV
 
     - name: "Initialize build-harness"
       uses: docker://cloudposse/test-harness:latest
