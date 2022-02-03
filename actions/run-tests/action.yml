@@ -16,6 +16,8 @@ inputs:
   labels:
     description: "The labels attached to this PR"
     required: true
+  OPSGENIE_API_KEY:
+    required: true
 runs:
   using: "composite"
   steps:
@@ -52,3 +54,4 @@ runs:
         sha: ${{ inputs.pr-sha }}
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
+        OPSGENIE_API_KEY: ${{ inputs.OPSGENIE_API_KEY }}
