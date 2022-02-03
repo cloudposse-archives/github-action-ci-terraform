@@ -1,0 +1,61 @@
+name: 'terraform-ci-bulk-status-update'
+description: 'Update the statuses of all requested checks'
+inputs:
+  token:
+    description: "github token"
+    required: true
+  sha:
+    description: "SHA hash of the commit whose status will be modified"
+    required: true
+  test-names:
+    description: "Names of the github action status checks to set to pending"
+    required: true
+  status:
+    description: "Status to update checks to. Options include ['pending', 'error', failure', 'success']"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Set status of bats test to pending"
+      if: contains(inputs.test-names, 'bats') || contains(inputs.test-names, 'all')
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: 'tests-bats'
+        description: 'Tests are currently running'
+        state: ${{ inputs.status }}
+        sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    - name: "Set status of ping test to pending"
+      if: contains(inputs.test-names, 'ping') || contains(inputs.test-names, 'all')
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: 'tests-ping'
+        description: 'Tests are currently running'
+        state: ${{ inputs.status }}
+        sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    - name: "Set status of readme test to pending"
+      if: contains(inputs.test-names, 'readme') || contains(inputs.test-names, 'all')
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: 'tests-readme'
+        description: 'Tests are currently running'
+        state: ${{ inputs.status }}
+        sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+    - name: "Set status of terratest test to pending"
+      if: contains(inputs.test-names, 'terratest') || contains(inputs.test-names, 'all')
+      uses: Sibz/github-status-action@v1
+      with:
+        authToken: ${{ inputs.token }}
+        context: 'tests-terratest'
+        description: 'Tests are currently running'
+        state: ${{ inputs.status }}
+        sha: ${{ inputs.sha }}
+        target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
