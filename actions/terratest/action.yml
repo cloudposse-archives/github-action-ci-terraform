@@ -21,31 +21,31 @@ inputs:
       MAKE_INCLUDES=Makefile
   AWS_ACCESS_KEY_ID:
     required: false
-    default: "none"
+    default: ""
   AWS_SECRET_ACCESS_KEY:
     required: true
   OPSGENIE_API_KEY:
     required: true
   DD_API_KEY:
     required: false
-    default: "none"
+    default: ""
   DD_APP_KEY:
     required: false
-    default: "none"
+    default: ""
   SPOTINST_TOKEN:
     required: false
-    default: "none"
+    default: ""
   SPOTINST_ACCOUNT:
     required: true
   TFE_TOKEN:
     required: false
-    default: "none"
+    default: ""
   CLOUDFLARE_EMAIL:
     required: false
-    default: "none"
+    default: ""
   CLOUDFLARE_API_KEY:
     required: false
-    default: "none"
+    default: ""
 runs:
   using: "composite"
   steps:
