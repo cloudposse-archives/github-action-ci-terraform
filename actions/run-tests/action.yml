@@ -20,6 +20,8 @@ inputs:
     required: true
   SPOTINST_ACCOUNT:
     required: true
+  AWS_ACCESS_KEY_ID:
+    required: true
   AWS_SECRET_ACCESS_KEY:
     required: true
 runs:
@@ -60,4 +62,5 @@ runs:
         labels: ${{ inputs.labels }}
         OPSGENIE_API_KEY: ${{ inputs.OPSGENIE_API_KEY }}
         SPOTINST_ACCOUNT: ${{ inputs.SPOTINST_ACCOUNT }}
+        AWS_ACCESS_KEY_ID: ${{ inputs.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}

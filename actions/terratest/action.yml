@@ -20,8 +20,7 @@ inputs:
     default: |
       MAKE_INCLUDES=Makefile
   AWS_ACCESS_KEY_ID:
-    required: false
-    default: ""
+    required: true
   AWS_SECRET_ACCESS_KEY:
     required: true
   OPSGENIE_API_KEY:
