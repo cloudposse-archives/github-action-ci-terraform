@@ -13,13 +13,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # Checkout the pull request branch
-    - uses: actions/checkout@v2
-      with:
-        token: ${{ secrets.PUBLIC_REPO_ACCESS_TOKEN }}
-        repository: ${{ github.event.client_payload.pull_request.head.repo.full_name }}
-        ref: ${{ github.event.client_payload.pull_request.head.ref }}
-
     # Export script to rebuild README and commit changes (if any) to the PR branch
     - name: Export rebuild README script
       shell: bash
