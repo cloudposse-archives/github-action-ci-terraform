@@ -167,12 +167,12 @@ runs:
           }
 
           // debugging
-          console.log(validCommandRequest)
-          console.log(recognizedCommands)
-          console.log(unrecognizedCommands)
-          console.log(validTestRequest)
-          console.log(recognizedTests)
-          console.log(unrecognizedTests)
+          console.log("validCommandRequest: " + validCommandRequest)
+          console.log("recognizedCommands: " + recognizedCommands)
+          console.log("unrecognizedCommands: " + unrecognizedCommands)
+          console.log("validTestRequest: " + validTestRequest)
+          console.log("recognizedTests: " + recognizedTests)
+          console.log("unrecognizedTests: " + unrecognizedTests)
 
           // outputs
           core.setOutput("valid-command-request", validCommandRequest)

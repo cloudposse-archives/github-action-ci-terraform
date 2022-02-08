@@ -86,7 +86,7 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/run-commands@main
       with:
         token: ${{ inputs.token }}
-        tests-names: ${{ steps.metadata.outputs.recognized-commands }}
+        commands-names: ${{ steps.metadata.outputs.recognized-commands }}
 
     - name: "Record cancelled status for all pending and completed checks, if necessary"
       if: cancelled() && contains(steps.metadata.outputs.valid-test-request, 'true')
