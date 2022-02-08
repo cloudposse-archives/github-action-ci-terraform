@@ -1,0 +1,53 @@
+name: "terraform-ci-command-terraform-fmt"
+description: "Format terraform files"
+inputs:
+  token:
+    description: "github token"
+    required: true
+  command-name:
+    description: "name of the github action status check that will be calling this action as a step"
+    required: true
+#  sha:
+#    description: "SHA hash of the commit whose status will be modified"
+#    required: true
+runs:
+  using: "composite"
+  steps:
+    # Export script to format Terraform files and commit changes (if any) to the PR branch
+    - name: "Export format terraform files script"
+      shell: bash
+      run: |
+        cat << "EOF" > format_terraform.sh
+        #!/bin/bash
+
+        /usr/bin/make BUILD_HARNESS_PATH=/build-harness PACKAGES_PREFER_HOST=true -f /build-harness/templates/Makefile.build-harness terraform/fmt
+
+        set -x
+        output=$(git diff --name-only)
+        if [ -n "$output" ]; then
+          echo "Changes detected. Pushing to the PR branch"
+          git config --global user.name 'actions-bot'
+          git config --global user.email '58130806+actions-bot@users.noreply.github.com'
+          git add -A
+          git commit -m "Executed 'terraform fmt'"
+          git push
+        else
+          echo "No changes detected"
+        fi
+        EOF
+        chmod a+x format_terraform.sh
+
+    # Format Terraform files and commit changes (if any) to the PR branch
+    - name: "Format Terraform file and commit changes (if any)"
+      uses: docker://cloudposse/build-harness:slim-latest
+      with:
+        entrypoint: "/github/workspace/format_terraform.sh"
+
+#    - name: "Record status"
+#      if: always()
+#      uses: cloudposse/github-action-terraform-ci/actions/status@main
+#      with:
+#        token: ${{ inputs.token }}
+#        test-name: ${{ inputs.command-name }}
+#        sha: ${{ inputs.sha }}
+#        status: ${{ github.action_status }}

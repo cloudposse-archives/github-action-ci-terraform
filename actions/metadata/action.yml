@@ -19,6 +19,15 @@ outputs:
   unrecognized-tests:
     description: "Space-separated string of the names of the tests that were requested but are not supported"
     value: ${{ steps.metadata.outputs.unrecognized-tests }}
+  valid-command-request:
+    description: "Boolean string. Indicating whether the calling event was a proper /command request."
+    value: ${{ steps.metadata.outputs.valid-command-request }}
+  recognized-commands:
+    description: "Space-separated string of the names of the commands to run. Valid values: ['all', 'rebuild-readme', 'terraform-fmt']"
+    value: ${{ steps.metadata.outputs.recognized-commands }}
+  unrecognized-commands:
+    description: "Space-separated string of the names of the commands that were requested but are not supported"
+    value: ${{ steps.metadata.outputs.unrecognized-commands }}
 runs:
   using: "composite"
   steps:
@@ -79,22 +88,51 @@ runs:
           let prLabels = prDetails.data.labels;
           core.setOutput("pr-labels", prLabels);
 
-          // prepare to extract the name(s) of the test suite(s) to be run
-          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
+          // prepare to extract the name(s) of the command or test suite(s) to be run
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
+          // run command regex
+          const validCommands = ['all', 'rebuild-readme', 'terraform-fmt']
+          const commandRegex = /^\/command( .+)\s*$/;
+          commandMatches = commentBody.match(commandRegex);
+          // run test regex
+          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
           const testRegex = /^\/test( .+)\s*$/;
           testMatches = commentBody.match(testRegex);
-          console.log(testMatches)
-          // compare the regex match string against each validTest to determine which tests to run
-          // any characters left in the regex match string become unrecognized tests
+
+          // evaluate regex results
+          let validCommandRequest = ""
+          let recognizedCommands = ""
+          let unrecognizedCommands = ""
           let validTestRequest = ""
           let recognizedTests = ""
           let unrecognizedTests = ""
           if (testMatches == null) { // this indicates no /test command was found
-            //core.setOutput("tests-names", "none")
-            validTestRequest = "false"
+            if (commandMatches == null) { // this indicates that no /command request was found
+              validTestRequest = "false"
+              validCommandRequest = "false"
+            } else if (commandMatches[1]) { // this indicates that we detected a properly-formatted /command request
+              validTestRequest = "false"
+              validCommandRequest = "true"
+              unrecognizedCommands = commandMatches[1]
+              validTests.forEach(commandCheck)
+              unrecognizedCommands = unrecognizedCommands.replace(/\s{2,}/g," ")
+              // clean up lists of commands, whether they're empty or not
+              if ( !( /\S/.test(recognizedCommands) ) ) {
+                recognizedCommands = ""
+              } else {
+                recognizedCommands = recognizedCommands.replace(/^\s*/,"")
+              }
+              if ( !( /\S/.test(unrecognizedCommands) ) ) {
+                unrecognizedCommands = ""
+              } else {
+                unrecognizedCommands = unrecognizedCommands.replace(/^\s*/,"")
+              }
+            }
           } else if (testMatches[1]) { // this indicates that we detected a properly-formatted /test request
+            // compare the regex match string against each validTest to determine which tests to run
+            // any characters left in the regex match string become unrecognized tests
+            validCommandRequest = "false"
             validTestRequest = "true"
             unrecognizedTests = testMatches[1]
             validTests.forEach(testCheck)
@@ -112,7 +150,7 @@ runs:
             }
           }
 
-          // function for forEach loop above, checking valid test names against the string of requested tests
+          // function for test forEach loop above, checking valid test names against the string of requested tests
           function testCheck(test_name, index) {
             if ( unrecognizedTests.includes( " " + test_name + " " ) ) {
               recognizedTests += test_name + " "
@@ -120,12 +158,26 @@ runs:
             }
           }
 
+          // function for command forEach loop above, checking valid command names against the string of requested commands
+          function commandCheck(command_name, index) {
+            if ( unrecognizedCommands.includes( " " + command_name + " " ) ) {
+              recognizedCommands += command_name + " "
+              unrecognizedCommands = unrecognizedCommands.replace(command_name,"")
+            }
+          }
+
           // debugging
+          console.log(validCommandRequest)
+          console.log(recognizedCommands)
+          console.log(unrecognizedCommands)
           console.log(validTestRequest)
           console.log(recognizedTests)
           console.log(unrecognizedTests)
 
           // outputs
+          core.setOutput("valid-command-request", validCommandRequest)
+          core.setOutput("recognized-commands", recognizedCommands)
+          core.setOutput("unrecognized-commands", unrecognizedCommands)
           core.setOutput("valid-test-request", validTestRequest)
           core.setOutput("recognized-tests", recognizedTests)
           core.setOutput("unrecognized-tests", unrecognizedTests)
@@ -183,3 +235,27 @@ runs:
           valid_test_request="${{ steps.metadata-pull-request.outputs.valid-test-request }}"
         fi
         echo "::set-output name=valid-test-request::$valid_test_request"
+
+        # recognized-commands
+        if [ "${{ steps.metadata-chatops.outputs.recognized-commands }}" ]; then
+          recognized_commands="${{ steps.metadata-chatops.outputs.recognized-commands }}"
+        else
+          recognized_commands=""
+        fi
+        echo "::set-output name=recognized-commands::$recognized_commands"
+
+        # unrecognized-commands
+        if [ "${{ steps.metadata-chatops.outputs.unrecognized-commands }}" ]; then
+          unrecognized_commands="${{ steps.metadata-chatops.outputs.unrecognized-tests }}"
+        else
+          unrecognized_commands=""
+        fi
+        echo "::set-output name=unrecognized-commands::$unrecognized_tests"
+
+        # valid-command-request
+        if [ "${{ steps.metadata-chatops.outputs.valid-command-request }}" ]; then
+          valid_command_request="${{ steps.metadata-chatops.outputs.valid-test-request }}"
+        else
+          valid_command_request=""
+        fi
+        echo "::set-output name=valid-command-request::$valid_test_request"
