@@ -9,15 +9,15 @@ inputs:
     required: true
   test-name:
     description: "name of the github action status check that will be calling this action as a step"
-    required: false
+    required: true
   status:
     description: "Result of status check"
-    required: false
+    required: true
 runs:
   using: "composite"
   steps:
     - name: "Acknowledge ping test"
-      if: ${{ inputs.status == 'ping' }}
+      if: inputs.status == 'ping'
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -28,7 +28,7 @@ runs:
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Record successful result"
-      if: ${{ inputs.status == 'Success' }}
+      if: inputs.status == 'success'
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -39,7 +39,7 @@ runs:
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Record canceled result"
-      if: ${{ inputs.status == 'Canceled' }}
+      if: inputs.status == 'canceled' || inputs.status == 'error'
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}
@@ -50,7 +50,7 @@ runs:
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
     - name: "Record unsuccessful result"
-      if: ${{ inputs.status == 'Failure' }}
+      if: inputs.status == 'failure'
       uses: Sibz/github-status-action@v1
       with:
         authToken: ${{ inputs.token }}

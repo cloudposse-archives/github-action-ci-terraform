@@ -1,5 +1,5 @@
-name: 'terraform-ci-terratest'
-description: 'Run terratest tests'
+name: 'terraform-ci-ping'
+description: 'Acknowledge ping test'
 inputs:
   token:
     description: "github token"
@@ -13,7 +13,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Record status"
+    - name: "Acknowledge ping"
       uses: cloudposse/github-action-terraform-ci/actions/status@main
       with:
         token: ${{ inputs.token }}
