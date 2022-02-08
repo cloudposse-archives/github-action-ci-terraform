@@ -246,16 +246,16 @@ runs:
 
         # unrecognized-commands
         if [ "${{ steps.metadata-chatops.outputs.unrecognized-commands }}" ]; then
-          unrecognized_commands="${{ steps.metadata-chatops.outputs.unrecognized-tests }}"
+          unrecognized_commands="${{ steps.metadata-chatops.outputs.unrecognized-commands }}"
         else
           unrecognized_commands=""
         fi
-        echo "::set-output name=unrecognized-commands::$unrecognized_tests"
+        echo "::set-output name=unrecognized-commands::$unrecognized_commands"
 
         # valid-command-request
         if [ "${{ steps.metadata-chatops.outputs.valid-command-request }}" ]; then
-          valid_command_request="${{ steps.metadata-chatops.outputs.valid-test-request }}"
+          valid_command_request="${{ steps.metadata-chatops.outputs.valid-command-request }}"
         else
           valid_command_request=""
         fi
-        echo "::set-output name=valid-command-request::$valid_test_request"
+        echo "::set-output name=valid-command-request::$valid_command_request"
