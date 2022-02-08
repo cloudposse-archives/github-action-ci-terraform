@@ -23,12 +23,10 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/metadata@main
 
     - name: "Respond to chatops comment"
-      #if: github.event.comment
       if: github.event.comment && contains(steps.metadata.outputs.valid-test-request, 'true')
       uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
       with:
         comment_id: ${{ github.event.comment.id }}
-        #tests_names: ${{ steps.metadata.outputs.tests-names }}
         recognized_tests: ${{ steps.metadata.outputs.recognized-tests }}
         unrecognized_tests: ${{ steps.metadata.outputs.unrecognized-tests }}
 
@@ -36,17 +34,14 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/bulk-status-update@main
       with:
         token: ${{ inputs.token }}
-        #test-names: ${{ steps.metadata.outputs.tests-names }}
         test-names: ${{ steps.metadata.outputs.recognized-tests }}
         sha: ${{ steps.metadata.outputs.pr-sha }}
         status: 'pending'
 
     - name: "Run all requested tests"
-      #if: contains(steps.metadata.outputs.tests-names, 'unrecognized') != true && contains(steps.metadata.outputs.tests-names, 'none') != true
       uses: cloudposse/github-action-terraform-ci/actions/run-tests@main
       with:
         token: ${{ inputs.token }}
-        #tests-names: ${{ steps.metadata.outputs.tests-names }}
         tests-names: ${{ steps.metadata.outputs.recognized-tests }}
         pr-sha: ${{ steps.metadata.outputs.pr-sha }}
         base-ref: ${{ steps.metadata.outputs.pr-base-ref }}
@@ -61,7 +56,6 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/bulk-status-update@main
       with:
         token: ${{ inputs.token }}
-        #test-names: ${{ steps.metadata.outputs.tests-names }}
         test-names: ${{ steps.metadata.outputs.recognized-tests }}
         sha: ${{ steps.metadata.outputs.pr-sha }}
         status: 'error'

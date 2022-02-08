@@ -16,7 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Set status of bats test to pending"
+    - name: "Set status of bats test"
       if: contains(inputs.test-names, 'bats') || contains(inputs.test-names, 'all')
       uses: Sibz/github-status-action@v1
       with:
@@ -27,7 +27,7 @@ runs:
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    - name: "Set status of ping test to pending"
+    - name: "Set status of ping test"
       if: contains(inputs.test-names, 'ping') || contains(inputs.test-names, 'all')
       uses: Sibz/github-status-action@v1
       with:
@@ -38,7 +38,7 @@ runs:
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    - name: "Set status of readme test to pending"
+    - name: "Set status of readme test"
       if: contains(inputs.test-names, 'readme') || contains(inputs.test-names, 'all')
       uses: Sibz/github-status-action@v1
       with:
@@ -49,7 +49,7 @@ runs:
         sha: ${{ inputs.sha }}
         target_url: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-    - name: "Set status of terratest test to pending"
+    - name: "Set status of terratest test"
       if: contains(inputs.test-names, 'terratest') || contains(inputs.test-names, 'all')
       uses: Sibz/github-status-action@v1
       with:

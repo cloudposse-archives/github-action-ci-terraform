@@ -10,9 +10,6 @@ outputs:
   pr-labels:
     description: "The labels attached to this PR"
     value: ${{ steps.metadata.outputs.pr-labels }}
-#  tests-names:
-#    description: "Names of the tests to run. Valid values: ['all', 'ping', 'bats', 'terratest', 'readme']"
-#    value: ${{ steps.metadata.outputs.tests-names }}
   valid-test-request:
     description: "Boolean string. Indicating whether the calling event was a proper /test request."
     value: ${{ steps.metadata.outputs.valid-test-request }}
@@ -82,26 +79,15 @@ runs:
           let prLabels = prDetails.data.labels;
           core.setOutput("pr-labels", prLabels);
 
-          // extract the name(s) of the test suite(s) to be run
+          // prepare to extract the name(s) of the test suite(s) to be run
           const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
           const commentBody = context.payload.comment.body;
           console.log(commentBody)
           const testRegex = /^\/test( .+)\s*$/;
           testMatches = commentBody.match(testRegex);
           console.log(testMatches)
-          //if (testMatches == null) { // this indicates no /test command was found
-            //core.setOutput("tests-names", "none")
-          //} else if (testMatches[1]) { // this should be the first capture group in a successful match
-            //if ( validTests.some( test => testMatches[1].includes(test) ) ) {
-              //// at least one valid test specified
-              //core.setOutput("tests-names", testMatches[1])
-            //} else {
-              //// no valid tests specified
-              //core.setOutput("tests-names", "unrecognized")
-            //}
-          //}
-
-          // new loop, where we compare the string against each validTest and then see if there are any non-space characters left
+          // compare the regex match string against each validTest to determine which tests to run
+          // any characters left in the regex match string become unrecognized tests
           let validTestRequest = ""
           let recognizedTests = ""
           let unrecognizedTests = ""
@@ -128,16 +114,10 @@ runs:
 
           // function for forEach loop above, checking valid test names against the string of requested tests
           function testCheck(test_name, index) {
-            console.log("\n")
-            console.log(test_name)
-            console.log(recognizedTests)
-            console.log(unrecognizedTests)
             if ( unrecognizedTests.includes( " " + test_name + " " ) ) {
               recognizedTests += test_name + " "
               unrecognizedTests = unrecognizedTests.replace(test_name,"")
             }
-            console.log(recognizedTests)
-            console.log(unrecognizedTests)
           }
 
           // debugging
@@ -179,14 +159,6 @@ runs:
           pr_labels=${{ steps.metadata-pull-request.outputs.pr-labels }}
         fi
         echo "::set-output name=pr-labels::$pr_labels"
-
-        # tests-names
-        #if [ "${{ steps.metadata-chatops.outputs.tests-names }}" ]; then
-        #  tests_names="${{ steps.metadata-chatops.outputs.tests-names }}"
-        #elif [ "${{ steps.metadata-pull-request.outputs.tests-names}}" ]; then
-        #  tests_names="${{ steps.metadata-pull-request.outputs.tests-names }}"
-        #fi
-        #echo "::set-output name=tests-names::$tests_names"
 
         # recognized-tests
         if [ "${{ steps.metadata-chatops.outputs.recognized-tests }}" ]; then

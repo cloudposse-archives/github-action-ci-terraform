@@ -28,11 +28,6 @@ runs:
       with:
         args: "-C test/ examples/complete"
 
-#    - name: "Test failure"
-#      uses: docker://cloudposse/test-harness:latest
-#      with:
-#        args: "-C this/ should/fail"
-
     - name: "Record status"
       if: always()
       uses: cloudposse/github-action-terraform-ci/actions/status@main

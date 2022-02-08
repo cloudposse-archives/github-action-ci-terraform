@@ -4,9 +4,6 @@ inputs:
   comment_id:
     description: "ID of comment which triggered this action"
     required: true
-  #tests_names:
-  #  description: "Names of all tests to be run, or 'unrecognized' if no valid tests were requested, or 'none' if comment wasn't a properly formatted chatops request"
-  #  required: true
   recognized_tests:
     description: "Names of all tests to be run, or '' if if no valid tests were requested"
     required: true
@@ -16,19 +13,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-#    - name: "Respond to chatops comments requesting recognized '/test's"
-#      if: contains(inputs.tests_names, 'unrecognized') != true && contains(inputs.tests_names, 'none') != true
-#      uses: actions/github-script@v4
-#      with:
-#        script: |
-#          const {owner, repo} = context.issue
-#          github.reactions.createForIssueComment({
-#            owner,
-#            repo,
-#            comment_id: "${{ inputs.comment_id }}",
-#            content: "+1",
-#          });
-
     - name: "Respond to chatops comments requesting only valid '/test's"
       if: inputs.recognized_tests != '' && inputs.unrecognized_tests == ''
       uses: actions/github-script@v4
@@ -67,19 +51,6 @@ runs:
           });
           core.info(`Updated comment id '${{ inputs.comment_id }}'.`);
           //core.setOutput("comment-id", inputs.commentId);
-
-#    - name: "Respond to chatops comments requesting unrecognized '/test's"
-#      if: contains(inputs.tests_names, 'unrecognized')
-#      uses: actions/github-script@v4
-#      with:
-#        script: |
-#          const {owner, repo} = context.issue
-#          github.reactions.createForIssueComment({
-#            owner,
-#            repo,
-#            comment_id: "${{ inputs.comment_id }}",
-#            content: "-1",
-#          });
 
     - name: "Respond to chatops comments requesting only invalid '/test's"
       if: inputs.recognized_tests == '' && inputs.unrecognized_tests != ''

@@ -48,11 +48,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-#    - name: "Update ENV"
-#      shell: bash
-#      run: |
-#        echo $INPUT_ENV > $GITHUB_ENV
-
     - name: "Output script for `Determine required terraform version` step"
       shell: bash -x -e -o pipefail {0}
       run: |
@@ -101,28 +96,6 @@ runs:
         EOF
         chmod a+x determine_required_terraform_version.sh
 
-#    # Determine requied version of terraform based on the target branch of the pull request. Then update the PATH to use it.
-#    - name: "Determine required terraform version"
-#      uses: docker://cloudposse/test-harness:latest
-#      env:
-#        # Pull request target branch
-#        BASE_REF: ${{ inputs.base-ref }}
-#        LABELS: ${{ join(inputs.labels.*.name, '\n') }}
-#        # ${{ join(github.event.client_payload.pull_request.labels.*.name, '\n') }}
-#      with:
-#        entrypoint: "/github/workspace/determine_required_terraform_version.sh"
-
-#    # Initialize the terratest go project
-#    - name: "Initialize terratest Go project, part 1"
-#      uses: docker://cloudposse/test-harness:latest
-#      with:
-#        args: "-C test/src clean init"
-
-#    - name: "Initialize terratest Go project, part 2"
-#      uses: docker://cloudposse/test-harness:latest
-#      with:
-#        entrypoint: "rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl"
-
     - name: "Output script for `Inject secrets` step"
       shell: bash -x -e -o pipefail {0}
       run: |
@@ -163,49 +136,6 @@ runs:
         fi;
         EOF
         chmod a+x inject_secrets.sh
-
-#    - name: "Inject secrets"
-#      uses: docker://cloudposse/test-harness:latest
-#      env:
-#        USES_GITHUB:   >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, '-github-')
-#          || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-github-provider') }}
-#        USES_OPSGENIE: >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, 'terraform-opsgenie-')
-#          || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-opsgenie-provider') }}
-#        USES_AWS: >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, 'terraform-aws-')
-#          || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-aws-provider') }}
-#        USES_SPOTINST: >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, '-spotinst-')
-#          || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-spotinst-provider') }}
-#        USES_DATADOG: >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, '-datadog-')
-#          ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-datadog-provider') }}
-#        USES_TFE: >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, '-tfe-')
-#          ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-tfe-provider') }}
-#        USES_CLOUDFLARE: >-
-#          ${{ contains(github.event.client_payload.github.payload.repository.name, '-cloudflare-')
-#          ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-cloudflare-provider') }}
-#        AWS_ACCESS_KEY_ID:     ${{ inputs.AWS_ACCESS_KEY_ID }}
-#        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-#        GITHUB_TOKEN:          ${{ inputs.token }}
-#        OPSGENIE_API_KEY:      ${{ inputs.OPSGENIE_API_KEY }}
-#        DD_API_KEY:            ${{ inputs.DD_API_KEY }}
-#        DD_APP_KEY:            ${{ inputs.DD_APP_KEY }}
-#        SPOTINST_TOKEN:        ${{ inputs.SPOTINST_TOKEN }}
-#        SPOTINST_ACCOUNT:      ${{ inputs.SPOTINST_ACCOUNT }}
-#        TFE_TOKEN:             ${{ inputs.TFE_TOKEN }}
-#        CLOUDFLARE_EMAIL:      ${{ inputs.CLOUDFLARE_EMAIL }}
-#        CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
-#      with:
-#        entrypoint: "/github/workspace/inject_secrets.sh"
-
-#    - name: "Test `examples/complete` with terratest"
-#      uses: docker://cloudposse/test-harness:latest
-#      with:
-#        args: "-C test/src"
 
     - name: "Output master terratest script"
       shell: bash -x -e -o pipefail {0}
