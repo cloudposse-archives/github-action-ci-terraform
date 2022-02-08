@@ -16,14 +16,34 @@ inputs:
   labels:
     description: "The labels attached to this PR"
     required: true
-  OPSGENIE_API_KEY:
-    required: true
-  SPOTINST_ACCOUNT:
-    required: true
   AWS_ACCESS_KEY_ID:
     required: true
   AWS_SECRET_ACCESS_KEY:
     required: true
+  CLOUDFLARE_EMAIL:
+    required: false
+    default: ""
+  CLOUDFLARE_API_KEY:
+    required: false
+    default: ""
+  DD_API_KEY:
+    required: false
+    default: ""
+  DD_APP_KEY:
+    required: false
+    default: ""
+  OPSGENIE_API_KEY:
+    required: false
+    default: ""
+  SPOTINST_ACCOUNT:
+    required: false
+    default: ""
+  SPOTINST_TOKEN:
+    required: false
+    default: ""
+  TFE_TOKEN:
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -60,7 +80,13 @@ runs:
         sha: ${{ inputs.pr-sha }}
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
-        OPSGENIE_API_KEY: ${{ inputs.OPSGENIE_API_KEY }}
-        SPOTINST_ACCOUNT: ${{ inputs.SPOTINST_ACCOUNT }}
         AWS_ACCESS_KEY_ID: ${{ inputs.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+        CLOUDFLARE_EMAIL: ${{ inputs.CLOUDFLARE_EMAIL }}
+        CLOUDFLARE_API_KEY: ${{ inputs.CLOUDFLARE_API_KEY }}
+        DD_API_KEY: ${{ inputs.DD_API_KEY }}
+        DD_APP_KEY: ${{ inputs.DD_APP_KEY }}
+        OPSGENIE_API_KEY: ${{ inputs.OPSGENIE_API_KEY }}
+        SPOTINST_ACCOUNT: ${{ inputs.SPOTINST_ACCOUNT }}
+        SPOTINST_TOKEN: ${{ inputs.SPOTINST_TOKEN }}
+        TFE_TOKEN: ${{ inputs.TFE_TOKEN }}

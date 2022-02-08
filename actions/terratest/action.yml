@@ -16,33 +16,32 @@ inputs:
   labels:
     description: "Labels on this PR, including associated metadata"
     required: true
-  env:
-    default: |
-      MAKE_INCLUDES=Makefile
   AWS_ACCESS_KEY_ID:
     required: true
   AWS_SECRET_ACCESS_KEY:
     required: true
-  OPSGENIE_API_KEY:
-    required: true
+  CLOUDFLARE_EMAIL:
+    required: false
+    default: ""
+  CLOUDFLARE_API_KEY:
+    required: false
+    default: ""
   DD_API_KEY:
     required: false
     default: ""
   DD_APP_KEY:
     required: false
     default: ""
-  SPOTINST_TOKEN:
+  OPSGENIE_API_KEY:
     required: false
     default: ""
   SPOTINST_ACCOUNT:
-    required: true
+    required: false
+    default: ""
+  SPOTINST_TOKEN:
+    required: false
+    default: ""
   TFE_TOKEN:
-    required: false
-    default: ""
-  CLOUDFLARE_EMAIL:
-    required: false
-    default: ""
-  CLOUDFLARE_API_KEY:
     required: false
     default: ""
 runs:
