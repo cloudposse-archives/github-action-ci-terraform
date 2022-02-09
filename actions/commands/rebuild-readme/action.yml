@@ -17,7 +17,7 @@ runs:
     - name: Export rebuild README script
       shell: bash
       run: |
-        cat << "EOF" > reduild_readme.sh
+        cat << "EOF" > rebuild_readme.sh
         #!/bin/bash
 
         make init
