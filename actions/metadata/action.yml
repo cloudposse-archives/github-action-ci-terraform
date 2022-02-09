@@ -152,7 +152,7 @@ runs:
 
           // function for test forEach loop above, checking valid test names against the string of requested tests
           function testCheck(test_name, index) {
-            let testCheck = new RegExp( " " + test_name + "[ $]")
+            let testCheck = new RegExp( test_name + "(?= |$)")
             if ( unrecognizedTests.match(testCheck) ) {
               recognizedTests += test_name + " "
               unrecognizedTests = unrecognizedTests.replace(test_name,"")
@@ -161,7 +161,7 @@ runs:
 
           // function for command forEach loop above, checking valid command names against the string of requested commands
           function commandCheck(command_name, index) {
-            let commandCheck = new RegExp( " " + command_name + "[ $]")
+            let commandCheck = new RegExp( command_name + "(?= |$)")
             if ( unrecognizedCommands.match(commandCheck) ) {
               recognizedCommands += command_name + " "
               unrecognizedCommands = unrecognizedCommands.replace(command_name,"")
