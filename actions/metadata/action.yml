@@ -90,7 +90,7 @@ runs:
 
           // prepare to extract the name(s) of the command or test suite(s) to be run
           const commentBody = context.payload.comment.body;
-          console.log(commentBody)
+          console.log("commentBody: " + commentBody)
           // run command regex
           const validCommands = ['all', 'rebuild-readme', 'terraform-fmt']
           const commandRegex = /^\/command( .+)\s*$/;
@@ -152,7 +152,8 @@ runs:
 
           // function for test forEach loop above, checking valid test names against the string of requested tests
           function testCheck(test_name, index) {
-            if ( unrecognizedTests.includes( " " + test_name + " " ) ) {
+            let testCheck = new RegExp( " " + test_name + "[ $]")
+            if ( unrecognizedTests.match(testCheck) ) {
               recognizedTests += test_name + " "
               unrecognizedTests = unrecognizedTests.replace(test_name,"")
             }
@@ -160,7 +161,8 @@ runs:
 
           // function for command forEach loop above, checking valid command names against the string of requested commands
           function commandCheck(command_name, index) {
-            if ( unrecognizedCommands.includes( " " + command_name + " " ) ) {
+            let commandCheck = new RegExp( " " + command_name + "[ $]")
+            if ( unrecognizedCommands.match(commandCheck) ) {
               recognizedCommands += command_name + " "
               unrecognizedCommands = unrecognizedCommands.replace(command_name,"")
             }
