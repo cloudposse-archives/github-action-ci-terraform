@@ -115,7 +115,7 @@ runs:
               validTestRequest = "false"
               validCommandRequest = "true"
               unrecognizedCommands = commandMatches[1]
-              validTests.forEach(commandCheck)
+              validCommands.forEach(commandCheck)
               unrecognizedCommands = unrecognizedCommands.replace(/\s{2,}/g," ")
               // clean up lists of commands, whether they're empty or not
               if ( !( /\S/.test(recognizedCommands) ) ) {
