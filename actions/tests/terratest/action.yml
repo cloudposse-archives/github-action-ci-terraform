@@ -172,14 +172,25 @@ runs:
         USES_CLOUDFLARE: >-
           ${{ contains(github.repository, '-cloudflare-')
           ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-cloudflare-provider') }}
+        AWS_ACCESS_KEY_ID:     ${{ inputs.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
+        GITHUB_TOKEN:          ${{ inputs.token }}
+        OPSGENIE_API_KEY:      ${{ inputs.OPSGENIE_API_KEY }}
+        DD_API_KEY:            ${{ inputs.DD_API_KEY }}
+        DD_APP_KEY:            ${{ inputs.DD_APP_KEY }}
+        SPOTINST_TOKEN:        ${{ inputs.SPOTINST_TOKEN }}
+        SPOTINST_ACCOUNT:      ${{ inputs.SPOTINST_ACCOUNT }}
+        TFE_TOKEN:             ${{ inputs.TFE_TOKEN }}
+        CLOUDFLARE_EMAIL:      ${{ inputs.CLOUDFLARE_EMAIL }}
+        CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
       with:
         entrypoint: "/github/workspace/inject_secrets.sh"
 
-    - name: Dump GitHub context
-      shell: bash
-      run: echo "$GITHUB_CONTEXT"
-      env:
-        GITHUB_CONTEXT: ${{ toJson(github) }}
+#    - name: Dump GitHub context
+#      shell: bash
+#      run: echo "$GITHUB_CONTEXT"
+#      env:
+#        GITHUB_CONTEXT: ${{ toJson(github) }}
 
     - name: "Output script for `Execute terratest functionality` step"
       shell: bash -x -e -o pipefail {0}
