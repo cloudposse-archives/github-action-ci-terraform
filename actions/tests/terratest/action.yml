@@ -100,12 +100,11 @@ runs:
 
     - name: "Determine required Terraform version"
       uses: docker://cloudposse/test-harness:latest
+      env:
+        BASE_REF: ${{ inputs.base-ref }}
+        LABELS: ${{ join(inputs.labels.*.name, '\n') }}
       with:
         entrypoint: "/github/workspace/determine_required_terraform_version.sh"
-
-    - name: "Test VERSION passing"
-      shell: bash
-      run: echo "$VERSION"
 
     - name: "Output script for `Inject secrets` step"
       shell: bash -x -e -o pipefail {0}
@@ -148,43 +147,9 @@ runs:
         EOF
         chmod a+x inject_secrets.sh
 
-    - name: "Output master terratest script"
-      shell: bash -x -e -o pipefail {0}
-      run: |
-        cat << "EOF" > terratest.sh
-        #!/bin/bash
-
-        # Update ENV
-        echo $INPUT_ENV > $GITHUB_ENV
-
-        # Determine requied version of terraform based on the target branch of the pull request.
-        # Then update the PATH to use it.
-        #./determine_required_terraform_version.sh
-        /github/workspace/determine_required_terraform_version.sh
-
-        # Initialize the terratest go project
-        make -C test/src clean init
-        rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl
-
-        # Inject secrets
-        #./inject_secrets.sh
-        /github/workspace/inject_secrets.sh
-
-        # Test `examples/complete` with terratest
-        make -C test/src
-        EOF
-        chmod a+x terratest.sh
-
-    # Execute all terratest functionality within one container.
-    - name: "Determine required terraform version"
+    - name: "Inject secrets"
       uses: docker://cloudposse/test-harness:latest
-      with:
-        entrypoint: "/github/workspace/terratest.sh"
       env:
-        # Pull request target branch
-        BASE_REF: ${{ inputs.base-ref }}
-        LABELS: ${{ join(inputs.labels.*.name, '\n') }}
-        # ${{ join(github.event.client_payload.pull_request.labels.*.name, '\n') }}
         USES_GITHUB:   >-
           ${{ contains(github.event.client_payload.github.payload.repository.name, '-github-')
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-github-provider') }}
@@ -206,17 +171,27 @@ runs:
         USES_CLOUDFLARE: >-
           ${{ contains(github.event.client_payload.github.payload.repository.name, '-cloudflare-')
           ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-cloudflare-provider') }}
-        AWS_ACCESS_KEY_ID:     ${{ inputs.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
-        GITHUB_TOKEN:          ${{ inputs.token }}
-        OPSGENIE_API_KEY:      ${{ inputs.OPSGENIE_API_KEY }}
-        DD_API_KEY:            ${{ inputs.DD_API_KEY }}
-        DD_APP_KEY:            ${{ inputs.DD_APP_KEY }}
-        SPOTINST_TOKEN:        ${{ inputs.SPOTINST_TOKEN }}
-        SPOTINST_ACCOUNT:      ${{ inputs.SPOTINST_ACCOUNT }}
-        TFE_TOKEN:             ${{ inputs.TFE_TOKEN }}
-        CLOUDFLARE_EMAIL:      ${{ inputs.CLOUDFLARE_EMAIL }}
-        CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
+      with:
+        entrypoint: "/github/workspace/inject_secrets.sh"
+
+    - name: "Output script for `Execute terratest functionality` step"
+      shell: bash -x -e -o pipefail {0}
+      run: |
+        cat << "EOF" > terratest.sh
+        #!/bin/bash
+        # Initialize the terratest go project
+        make -C test/src clean init
+        rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl
+        # Test `examples/complete` with terratest
+        make -C test/src
+        EOF
+        chmod a+x terratest.sh
+
+    # Execute terratest
+    - name: "Execute terratest functionality"
+      uses: docker://cloudposse/test-harness:latest
+      with:
+        entrypoint: "/github/workspace/terratest.sh"
 
     - name: "Record status"
       if: always()
