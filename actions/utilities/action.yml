@@ -1,0 +1,19 @@
+name: 'terraform-ci-determine-terraform-version'
+description: 'Determine the version of Terraform installe in the latest cloudposse/test-harness Docker image'
+inputs:
+  base-ref:
+    description: "Name of the branch into which this PR wants to merge"
+    required: true
+  labels:
+    description: "Labels on this PR, including associated metadata"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: "Determine required Terraform version"
+      uses: docker://cloudposse/test-harness:latest
+      env:
+        BASE_REF: ${{ inputs.base-ref }}
+        LABELS: ${{ join(inputs.labels.*.name, '\n') }}
+      with:
+        entrypoint: "/github/workspace/determine_required_terraform_version.sh"
