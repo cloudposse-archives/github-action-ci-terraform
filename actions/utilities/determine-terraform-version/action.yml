@@ -6,7 +6,7 @@ inputs:
     required: true
   app_checkout_path:
     description: 'The path to checkout the application repository to during the workflow run'
-    default: ./repo
+    default: ./github-action-terraform-ci
     required: false
   labels:
     description: "Labels on this PR, including associated metadata"
@@ -17,6 +17,7 @@ runs:
     - name: Checkout terraform-ci repo to load script locally on runner
       uses: actions/checkout@v2
       with:
+        repository: cloudposse/github-action-terraform-ci
         path: ${{ inputs.app_checkout_path }}
 
     - name: Debug
