@@ -33,4 +33,4 @@ runs:
         BASE_REF: ${{ inputs.base-ref }}
         LABELS: ${{ join(inputs.labels.*.name, '\n') }}
       with:
-        entrypoint: "/github/workspace/${{ input.app_checkout_path }}/actions/utilities/determine-terraform-version/determine_required_terraform_version.sh"
+        entrypoint: "/github/workspace/${{ inputs.app_checkout_path }}/actions/utilities/determine-terraform-version/determine_required_terraform_version.sh"
