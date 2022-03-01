@@ -7,14 +7,11 @@ inputs:
   command-name:
     description: "name of the github action status check that will be calling this action as a step"
     required: true
-#  sha:
-#    description: "SHA hash of the commit whose status will be modified"
-#    required: true
 runs:
   using: "composite"
   steps:
     # Export script to rebuild README and commit changes (if any) to the PR branch
-    - name: Export rebuild README script
+    - name: "Export script for `Rebuild README and commit changes (if any)` step"
       shell: bash
       run: |
         cat << "EOF" > rebuild_readme.sh
@@ -44,12 +41,3 @@ runs:
       uses: docker://cloudposse/build-harness:slim-latest
       with:
         entrypoint: "/github/workspace/rebuild_readme.sh"
-
-#    - name: "Record status"
-#      if: always()
-#      uses: cloudposse/github-action-terraform-ci/actions/status@main
-#      with:
-#        token: ${{ inputs.token }}
-#        test-name: ${{ inputs.command-name }}
-#        sha: ${{ inputs.sha }}
-#        status: ${{ github.action_status }}
