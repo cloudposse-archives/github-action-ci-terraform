@@ -4,6 +4,10 @@ inputs:
   base-ref:
     description: "Name of the branch into which this PR wants to merge"
     required: true
+  app_checkout_path:
+    description: 'The path to checkout the application repository to during the workflow run'
+    default: ./repo
+    required: false
   labels:
     description: "Labels on this PR, including associated metadata"
     required: true
@@ -12,12 +16,15 @@ runs:
   steps:
     - name: Checkout terraform-ci repo to load script locally on runner
       uses: actions/checkout@v2
+      with:
+        path: ${{ inputs.app_checkout_path }}
 
     - name: Debug
       shell: bash
       run: |
         pwd
         ls -lhta
+        ls -lhta ${{ inputs.app_checkout_path }}
 
     - name: "Determine required Terraform version"
       uses: docker://cloudposse/test-harness:latest
