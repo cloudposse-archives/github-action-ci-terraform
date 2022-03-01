@@ -158,7 +158,8 @@ runs:
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-opsgenie-provider') }}
         USES_AWS: >-
           ${{ contains(github.event.client_payload.github.payload.repository.name, 'terraform-aws-')
-          || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-aws-provider') }}
+          || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-aws-provider')
+          || contains(github.event.client_payload.github.payload.repository.name, 'action-test') }}
         USES_SPOTINST: >-
           ${{ contains(github.event.client_payload.github.payload.repository.name, '-spotinst-')
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-spotinst-provider') }}
