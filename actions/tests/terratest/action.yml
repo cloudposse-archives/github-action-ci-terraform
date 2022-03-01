@@ -175,6 +175,11 @@ runs:
       with:
         entrypoint: "/github/workspace/inject_secrets.sh"
 
+    - name: Dump GitHub context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "$GITHUB_CONTEXT"
+
     - name: "Output script for `Execute terratest functionality` step"
       shell: bash -x -e -o pipefail {0}
       run: |
