@@ -10,6 +10,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Checkout terraform-ci repo to load script locally on runner
+      uses: actions/checkout@v2
+
     - name: Debug
       shell: bash
       run: |
