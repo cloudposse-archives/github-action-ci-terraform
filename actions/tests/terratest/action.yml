@@ -53,12 +53,10 @@ runs:
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
 
-    - name: "Output script for `Inject secrets` step"
-      shell: bash -x -e -o pipefail {0}
+    - name: "Inject secrets"
+      shell: bash
       run: |
-        cat << "EOF" > inject_secrets.sh
         #!/bin/bash
-
         if [[ "$USES_AWS" == "true" || "$USES_DATADOG" == "true" || "$USES_SPOTINST" == "true" ]]; then
           printf "%s=%s\n"  AWS_ACCESS_KEY_ID      "$AWS_ACCESS_KEY_ID"      >> "$GITHUB_ENV"
           printf "%s=%s\n"  AWS_SECRET_ACCESS_KEY  "$AWS_SECRET_ACCESS_KEY"  >> "$GITHUB_ENV"
@@ -91,11 +89,6 @@ runs:
           printf "%s=%s\n"  CLOUDFLARE_API_KEY "$CLOUDFLARE_API_KEY" >> "$GITHUB_ENV"
           echo exported CloudFlare
         fi;
-        EOF
-        chmod a+x inject_secrets.sh
-
-    - name: "Inject secrets"
-      uses: docker://cloudposse/test-harness:latest
       env:
         USES_GITHUB:   >-
           ${{ contains(github.repository, '-github-')
@@ -130,8 +123,6 @@ runs:
         TFE_TOKEN:             ${{ inputs.TFE_TOKEN }}
         CLOUDFLARE_EMAIL:      ${{ inputs.CLOUDFLARE_EMAIL }}
         CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
-      with:
-        entrypoint: "/github/workspace/inject_secrets.sh"
 
     - name: "Output script for `Execute terratest functionality` step"
       shell: bash -x -e -o pipefail {0}
