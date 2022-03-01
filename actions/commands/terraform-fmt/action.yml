@@ -1,41 +1,21 @@
 name: "terraform-ci-command-terraform-fmt"
 description: "Format terraform files"
 inputs:
-  token:
-    description: "github token"
-    required: true
-  command-name:
-    description: "name of the github action status check that will be calling this action as a step"
-    required: true
+  app_checkout_path:
+    description: 'The path to checkout the application repository to during the workflow run'
+    default: ./github-action-terraform-ci
+    required: false
 runs:
   using: "composite"
   steps:
-    # Export script to format Terraform files and commit changes (if any) to the PR branch
-    - name: "Export script for `Format Terraform files and commit changes (if any)` step"
-      shell: bash
-      run: |
-        cat << "EOF" > format_terraform.sh
-        #!/bin/bash
-
-        /usr/bin/make BUILD_HARNESS_PATH=/build-harness PACKAGES_PREFER_HOST=true -f /build-harness/templates/Makefile.build-harness terraform/fmt
-
-        set -x
-        output=$(git diff --name-only)
-        if [ -n "$output" ]; then
-          echo "Changes detected. Pushing to the PR branch"
-          git config --global user.name 'actions-bot'
-          git config --global user.email '58130806+actions-bot@users.noreply.github.com'
-          git add -A
-          git commit -m "Executed 'terraform fmt'"
-          git push
-        else
-          echo "No changes detected"
-        fi
-        EOF
-        chmod a+x format_terraform.sh
+    - name: "Checkout terraform-ci repo to load script locally on runner"
+      uses: actions/checkout@v2
+      with:
+        repository: cloudposse/github-action-terraform-ci
+        path: ${{ inputs.app_checkout_path }}
 
     # Format Terraform files and commit changes (if any) to the PR branch
     - name: "Format Terraform files and commit changes (if any)"
       uses: docker://cloudposse/build-harness:slim-latest
       with:
-        entrypoint: "/github/workspace/format_terraform.sh"
+        entrypoint: "/github/workspace/${{ inputs.app_checkout_path }}/actions/commands/terraform-fmt/format_terraform.sh"
