@@ -1,12 +1,5 @@
 name: 'terraform-ci-run-commands'
 description: 'Run all requested commands'
-inputs:
-  token:
-    description: "github token"
-    required: true
-  commands-names:
-    description: "Names of all commands that will be called"
-    required: true
 runs:
   using: "composite"
   steps:
@@ -17,6 +10,3 @@ runs:
     - name: "Run terraform command"
       if: (contains(inputs.commands-names, 'terraform-fmt') || contains(inputs.tests-names, 'all')) && (success() || failure())
       uses: cloudposse/github-action-terraform-ci/actions/commands/terraform-fmt@main
-      with:
-        token: ${{ inputs.token }}
-        command-name: "terraform-fmt"
