@@ -151,26 +151,26 @@ runs:
       uses: docker://cloudposse/test-harness:latest
       env:
         USES_GITHUB:   >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, '-github-')
+          ${{ contains(github.repository, '-github-')
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-github-provider') }}
         USES_OPSGENIE: >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, 'terraform-opsgenie-')
+          ${{ contains(github.repository, 'terraform-opsgenie-')
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-opsgenie-provider') }}
         USES_AWS: >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, 'terraform-aws-')
+         ${{ contains(github.repository, 'terraform-aws-')
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-aws-provider')
-          || contains(github.event.client_payload.github.payload.repository.name, 'action-test') }}
+          || contains(github.repository, 'action-test') }}
         USES_SPOTINST: >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, '-spotinst-')
+          ${{ contains(github.repository, '-spotinst-')
           || contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-spotinst-provider') }}
         USES_DATADOG: >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, '-datadog-')
+          ${{ contains(github.repository, '-datadog-')
           ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-datadog-provider') }}
         USES_TFE: >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, '-tfe-')
+          ${{ contains(github.repository, '-tfe-')
           ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-tfe-provider') }}
         USES_CLOUDFLARE: >-
-          ${{ contains(github.event.client_payload.github.payload.repository.name, '-cloudflare-')
+          ${{ contains(github.repository, '-cloudflare-')
           ||  contains(github.event.client_payload.pull_request.labels.*.name, 'terraform-cloudflare-provider') }}
       with:
         entrypoint: "/github/workspace/inject_secrets.sh"
