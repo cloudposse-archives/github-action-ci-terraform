@@ -8,6 +8,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: "Determine required Terraform version"
+      uses: cloudposse/github-action-terraform-ci/actions/utilities/determine-terraform-version@main
+      with:
+        base-ref: ${{ inputs.base-ref }}
+        labels: ${{ inputs.labels }}
+
     - name: "Checkout terraform-ci repo to load script locally on runner"
       uses: actions/checkout@v2
       with:
