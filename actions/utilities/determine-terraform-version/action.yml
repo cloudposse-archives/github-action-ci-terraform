@@ -14,18 +14,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout terraform-ci repo to load script locally on runner
+    - name: "Checkout terraform-ci repo to load script locally on runner"
       uses: actions/checkout@v2
       with:
         repository: cloudposse/github-action-terraform-ci
         path: ${{ inputs.app_checkout_path }}
-
-    - name: Debug
-      shell: bash
-      run: |
-        pwd
-        ls -lhta
-        ls -lhta ${{ inputs.app_checkout_path }}
 
     - name: "Determine required Terraform version"
       uses: docker://cloudposse/test-harness:latest

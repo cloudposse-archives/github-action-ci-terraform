@@ -124,24 +124,8 @@ runs:
         CLOUDFLARE_EMAIL:      ${{ inputs.CLOUDFLARE_EMAIL }}
         CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
 
-    - name: "Output script for `Execute terratest functionality` step"
-      shell: bash -x -e -o pipefail {0}
-      run: |
-        cat << "EOF" > terratest.sh
-        #!/bin/bash
-        # Initialize the terratest go project
-        make -C test/src clean init
-        rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl
-        # Test `examples/complete` with terratest
-        make -C test/src
-        EOF
-        chmod a+x terratest.sh
-
-    # Execute terratest
-    - name: "Execute terratest functionality"
-      uses: docker://cloudposse/test-harness:latest
-      with:
-        entrypoint: "/github/workspace/terratest.sh"
+    - name: "Execute Terratest functionality"
+      uses: cloudposse/github-action-terraform-ci/actions/utilities/execute-terratest@main
 
     - name: "Record status"
       if: always()
