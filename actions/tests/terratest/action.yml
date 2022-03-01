@@ -137,19 +137,20 @@ runs:
       shell: bash -x -e -o pipefail {0}
       run: |
         cat << "EOF" > terratest.sh
-        chmod a+x terratest.sh
-
-    # Execute terratest
-    - name: "Execute terratest functionality"
-      uses: docker://cloudposse/test-harness:latest
-      with:
-        entrypoint: |
         #!/bin/bash
         # Initialize the terratest go project
         make -C test/src clean init
         rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl
         # Test `examples/complete` with terratest
         make -C test/src
+        EOF
+        chmod a+x terratest.sh
+
+    # Execute terratest
+    - name: "Execute terratest functionality"
+      uses: docker://cloudposse/test-harness:latest
+      with:
+        entrypoint: "/github/workspace/terratest.sh"
 
     - name: "Record status"
       if: always()
