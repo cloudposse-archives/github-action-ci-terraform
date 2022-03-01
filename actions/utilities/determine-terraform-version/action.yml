@@ -10,6 +10,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Debug
+      shell: bash
+      run: |
+        pwd
+        ls -lhta
+
     - name: "Determine required Terraform version"
       uses: docker://cloudposse/test-harness:latest
       env:
