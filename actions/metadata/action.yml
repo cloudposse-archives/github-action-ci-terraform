@@ -168,7 +168,7 @@ runs:
             }
           }
 
-          // debugging
+          // logging
           console.log("validRunRequest: " + validRunRequest)
           console.log("recognizedRuns: " + recognizedRuns)
           console.log("unrecognizedRuns: " + unrecognizedRuns)
