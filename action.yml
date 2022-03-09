@@ -43,14 +43,14 @@ runs:
       uses: cloudposse/github-action-terraform-ci/actions/metadata@main
 
     - name: "Respond to valid chatops comments"
-      if: github.event.comment && ( contains(steps.metadata.outputs.valid-test-request, 'true') || contains(steps.metadata.outputs.valid-command-request, 'true') )
+      if: github.event.comment && ( contains(steps.metadata.outputs.valid-test-request, 'true') || contains(steps.metadata.outputs.valid-run-request, 'true') )
       uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
       with:
         comment_id: ${{ github.event.comment.id }}
         recognized_tests: ${{ steps.metadata.outputs.recognized-tests }}
         unrecognized_tests: ${{ steps.metadata.outputs.unrecognized-tests }}
-        recognized_commands: ${{ steps.metadata.outputs.recognized-commands }}
-        unrecognized_commands: ${{ steps.metadata.outputs.unrecognized-commands }}
+        recognized_runs: ${{ steps.metadata.outputs.recognized-runs }}
+        unrecognized_runs: ${{ steps.metadata.outputs.unrecognized-runs }}
 
     - name: "Record pending status for all forthcoming tests, if any"
       if: contains(steps.metadata.outputs.valid-test-request, 'true')
@@ -63,7 +63,7 @@ runs:
 
     - name: "Run all requested tests, if any"
       if: contains(steps.metadata.outputs.valid-test-request, 'true')
-      uses: cloudposse/github-action-terraform-ci/actions/run-tests@main
+      uses: cloudposse/github-action-terraform-ci/actions/handle-tests@main
       with:
         token: ${{ inputs.token }}
         tests-names: ${{ steps.metadata.outputs.recognized-tests }}
@@ -81,11 +81,11 @@ runs:
         SPOTINST_TOKEN: ${{ inputs.SPOTINST_TOKEN }}
         TFE_TOKEN: ${{ inputs.TFE_TOKEN }}
 
-    - name: "Run all requested commands, if any"
-      if: contains(steps.metadata.outputs.valid-command-request, 'true')
-      uses: cloudposse/github-action-terraform-ci/actions/run-commands@main
+    - name: "Run all requested runs, if any"
+      if: contains(steps.metadata.outputs.valid-run-request, 'true')
+      uses: cloudposse/github-action-terraform-ci/actions/handle-commands@main
       with:
-        commands-names: ${{ steps.metadata.outputs.recognized-commands }}
+        commands-names: ${{ steps.metadata.outputs.recognized-runs }}
 
     - name: "Record cancelled status for all pending and completed checks, if necessary"
       if: cancelled() && contains(steps.metadata.outputs.valid-test-request, 'true')
@@ -95,25 +95,3 @@ runs:
         test-names: ${{ steps.metadata.outputs.recognized-tests }}
         sha: ${{ steps.metadata.outputs.pr-sha }}
         status: 'error'
-
-#    - name: "Handle common commands"
-#      uses: peter-evans/slash-command-dispatch@v2.3.0
-#      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
-#      with:
-#        token: ${{ inputs.token }}
-#        reaction-token: ${{ inputs.reaction-token }}
-#        repository: cloudposse/actions
-#        commands: rebuild-readme, terraform-fmt
-#        permission: triage
-#        issue-type: pull-request
-#    - name: "Run tests"
-#      uses: peter-evans/slash-command-dispatch@v2.3.0
-#      #uses: cloudposse/actions/github/slash-command-dispatch@0.22.0
-#      with:
-#        token: ${{ inputs.token }}
-#        reaction-token: ${{ inputs.reaction-token }}
-#        repository: cloudposse/actions
-#        commands: test
-#        permission: triage
-#        issue-type: pull-request
-#        reactions: false

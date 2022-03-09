@@ -10,17 +10,17 @@ inputs:
   unrecognized_tests:
     description: "Names of all invalid tests requested, or '' if no invalid tests were requested"
     required: true
-  recognized_commands:
-    description: "Names of all commands to be run, or '' if if no valid commands were requested"
+  recognized_runs:
+    description: "Names of all runs to be executed, or '' if if no valid runs were requested"
     required: true
-  unrecognized_commands:
-    description: "Names of all invalid commands requested, or '' if no invalid commands were requested"
+  unrecognized_runs:
+    description: "Names of all invalid runs requested, or '' if no invalid runs were requested"
     required: true
 runs:
   using: "composite"
   steps:
-    - name: "Respond to chatops comments requesting only valid '/test's or '/command's"
-      if: (inputs.recognized_tests != '' || inputs.recognized_commands != '') && (inputs.unrecognized_tests == '' && inputs.unrecognized_commands == '')
+    - name: "Respond to chatops comments requesting only valid '/test's or '/run's"
+      if: (inputs.recognized_tests != '' || inputs.recognized_runs != '') && (inputs.unrecognized_tests == '' && inputs.unrecognized_runs == '')
       uses: actions/github-script@v4
       with:
         script: |
@@ -46,7 +46,7 @@ runs:
           // Make addition to comment body
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "All the requested actions were valid." + "\n";
-          commentBody = commentBody + "Valid actions: " + "<b>${{ inputs.recognized_tests }} ${{ inputs.recognized_commands }}</b>" + "\n";
+          commentBody = commentBody + "Valid actions: " + "<b>${{ inputs.recognized_tests }} ${{ inputs.recognized_runs }}</b>" + "\n";
           commentBody = commentBody + "The valid actions will now be executed.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
@@ -58,8 +58,8 @@ runs:
           core.info(`Updated comment id '${{ inputs.comment_id }}'.`);
           //core.setOutput("comment-id", inputs.commentId);
 
-    - name: "Respond to chatops comments requesting only invalid '/test's or '/command's"
-      if: (inputs.recognized_tests == '' && inputs.recognized_commands == '') && (inputs.unrecognized_tests != '' || inputs.unrecognized_commands != '')
+    - name: "Respond to chatops comments requesting only invalid '/test's or '/run's"
+      if: (inputs.recognized_tests == '' && inputs.recognized_runs == '') && (inputs.unrecognized_tests != '' || inputs.unrecognized_runs != '')
       uses: actions/github-script@v4
       with:
         script: |
@@ -85,7 +85,7 @@ runs:
           // Make addition to comment body
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "All requested actions are invalid." + "\n";
-          commentBody = commentBody + "Invalid actions: " + "<b>${{ inputs.unrecognized_tests }} ${{ inputs.unrecognized_commands }}</b>" + "\n";
+          commentBody = commentBody + "Invalid actions: " + "<b>${{ inputs.unrecognized_tests }} ${{ inputs.unrecognized_runs }}</b>" + "\n";
           commentBody = commentBody + "If you would still like to run these invalid actions, please verify that they are supported via chatops and were spelled correctly. Then, create another request comment.";
           core.debug(`Comment body: ${commentBody}`);
           await github.issues.updateComment({
@@ -97,8 +97,8 @@ runs:
           core.info(`Updated comment id '${{ inputs.comment_id }}'.`);
           //core.setOutput("comment-id", inputs.commentId);
 
-    - name: "Respond to chatops comments requesting a combination of valid and invalid '/test's or '/command's"
-      if: (inputs.recognized_tests != '' && inputs.unrecognized_tests != '') || (inputs.recognized_commands != '' && inputs.unrecognized_commands != '')
+    - name: "Respond to chatops comments requesting a combination of valid and invalid '/test's or '/run's"
+      if: (inputs.recognized_tests != '' && inputs.unrecognized_tests != '') || (inputs.recognized_runs != '' && inputs.unrecognized_runs != '')
       uses: actions/github-script@v4
       with:
         script: |
@@ -124,8 +124,8 @@ runs:
           // Make addition to comment body
           commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
           commentBody = commentBody + "There were a mixture of valid and invalid actions requested, as follows." + "\n";
-          commentBody = commentBody + "Valid actions: " + "<b>${{ inputs.recognized_tests }} ${{ inputs.recognized_commands }}</b>" + "\n";
-          commentBody = commentBody + "Invalid actions: " + "<b>${{ inputs.unrecognized_tests }} ${{ inputs.unrecognized_commands }}</b>" + "\n";
+          commentBody = commentBody + "Valid actions: " + "<b>${{ inputs.recognized_tests }} ${{ inputs.recognized_runs }}</b>" + "\n";
+          commentBody = commentBody + "Invalid actions: " + "<b>${{ inputs.unrecognized_tests }} ${{ inputs.unrecognized_runs }}</b>" + "\n";
           commentBody = commentBody + "Only the valid actions will be executed." + "\n";
           commentBody = commentBody + "If you would still like to run the invalid actions, please verify that they are supported by chatops and were spelled correctly. Then, create another request comment.";
           core.debug(`Comment body: ${commentBody}`);

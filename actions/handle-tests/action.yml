@@ -1,4 +1,4 @@
-name: 'terraform-ci-run-tests'
+name: 'terraform-ci-handle-tests'
 description: 'Run all requested tests'
 inputs:
   token:
