@@ -48,7 +48,7 @@ related:
     description: "Automatically update `context.tf` whenever a new version becomes available"
     url: "https://github.com/cloudposse/github-action-terraform-auto-context"
   - name: "GitHub Action Validate CODEOWNERS"
-    description: "GitHub Action to validate conents of CODEOWNERS file"
+    description: "Validate and lint contents of CODEOWNERS file"
     url: "https://github.com/cloudposse/github-action-validate-codeowners"
 
 # References
