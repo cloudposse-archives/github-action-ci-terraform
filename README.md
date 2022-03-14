@@ -72,18 +72,20 @@ To request functionality via chatops, type `/run [command_name]` or `/test [test
 It is possible to request multiple commands or tests in one chatops comment, e.g., `/run command_1 command_2 command_3`.
 #### Commands
 Some of Cloud Posse's Terraform CI functionality will modify repo files and push a commit with the modified files to the current branch. These commands can be invoked by commenting on a pull request with `/run [command_name]`.
-- The following is a complete list of all valid run commands:
-  * rebuild-readme
-  * terraform-fmt
-  * all (runs all of the above)
+
+The following is a complete list of all valid run commands:
+  * **rebuild-readme**
+  * **terraform-fmt**
+  * **all** (runs all of the above)
 #### Tests
 Some of Cloud Posse's Terraform CI functionality will test the current state of files in the repo, but will not modify them. The results of tests will be listed along with the other status checks at the bottom of a pull request. These tests can be invoked by commenting on a pull request with `/test [test_name]`.
-- The following is a complete list of all valid tests:
-  * ping
-  * bats
-  * readme
-  * terratest
-  * all (runs all of the above)
+
+The following is a complete list of all valid tests:
+  * **ping**
+  * **bats**
+  * **readme**
+  * **terratest**
+  * **all** (runs all of the above)
 
 
 
