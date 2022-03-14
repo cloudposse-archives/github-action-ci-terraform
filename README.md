@@ -68,11 +68,18 @@ It's 100% Open Source and licensed under the [APACHE2](LICENSE).
 Copy the `sample_workflow_file.yaml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
 This will cause CI functionality to execute on pull requests and whenever requested via chatops.
 ## Chatops
-To request functionality via chatops, type `/command [command_name]` or `/test [test_name]` in a comment for any open pull request.
-It is possible to request multiple commands or tests in one chatops comment, e.g., `/command command_1 command_2 command_3`.
-## Notes
-- It is necessary for the step that calls this action in a workflow file to have the `if: always()` condition attached in order to handle manual cancellations properly. If the `if: always()` condition is instead attached to the job as a whole, cancellations won't be reported properly.
-- If running on `pull_request` events (in addition to `issue_comment` events, presumably), then attach the following condition the to job that calls this action: `if: ( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name == github.repository) ) || (github.event_name != 'pull_request')`. This is meant to prevent running the action on pull requests that come from forks.
+To request functionality via chatops, type `/run [command_name]` or `/test [test_name]` in a comment for any open pull request.
+It is possible to request multiple commands or tests in one chatops comment, e.g., `/run command_1 command_2 command_3`.
+The following is a complete list of all valid run commands:
+  - rebuild-readme
+  - terraform-fmt
+  - all (runs all of the above)
+The following is a complete list of all valid tests:
+  - ping
+  - bats
+  - readme
+  - terratest
+  - all (runs all of the above)
 
 
 
@@ -93,11 +100,10 @@ Are you using this project or any of our other projects? Consider [leaving a tes
 
 Check out these related projects.
 
-- [GitHub Action Validate Codeowners](https://github.com/cloudposse/github-action-validate-codeowners) - GitHub Action to validate conents of CODEOWNERS file
+- [GitHub Action Auto-format](https://github.com/cloudposse/github-action-auto-format) - Add standard files to a repo and keep its README up to date
 - [GitHub Action Auto-release](https://github.com/cloudposse/github-action-auto-release) - Automatically draft release notes for a new release when merges are made into the default branch
-- [GitHub Action Auto-readme](https://github.com/cloudposse/github-action-auto-readme) - Automatically regenerate the README.md file
-- [GitHub Action Terraform Auto-format](https://github.com/cloudposse/github-action-terraform-auto-format) - Automatically format all Terraform files
 - [GitHub Action Terraform Auto-context](https://github.com/cloudposse/github-action-terraform-auto-context) - Automatically update `context.tf` whenever a new version becomes available
+- [GitHub Action Validate CODEOWNERS](https://github.com/cloudposse/github-action-validate-codeowners) - GitHub Action to validate conents of CODEOWNERS file
 
 ## Help
 
