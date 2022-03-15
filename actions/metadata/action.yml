@@ -74,115 +74,119 @@ runs:
       if: steps.event-type.outputs.event-type == 'chatops'
       with:
         script: |
-          // extract the SHA of the commit at the head of the PR
-          const prUrl = context.payload.issue.pull_request.url;
-          const prDetails = await github.request(`GET ${prUrl}`);
-          let headSha = prDetails.data.head.sha;
-          core.setOutput("pr-sha", headSha);
+          const actionContext = require('lib/actioncontext.js')(this, context, core, github, ${{ toJSON(github) }}, ${{ toJSON(inputs) }}, ${{ toJSON(steps) }})
+          const chatops = require('lib/chatops.js')(actionContext)
+          chatops.metadata_extraction()
 
-          // extract the base branch name that's being merged into
-          let prBaseRef = prDetails.data.base.ref;
-          core.setOutput("pr-base-ref", prBaseRef);
-
-          // extract the labels attached to this PR
-          let prLabels = prDetails.data.labels;
-          core.setOutput("pr-labels", prLabels);
-
-          // prepare to extract the name(s) of the /run or /test suite(s) to be executed
-          const commentBody = context.payload.comment.body;
-          console.log("commentBody: " + commentBody)
-          // evaluate run regex
-          const validRuns = ['all', 'rebuild-readme', 'terraform-fmt']
-          const runRegex = /^\/run( .+)\s*$/;
-          runMatches = commentBody.match(runRegex);
-          // evaluate test regex
-          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
-          const testRegex = /^\/test( .+)\s*$/;
-          testMatches = commentBody.match(testRegex);
-
-          // evaluate regex results
-          let validRunRequest = ""
-          let recognizedRuns = ""
-          let unrecognizedRuns = ""
-          let validTestRequest = ""
-          let recognizedTests = ""
-          let unrecognizedTests = ""
-          if (testMatches == null) { // this indicates no /test request was found
-            if (runMatches == null) { // this indicates that no /run request was found
-              validTestRequest = "false"
-              validRunRequest = "false"
-            } else if (runMatches[1]) { // this indicates that we detected a properly-formatted /run request
-              validTestRequest = "false"
-              validRunRequest = "true"
-              unrecognizedRuns = runMatches[1]
-              validRuns.forEach(runCheck)
-              unrecognizedRuns = unrecognizedRuns.replace(/\s{2,}/g," ")
-              // clean up lists of runs, whether they're empty or not
-              if ( !( /\S/.test(recognizedRuns) ) ) {
-                recognizedRuns = ""
-              } else {
-                recognizedRuns = recognizedRuns.replace(/^\s*/,"")
-              }
-              if ( !( /\S/.test(unrecognizedRuns) ) ) {
-                unrecognizedRuns = ""
-              } else {
-                unrecognizedRuns = unrecognizedRuns.replace(/^\s*/,"")
-              }
-            }
-          } else if (testMatches[1]) { // this indicates that we detected a properly-formatted /test request
-            // compare the regex match string against each validTest to determine which tests to run
-            // any characters left in the regex match string become unrecognized tests
-            validRunRequest = "false"
-            validTestRequest = "true"
-            unrecognizedTests = testMatches[1]
-            validTests.forEach(testCheck)
-            unrecognizedTests = unrecognizedTests.replace(/\s{2,}/g," ")
-            // clean up lists of tests, whether they're empty or not
-            if ( !( /\S/.test(recognizedTests) ) ) {
-              recognizedTests = ""
-            } else {
-              recognizedTests = recognizedTests.replace(/^\s*/,"")
-            }
-            if ( !( /\S/.test(unrecognizedTests) ) ) {
-              unrecognizedTests = ""
-            } else {
-              unrecognizedTests = unrecognizedTests.replace(/^\s*/,"")
-            }
-          }
-
-          // function for test forEach loop above, checking valid test names against the string of requested tests
-          function testCheck(test_name, index) {
-            let testCheck = new RegExp( test_name + "(?= |$)")
-            if ( unrecognizedTests.match(testCheck) ) {
-              recognizedTests += test_name + " "
-              unrecognizedTests = unrecognizedTests.replace(test_name,"")
-            }
-          }
-
-          // function for run forEach loop above, checking valid run names against the string of requested runs
-          function runCheck(run_name, index) {
-            let runCheck = new RegExp( run_name + "(?= |$)")
-            if ( unrecognizedRuns.match(runCheck) ) {
-              recognizedRuns += run_name + " "
-              unrecognizedRuns = unrecognizedRuns.replace(run_name,"")
-            }
-          }
-
-          // logging
-          console.log("validRunRequest: " + validRunRequest)
-          console.log("recognizedRuns: " + recognizedRuns)
-          console.log("unrecognizedRuns: " + unrecognizedRuns)
-          console.log("validTestRequest: " + validTestRequest)
-          console.log("recognizedTests: " + recognizedTests)
-          console.log("unrecognizedTests: " + unrecognizedTests)
-
-          // outputs
-          core.setOutput("valid-run-request", validRunRequest)
-          core.setOutput("recognized-runs", recognizedRuns)
-          core.setOutput("unrecognized-runs", unrecognizedRuns)
-          core.setOutput("valid-test-request", validTestRequest)
-          core.setOutput("recognized-tests", recognizedTests)
-          core.setOutput("unrecognized-tests", unrecognizedTests)
+#          // extract the SHA of the commit at the head of the PR
+#          const prUrl = context.payload.issue.pull_request.url;
+#          const prDetails = await github.request(`GET ${prUrl}`);
+#          let headSha = prDetails.data.head.sha;
+#          core.setOutput("pr-sha", headSha);
+#
+#          // extract the base branch name that's being merged into
+#          let prBaseRef = prDetails.data.base.ref;
+#          core.setOutput("pr-base-ref", prBaseRef);
+#
+#          // extract the labels attached to this PR
+#          let prLabels = prDetails.data.labels;
+#          core.setOutput("pr-labels", prLabels);
+#
+#          // prepare to extract the name(s) of the /run or /test suite(s) to be executed
+#          const commentBody = context.payload.comment.body;
+#          console.log("commentBody: " + commentBody)
+#          // evaluate run regex
+#          const validRuns = ['all', 'rebuild-readme', 'terraform-fmt']
+#          const runRegex = /^\/run( .+)\s*$/;
+#          runMatches = commentBody.match(runRegex);
+#          // evaluate test regex
+#          const validTests = ['all', 'ping', 'bats', 'terratest', 'readme']
+#          const testRegex = /^\/test( .+)\s*$/;
+#          testMatches = commentBody.match(testRegex);
+#
+#          // evaluate regex results
+#          let validRunRequest = ""
+#          let recognizedRuns = ""
+#          let unrecognizedRuns = ""
+#          let validTestRequest = ""
+#          let recognizedTests = ""
+#          let unrecognizedTests = ""
+#          if (testMatches == null) { // this indicates no /test request was found
+#            if (runMatches == null) { // this indicates that no /run request was found
+#              validTestRequest = "false"
+#              validRunRequest = "false"
+#            } else if (runMatches[1]) { // this indicates that we detected a properly-formatted /run request
+#              validTestRequest = "false"
+#              validRunRequest = "true"
+#              unrecognizedRuns = runMatches[1]
+#              validRuns.forEach(runCheck)
+#              unrecognizedRuns = unrecognizedRuns.replace(/\s{2,}/g," ")
+#              // clean up lists of runs, whether they're empty or not
+#              if ( !( /\S/.test(recognizedRuns) ) ) {
+#                recognizedRuns = ""
+#              } else {
+#                recognizedRuns = recognizedRuns.replace(/^\s*/,"")
+#              }
+#              if ( !( /\S/.test(unrecognizedRuns) ) ) {
+#                unrecognizedRuns = ""
+#              } else {
+#                unrecognizedRuns = unrecognizedRuns.replace(/^\s*/,"")
+#              }
+#            }
+#          } else if (testMatches[1]) { // this indicates that we detected a properly-formatted /test request
+#            // compare the regex match string against each validTest to determine which tests to run
+#            // any characters left in the regex match string become unrecognized tests
+#            validRunRequest = "false"
+#            validTestRequest = "true"
+#            unrecognizedTests = testMatches[1]
+#            validTests.forEach(testCheck)
+#            unrecognizedTests = unrecognizedTests.replace(/\s{2,}/g," ")
+#            // clean up lists of tests, whether they're empty or not
+#            if ( !( /\S/.test(recognizedTests) ) ) {
+#              recognizedTests = ""
+#            } else {
+#              recognizedTests = recognizedTests.replace(/^\s*/,"")
+#            }
+#            if ( !( /\S/.test(unrecognizedTests) ) ) {
+#              unrecognizedTests = ""
+#            } else {
+#              unrecognizedTests = unrecognizedTests.replace(/^\s*/,"")
+#            }
+#          }
+#
+#          // function for test forEach loop above, checking valid test names against the string of requested tests
+#          function testCheck(test_name, index) {
+#            let testCheck = new RegExp( test_name + "(?= |$)")
+#            if ( unrecognizedTests.match(testCheck) ) {
+#              recognizedTests += test_name + " "
+#              unrecognizedTests = unrecognizedTests.replace(test_name,"")
+#            }
+#          }
+#
+#          // function for run forEach loop above, checking valid run names against the string of requested runs
+#          function runCheck(run_name, index) {
+#            let runCheck = new RegExp( run_name + "(?= |$)")
+#            if ( unrecognizedRuns.match(runCheck) ) {
+#              recognizedRuns += run_name + " "
+#              unrecognizedRuns = unrecognizedRuns.replace(run_name,"")
+#            }
+#          }
+#
+#          // logging
+#          console.log("validRunRequest: " + validRunRequest)
+#          console.log("recognizedRuns: " + recognizedRuns)
+#          console.log("unrecognizedRuns: " + unrecognizedRuns)
+#          console.log("validTestRequest: " + validTestRequest)
+#          console.log("recognizedTests: " + recognizedTests)
+#          console.log("unrecognizedTests: " + unrecognizedTests)
+#
+#          // outputs
+#          core.setOutput("valid-run-request", validRunRequest)
+#          core.setOutput("recognized-runs", recognizedRuns)
+#          core.setOutput("unrecognized-runs", unrecognizedRuns)
+#          core.setOutput("valid-test-request", validTestRequest)
+#          core.setOutput("recognized-tests", recognizedTests)
+#          core.setOutput("unrecognized-tests", unrecognizedTests)
 
     - name: "Reconcile metadata"
       id: metadata
