@@ -88,8 +88,24 @@ usage: |-
 
 # Example usage
 examples: |-
-  Here are some real world examples:
+  Here's a real world example:
   - [`github-action-terraform-ci`](https://github.com/cloudposse/github-action-terraform-ci/.github/workflows/terraform-ci.yml) - Cloud Posse's self-testing Terraform CI GitHub Action repo
+
+include:
+  - "actions/bulk-status-update/README.md"
+  - "actions/commands/rebuild-readme/README.md"
+  - "actions/commands/terraform-fmt/README.md"
+  - "actions/comment-response/README.md"
+  - "actions/handle-commands/README.md"
+  - "actions/handle-tests/README.md"
+  - "actions/metadata/README.md"
+  - "actions/status/README.md"
+  - "actions/tests/bats/README.md"
+  - "actions/tests/ping/README.md"
+  - "actions/tests/readme/README.md"
+  - "actions/tests/terratest/README.md"
+  - "actions/utilities/determine-terraform-version/README.md"
+  - "actions/utilities/execute-terratest/README.md"
 
 # How to get started quickly
 quickstart: |-
