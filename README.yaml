@@ -7,9 +7,6 @@
 # Name of this project
 name: GitHub Action Terraform CI
 
-# Logo for this project
-#logo: docs/logo.png
-
 # License of this project
 license: "APACHE2"
 
@@ -23,19 +20,16 @@ copyrights:
 github_repo: cloudposse/github-action-terraform-ci
 
 # Badges to display
-#badges:
-#  - name: "Build Status"
-#    image: "https://github.com/cloudposse/build-harness/workflows/docker/badge.svg?branch=master"
-#    url: "https://github.com/cloudposse/build-harness/actions?query=workflow%3Adocker"
-#  - name: "Latest Release"
-#    image: "https://img.shields.io/github/release/cloudposse/build-harness.svg"
-#    url: "https://github.com/cloudposse/build-harness/releases/latest"
-#  - name: "Slack Community"
-#    image: "https://slack.cloudposse.com/badge.svg"
-#    url: "https://slack.cloudposse.com"
-#  - name: "Discourse Forum"
-#    image: "https://img.shields.io/discourse/https/ask.sweetops.com/posts.svg"
-#    url: "https://ask.sweetops.com/"
+badges:
+  - name: "Build Status"
+    image: "https://github.com/cloudposse/build-harness/workflows/docker/badge.svg?branch=master"
+    url: "https://github.com/cloudposse/build-harness/actions?query=workflow%3Adocker"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/build-harness.svg"
+    url: "https://github.com/cloudposse/build-harness/releases/latest"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
 
 related:
   - name: "GitHub Action Auto-format"
@@ -52,28 +46,25 @@ related:
     url: "https://github.com/cloudposse/github-action-validate-codeowners"
 
 # References
-#references:
-#  - name: "Wikipedia - Test Harness"
-#    description: 'The `build-harness` is similar in concept to a "Test Harness"'
-#    url: "https://en.wikipedia.org/wiki/Test_harness"
-
-# Screenshots
-#screenshots:
-#  - name: "demo"
-#    description: "Example of using the `build-harness` to build a docker image"
-#    url: "https://cdn.rawgit.com/cloudposse/build-harness/master/docs/demo.svg"
+references:
+  - name: "GitHub Action - github-script"
+    description: 'This is a GitHub Action that allows the running of Typescript code with access to built-in GitHub variables'
+    url: "https://github.com/actions/github-script"
+  - name: "GitHub Status Action"
+    description: 'Adds a status update to a commit'
+    url: "https://github.com/sibz/github-status-action"
+  - name: "GitHub Action - Checkout"
+    description: 'Checks out a repository under $GITHUB_WORKSPACE, so a workflow can access it'
+    url: "https://github.com/actions/checkout"
 
 # Short description of this project
 description: |-
   GitHub Action Terraform CI is a collection of GitHub Actions which are meant to cover all CI functionality necessary for
   Terraform projects. It also includes a chatops comment handler to allow for on-demand execution of these various tests and commands.
-# Introduction to the project
-#introduction: |-
-#  This is an introduction.
 
 # How to use this project
 usage: |-
-  Copy the `sample_workflow_file.yaml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
+  Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
   This will cause CI functionality to execute on pull requests and whenever requested via chatops.
   ### Chatops
   To request functionality via chatops, type `/run [command_name]` or `/test [test_name]` in a comment for any open pull request.
@@ -96,24 +87,16 @@ usage: |-
     * **all** (runs all of the above)
 
 # Example usage
-#examples: |-
-#  Here are some real world examples:
-#  - [`github-authorized-keys`](https://github.com/cloudposse/github-authorized-keys/) - A Golang project that leverages `docker/%`, `go/%`, `travis/%` targets
-#  - [`charts`](https://github.com/cloudposse/charts/) - A collection of Helm Charts that leverages `docker/%` and `helm/%` targets
-#  - [`bastion`](https://github.com/cloudposse/bastion/) - A docker image that leverages `docker/%` and `bash/lint` targets
-#  - [`terraform-null-label`](https://github.com/cloudposse/terraform-null-label/) - A terraform module that leverages `terraform/%` targets
+examples: |-
+  Here are some real world examples:
+  - [`github-action-terraform-ci`](https://github.com/cloudposse/github-action-terraform-ci/.github/workflows/terraform-ci.yml) - Cloud Posse's self-testing Terraform CI GitHub Action repo
 
 # How to get started quickly
-#quickstart: |-
-#  Here's how to get started...
-#  1. `git clone https://github.com/cloudposse/build-harness.git` to pull down the repository
-#  2. `make init` to initialize the [`build-harness`](https://github.com/cloudposse/build-harness/)
-
-# Other files to include in this README from the project folder
-#include:
-#  - "docs/targets.md"
-#  - "docs/extensions.md"
-#  - "docs/auto-init.md"
+quickstart: |-
+  Here's how to get started...
+  1. Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the target repo
+  2. Open a pull request inthe target repo
+  3. Optional - use chatops commands in comments on the pull request (e.g., `/test all`) as detailed in the [usage section](#usage)
 
 # Contributors to this project
 contributors:

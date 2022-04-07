@@ -1,6 +1,6 @@
 
 <!-- markdownlint-disable -->
-# GitHub Action Terraform CI
+# GitHub Action Terraform CI [![Build Status](https://github.com/cloudposse/build-harness/workflows/docker/badge.svg?branch=master)](https://github.com/cloudposse/build-harness/actions?query=workflow%3Adocker) [![Latest Release](https://img.shields.io/github/release/cloudposse/build-harness.svg)](https://github.com/cloudposse/build-harness/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 <!-- markdownlint-restore -->
 
 [![README Header][readme_header_img]][readme_header_link]
@@ -65,7 +65,7 @@ It's 100% Open Source and licensed under the [APACHE2](LICENSE).
 
 
 
-Copy the `sample_workflow_file.yaml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
+Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
 This will cause CI functionality to execute on pull requests and whenever requested via chatops.
 ### Chatops
 To request functionality via chatops, type `/run [command_name]` or `/test [test_name]` in a comment for any open pull request.
@@ -87,8 +87,18 @@ The following is a complete list of all valid tests:
   * **terratest**
   * **all** (runs all of the above)
 
+## Quick Start
+
+Here's how to get started...
+1. Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the target repo
+2. Open a pull request inthe target repo
+3. Optional - use chatops commands in comments on the pull request (e.g., `/test all`) as detailed in the [usage section](#usage)
 
 
+## Examples
+
+Here are some real world examples:
+- [`github-action-terraform-ci`](https://github.com/cloudposse/github-action-terraform-ci/.github/workflows/terraform-ci.yml) - Cloud Posse's self-testing Terraform CI GitHub Action repo
 
 
 
@@ -110,6 +120,16 @@ Check out these related projects.
 - [GitHub Action Auto-release](https://github.com/cloudposse/github-action-auto-release) - Automatically draft release notes for a new release when merges are made into the default branch
 - [GitHub Action Terraform Auto-context](https://github.com/cloudposse/github-action-terraform-auto-context) - Automatically update `context.tf` whenever a new version becomes available
 - [GitHub Action Validate CODEOWNERS](https://github.com/cloudposse/github-action-validate-codeowners) - Validate and lint contents of CODEOWNERS file
+
+
+## References
+
+For additional context, refer to some of these links.
+
+- [GitHub Action - github-script](https://github.com/actions/github-script) - This is a GitHub Action that allows the running of Typescript code with access to built-in GitHub variables
+- [GitHub Status Action](https://github.com/sibz/github-status-action) - Adds a status update to a commit
+- [GitHub Action - Checkout](https://github.com/actions/checkout) - Checks out a repository under $GITHUB_WORKSPACE, so a workflow can access it
+
 
 ## Help
 
