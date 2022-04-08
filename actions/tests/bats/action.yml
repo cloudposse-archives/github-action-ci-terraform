@@ -26,7 +26,7 @@ runs:
     - name: "Test `examples/complete` with bats"
       uses: docker://cloudposse/test-harness:latest
       with:
-        args: "-C test/ examples/complete"
+        args: "-C test/ test/examples/complete"
 
     - name: "Record status"
       if: always()
