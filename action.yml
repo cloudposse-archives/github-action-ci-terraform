@@ -40,11 +40,11 @@ runs:
 
     - name: "Extract Necessary Metadata"
       id: metadata
-      uses: cloudposse/github-action-terraform-ci/actions/metadata@main
+      uses: cloudposse/github-action-terraform-ci/actions/metadata@review-branch
 
     - name: "Respond to valid chatops comments"
       if: github.event.comment && ( contains(steps.metadata.outputs.valid-test-request, 'true') || contains(steps.metadata.outputs.valid-run-request, 'true') )
-      uses: cloudposse/github-action-terraform-ci/actions/comment-response@main
+      uses: cloudposse/github-action-terraform-ci/actions/comment-response@review-branch
       with:
         comment_id: ${{ github.event.comment.id }}
         recognized_tests: ${{ steps.metadata.outputs.recognized-tests }}
@@ -54,7 +54,7 @@ runs:
 
     - name: "Record pending status for all forthcoming tests, if any"
       if: contains(steps.metadata.outputs.valid-test-request, 'true')
-      uses: cloudposse/github-action-terraform-ci/actions/bulk-status-update@main
+      uses: cloudposse/github-action-terraform-ci/actions/bulk-status-update@review-branch
       with:
         token: ${{ inputs.token }}
         test-names: ${{ steps.metadata.outputs.recognized-tests }}
@@ -63,7 +63,7 @@ runs:
 
     - name: "Run all requested tests, if any"
       if: contains(steps.metadata.outputs.valid-test-request, 'true')
-      uses: cloudposse/github-action-terraform-ci/actions/handle-tests@main
+      uses: cloudposse/github-action-terraform-ci/actions/handle-tests@review-branch
       with:
         token: ${{ inputs.token }}
         tests-names: ${{ steps.metadata.outputs.recognized-tests }}
@@ -83,14 +83,14 @@ runs:
 
     - name: "Run all requested runs, if any"
       if: contains(steps.metadata.outputs.valid-run-request, 'true')
-      uses: cloudposse/github-action-terraform-ci/actions/handle-commands@main
+      uses: cloudposse/github-action-terraform-ci/actions/handle-commands@review-branch
       with:
         commands-names: ${{ steps.metadata.outputs.recognized-runs }}
         token: ${{ inputs.token }}
 
     - name: "Record cancelled status for all pending and completed checks, if necessary"
       if: cancelled() && contains(steps.metadata.outputs.valid-test-request, 'true')
-      uses: cloudposse/github-action-terraform-ci/actions/bulk-status-update@main
+      uses: cloudposse/github-action-terraform-ci/actions/bulk-status-update@review-branch
       with:
         token: ${{ inputs.token }}
         test-names: ${{ steps.metadata.outputs.recognized-tests }}

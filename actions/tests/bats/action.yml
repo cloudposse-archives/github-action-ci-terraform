@@ -30,7 +30,7 @@ runs:
 
     - name: "Record status"
       if: always()
-      uses: cloudposse/github-action-terraform-ci/actions/status@main
+      uses: cloudposse/github-action-terraform-ci/actions/status@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}

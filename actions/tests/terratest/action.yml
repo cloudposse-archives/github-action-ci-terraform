@@ -48,7 +48,7 @@ runs:
   using: "composite"
   steps:
     - name: "Determine required Terraform version"
-      uses: cloudposse/github-action-terraform-ci/actions/utilities/determine-terraform-version@main
+      uses: cloudposse/github-action-terraform-ci/actions/utilities/determine-terraform-version@review-branch
       with:
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
@@ -125,11 +125,11 @@ runs:
         CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
 
     - name: "Execute Terratest functionality"
-      uses: cloudposse/github-action-terraform-ci/actions/utilities/execute-terratest@main
+      uses: cloudposse/github-action-terraform-ci/actions/utilities/execute-terratest@review-branch
 
     - name: "Record status"
       if: always()
-      uses: cloudposse/github-action-terraform-ci/actions/status@main
+      uses: cloudposse/github-action-terraform-ci/actions/status@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}
