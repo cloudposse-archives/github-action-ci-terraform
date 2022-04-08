@@ -1,21 +1,14 @@
 name: "terraform-ci-command-rebuild-readme"
 description: "Rebuild readme"
 inputs:
-  app_checkout_path:
-    description: 'The path to checkout the application repository to during the workflow run'
-    default: ./github-action-terraform-ci
-    required: false
+  token:
+    description: 'Token that will be used to checkout the repo. The standard secrets.GITHUB_TOKEN token should do.'
+    required: true
 runs:
   using: "composite"
   steps:
-    - name: "Checkout terraform-ci repo to load script locally on runner"
-      uses: actions/checkout@v2
+    - uses: cloudposse/github-action-auto-format@review-branch
       with:
-        repository: cloudposse/github-action-terraform-ci
-        path: ${{ inputs.app_checkout_path }}
-
-    # Rebuild README and commit changes (if any) to the PR branch
-    - name: "Rebuild README and commit changes (if any)"
-      uses: docker://cloudposse/build-harness:slim-latest
-      with:
-        entrypoint: "/github/workspace/${{ inputs.app_checkout_path }}/actions/commands/rebuild-readme/rebuild_readme.sh"
+        script-names: readme
+        workflow-token: ${{ inputs.token }}
+        bot-name: cloudpossebot

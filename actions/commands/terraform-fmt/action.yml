@@ -1,27 +1,14 @@
 name: "terraform-ci-command-terraform-fmt"
 description: "Format terraform files"
 inputs:
-  app_checkout_path:
-    description: 'The path to checkout the application repository to during the workflow run'
-    default: ./github-action-terraform-ci
-    required: false
+  token:
+    description: 'Token that will be used to checkout the repo. The standard secrets.GITHUB_TOKEN token should do.'
+    required: true
 runs:
   using: "composite"
   steps:
-    - name: "Determine required Terraform version"
-      uses: cloudposse/github-action-terraform-ci/actions/utilities/determine-terraform-version@main
+    - uses: cloudposse/github-action-auto-format@review-branch
       with:
-        base-ref: ${{ inputs.base-ref }}
-        labels: ${{ inputs.labels }}
-
-    - name: "Checkout terraform-ci repo to load script locally on runner"
-      uses: actions/checkout@v2
-      with:
-        repository: cloudposse/github-action-terraform-ci
-        path: ${{ inputs.app_checkout_path }}
-
-    # Format Terraform files and commit changes (if any) to the PR branch
-    - name: "Format Terraform files and commit changes (if any)"
-      uses: docker://cloudposse/build-harness:slim-latest
-      with:
-        entrypoint: "/github/workspace/${{ inputs.app_checkout_path }}/actions/commands/terraform-fmt/format_terraform.sh"
+        script-names: terraform_format
+        workflow-token: ${{ inputs.token }}
+        bot-name: cloudpossebot
