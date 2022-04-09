@@ -112,13 +112,13 @@ This action handles the dispatching of status-update commands. It is called by t
 
 ### Description
 
-This action rebuilds the `README.md` of the target repo. It is called by the `terraform-ci-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-terraform-ci` action.
+This action rebuilds the `README.md` of the target repo. It is called by the `terraform-ci-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-terraform-ci` action, and it calls the `cloudposse/github-action-atuo-format` action with an input of `script-names: readme`.
 
 ## Sub-action: github-action-terraform-ci-terraform-fmt
 
 ### Description
 
-This action ensures that all Terraform files in the target repo are properly formatted. It is called by the `terraform-ci-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-terraform-ci` action, and it calls the `terraform-ci-determine-terraform-version` sub-action.
+This action ensures that all Terraform files in the target repo are properly formatted. It is called by the `terraform-ci-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-terraform-ci` action, and it calls the `cloudposse/github-action-auto-format` action with an input value of `script-names: terraform_format`.
 
 ## Sub-action: github-action-terraform-ci-comment-response
 
