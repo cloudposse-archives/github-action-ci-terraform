@@ -26,7 +26,7 @@ module "subnets" {
 }
 
 module "memcached" {
-  source                  = "../../"
+  source                  = "cloudposse/elasticache-memcached/aws"
   az_mode                 = var.az_mode
   availability_zone       = var.availability_zone
   vpc_id                  = module.vpc.vpc_id
