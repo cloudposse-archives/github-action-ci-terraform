@@ -1,15 +1,20 @@
-enabled = true
-
 region = "us-east-2"
+
+availability_zone = "us-east-2a"
+
+availability_zones = ["us-east-2a"]
 
 namespace = "eg"
 
 stage = "test"
 
-name = "iam-role-test"
+name = "memcached-test"
 
-use_fullname = true
+instance_type = "cache.t2.micro"
 
-principals = {
-  "AWS" : ["*"]
-}
+cluster_size = 1
+
+# https://docs.aws.amazon.com/AmazonElastiCache/latest/mem-ug/supported-engine-versions.html
+engine_version = "1.5.16"
+
+elasticache_parameter_group_family = "memcached1.5"

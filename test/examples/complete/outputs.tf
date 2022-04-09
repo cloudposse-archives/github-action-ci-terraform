@@ -1,14 +1,44 @@
-output "id" {
-  description = "ID of the created example"
-  value       = module.this.enabled ? module.this.id : null
+output "public_subnet_cidrs" {
+  value       = module.subnets.public_subnet_cidrs
+  description = "Public subnet CIDRs"
 }
 
-output "example" {
-  description = "Example output"
-  value       = module.this.enabled ? local.example : null
+output "private_subnet_cidrs" {
+  value       = module.subnets.private_subnet_cidrs
+  description = "Private subnet CIDRs"
 }
 
-output "random" {
-  description = "Stable random number for this example"
-  value       = module.this.enabled ? join("", random_integer.example[*].result) : null
+output "vpc_cidr" {
+  value       = module.vpc.vpc_cidr_block
+  description = "VPC CIDR"
+}
+
+output "cluster_id" {
+  value       = module.memcached.cluster_id
+  description = "Cluster ID"
+}
+
+output "security_group_id" {
+  value       = module.memcached.security_group_id
+  description = "Security Group ID"
+}
+
+output "cluster_address" {
+  value       = module.memcached.cluster_address
+  description = "Cluster address"
+}
+
+output "cluster_configuration_endpoint" {
+  value       = module.memcached.cluster_configuration_endpoint
+  description = "Cluster configuration endpoint"
+}
+
+output "hostname" {
+  value       = module.memcached.hostname
+  description = "Cluster hostname"
+}
+
+output "cluster_urls" {
+  value       = module.memcached.cluster_urls
+  description = "Cluster URLs"
 }
