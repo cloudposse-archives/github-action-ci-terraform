@@ -1,6 +1,6 @@
 
 <!-- markdownlint-disable -->
-# GitHub Action Terraform CI [![Build Status](https://github.com/cloudposse/build-harness/workflows/docker/badge.svg?branch=master)](https://github.com/cloudposse/build-harness/actions?query=workflow%3Adocker) [![Latest Release](https://img.shields.io/github/release/cloudposse/build-harness.svg)](https://github.com/cloudposse/build-harness/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
+# GitHub Action CI Terraform [![Build Status](https://github.com/cloudposse/build-harness/workflows/docker/badge.svg?branch=master)](https://github.com/cloudposse/build-harness/actions?query=workflow%3Adocker) [![Latest Release](https://img.shields.io/github/release/cloudposse/build-harness.svg)](https://github.com/cloudposse/build-harness/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 <!-- markdownlint-restore -->
 
 [![README Header][readme_header_img]][readme_header_link]
@@ -28,7 +28,7 @@
 
 -->
 
-GitHub Action Terraform CI is a collection of GitHub Actions which are meant to cover all CI functionality necessary for
+GitHub Action CI Terraform is a collection of GitHub Actions which are meant to cover all CI functionality necessary for
 Terraform projects. It also includes a chatops comment handler to allow for on-demand execution of these various tests and commands.
 
 ---
@@ -65,20 +65,20 @@ It's 100% Open Source and licensed under the [APACHE2](LICENSE).
 
 
 
-Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
+Copy the `.github/workflows/ci-terraform.yml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add CI functionality.
 This will cause CI functionality to execute on pull requests and whenever requested via chatops.
 ### Chatops
 To request functionality via chatops, type `/run [command_name]` or `/test [test_name]` in a comment for any open pull request.
 It is possible to request multiple commands or tests in one chatops comment, e.g., `/run command_1 command_2 command_3`.
 #### COMMANDS
-Some of Cloud Posse's Terraform CI functionality will modify repo files and push a commit with the modified files to the current branch. These commands can be invoked by commenting on a pull request with `/run [command_name]`.
+Some of Cloud Posse's CI functionality will modify repo files and push a commit with the modified files to the current branch. These commands can be invoked by commenting on a pull request with `/run [command_name]`.
 
 The following is a complete list of all valid run commands:
   * **rebuild-readme**
   * **terraform-fmt**
   * **all** (runs all of the above)
 #### TESTS
-Some of Cloud Posse's Terraform CI functionality will test the current state of files in the repo, but will not modify them. The results of tests will be listed along with the other status checks at the bottom of a pull request. These tests can be invoked by commenting on a pull request with `/test [test_name]`.
+Some of Cloud Posse's CI functionality will test the current state of files in the repo, but will not modify them. The results of tests will be listed along with the other status checks at the bottom of a pull request. These tests can be invoked by commenting on a pull request with `/test [test_name]`.
 
 The following is a complete list of all valid tests:
   * **ping**
@@ -90,7 +90,7 @@ The following is a complete list of all valid tests:
 ## Quick Start
 
 Here's how to get started...
-1. Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the target repo
+1. Copy the `.github/workflows/ci-terraform.yml` file from this repository into the `.github/workflows` folder of the target repo
 2. Open a pull request inthe target repo
 3. Optional - use chatops commands in comments on the pull request (e.g., `/test all`) as detailed in the [usage section](#usage)
 
@@ -98,7 +98,7 @@ Here's how to get started...
 ## Examples
 
 Here's a real world example:
-- [`github-action-terraform-ci`](https://github.com/cloudposse/github-action-terraform-ci/.github/workflows/terraform-ci.yml) - Cloud Posse's self-testing Terraform CI GitHub Action repo
+- [`github-action-ci-terraform`](https://github.com/cloudposse/github-action-ci-terraform/.github/workflows/ci-terraform.yml) - Cloud Posse's self-testing CI Terraform GitHub Action repo
 
 
 
@@ -191,7 +191,7 @@ This action executes the `terratest` functionality on the target repo. It is cal
 
 ## Share the Love
 
-Like this project? Please give it a ★ on [our GitHub](https://github.com/cloudposse/github-action-terraform-ci)! (it helps us **a lot**)
+Like this project? Please give it a ★ on [our GitHub](https://github.com/cloudposse/github-action-ci-terraform)! (it helps us **a lot**)
 
 Are you using this project or any of our other projects? Consider [leaving a testimonial][testimonial]. =)
 
@@ -220,7 +220,7 @@ For additional context, refer to some of these links.
 
 **Got a question?** We got answers.
 
-File a GitHub [issue](https://github.com/cloudposse/github-action-terraform-ci/issues), send us an [email][email] or join our [Slack Community][slack].
+File a GitHub [issue](https://github.com/cloudposse/github-action-ci-terraform/issues), send us an [email][email] or join our [Slack Community][slack].
 
 [![README Commercial Support][readme_commercial_support_img]][readme_commercial_support_link]
 
@@ -268,7 +268,7 @@ Sign up for [our newsletter][newsletter] that covers everything on our technolog
 
 ### Bug Reports & Feature Requests
 
-Please use the [issue tracker](https://github.com/cloudposse/github-action-terraform-ci/issues) to report any bugs or file feature requests.
+Please use the [issue tracker](https://github.com/cloudposse/github-action-ci-terraform/issues) to report any bugs or file feature requests.
 
 ### Developing
 
@@ -359,32 +359,32 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
 [![Beacon][beacon]][website]
 
   [logo]: https://cloudposse.com/logo-300x69.svg
-  [docs]: https://cpco.io/docs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=docs
-  [website]: https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=website
-  [github]: https://cpco.io/github?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=github
-  [jobs]: https://cpco.io/jobs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=jobs
-  [hire]: https://cpco.io/hire?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=hire
-  [slack]: https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=slack
-  [linkedin]: https://cpco.io/linkedin?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=linkedin
-  [twitter]: https://cpco.io/twitter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=twitter
-  [testimonial]: https://cpco.io/leave-testimonial?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=testimonial
-  [office_hours]: https://cloudposse.com/office-hours?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=office_hours
-  [newsletter]: https://cpco.io/newsletter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=newsletter
-  [discourse]: https://ask.sweetops.com/?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=discourse
-  [email]: https://cpco.io/email?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=email
-  [commercial_support]: https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=commercial_support
-  [we_love_open_source]: https://cpco.io/we-love-open-source?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=we_love_open_source
-  [terraform_modules]: https://cpco.io/terraform-modules?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=terraform_modules
+  [docs]: https://cpco.io/docs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=docs
+  [website]: https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=website
+  [github]: https://cpco.io/github?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=github
+  [jobs]: https://cpco.io/jobs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=jobs
+  [hire]: https://cpco.io/hire?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=hire
+  [slack]: https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=slack
+  [linkedin]: https://cpco.io/linkedin?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=linkedin
+  [twitter]: https://cpco.io/twitter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=twitter
+  [testimonial]: https://cpco.io/leave-testimonial?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=testimonial
+  [office_hours]: https://cloudposse.com/office-hours?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=office_hours
+  [newsletter]: https://cpco.io/newsletter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=newsletter
+  [discourse]: https://ask.sweetops.com/?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=discourse
+  [email]: https://cpco.io/email?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=email
+  [commercial_support]: https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=commercial_support
+  [we_love_open_source]: https://cpco.io/we-love-open-source?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=we_love_open_source
+  [terraform_modules]: https://cpco.io/terraform-modules?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=terraform_modules
   [readme_header_img]: https://cloudposse.com/readme/header/img
-  [readme_header_link]: https://cloudposse.com/readme/header/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=readme_header_link
+  [readme_header_link]: https://cloudposse.com/readme/header/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=readme_header_link
   [readme_footer_img]: https://cloudposse.com/readme/footer/img
-  [readme_footer_link]: https://cloudposse.com/readme/footer/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=readme_footer_link
+  [readme_footer_link]: https://cloudposse.com/readme/footer/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=readme_footer_link
   [readme_commercial_support_img]: https://cloudposse.com/readme/commercial-support/img
-  [readme_commercial_support_link]: https://cloudposse.com/readme/commercial-support/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-terraform-ci&utm_content=readme_commercial_support_link
-  [share_twitter]: https://twitter.com/intent/tweet/?text=GitHub+Action+Terraform+CI&url=https://github.com/cloudposse/github-action-terraform-ci
-  [share_linkedin]: https://www.linkedin.com/shareArticle?mini=true&title=GitHub+Action+Terraform+CI&url=https://github.com/cloudposse/github-action-terraform-ci
-  [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudposse/github-action-terraform-ci
-  [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudposse/github-action-terraform-ci
-  [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/github-action-terraform-ci
-  [share_email]: mailto:?subject=GitHub+Action+Terraform+CI&body=https://github.com/cloudposse/github-action-terraform-ci
-  [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/github-action-terraform-ci?pixel&cs=github&cm=readme&an=github-action-terraform-ci
+  [readme_commercial_support_link]: https://cloudposse.com/readme/commercial-support/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/github-action-ci-terraform&utm_content=readme_commercial_support_link
+  [share_twitter]: https://twitter.com/intent/tweet/?text=GitHub+Action+CI+Terraform&url=https://github.com/cloudposse/github-action-ci-terraform
+  [share_linkedin]: https://www.linkedin.com/shareArticle?mini=true&title=GitHub+Action+CI+Terraform&url=https://github.com/cloudposse/github-action-ci-terraform
+  [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudposse/github-action-ci-terraform
+  [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudposse/github-action-ci-terraform
+  [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/github-action-ci-terraform
+  [share_email]: mailto:?subject=GitHub+Action+CI+Terraform&body=https://github.com/cloudposse/github-action-ci-terraform
+  [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/github-action-ci-terraform?pixel&cs=github&cm=readme&an=github-action-ci-terraform

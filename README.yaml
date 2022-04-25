@@ -5,7 +5,7 @@
 #
 
 # Name of this project
-name: GitHub Action Terraform CI
+name: GitHub Action CI Terraform
 
 # License of this project
 license: "APACHE2"
@@ -17,7 +17,7 @@ copyrights:
     year: "2022"
 
 # Canonical GitHub repo
-github_repo: cloudposse/github-action-terraform-ci
+github_repo: cloudposse/github-action-ci-terraform
 
 # Badges to display
 badges:
@@ -59,25 +59,25 @@ references:
 
 # Short description of this project
 description: |-
-  GitHub Action Terraform CI is a collection of GitHub Actions which are meant to cover all CI functionality necessary for
+  GitHub Action CI Terraform is a collection of GitHub Actions which are meant to cover all CI functionality necessary for
   Terraform projects. It also includes a chatops comment handler to allow for on-demand execution of these various tests and commands.
 
 # How to use this project
 usage: |-
-  Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add Terraform CI functionality.
+  Copy the `.github/workflows/ci-terraform.yml` file from this repository into the `.github/workflows` folder of the repository to which you'd like to add CI functionality.
   This will cause CI functionality to execute on pull requests and whenever requested via chatops.
   ### Chatops
   To request functionality via chatops, type `/run [command_name]` or `/test [test_name]` in a comment for any open pull request.
   It is possible to request multiple commands or tests in one chatops comment, e.g., `/run command_1 command_2 command_3`.
   #### COMMANDS
-  Some of Cloud Posse's Terraform CI functionality will modify repo files and push a commit with the modified files to the current branch. These commands can be invoked by commenting on a pull request with `/run [command_name]`.
+  Some of Cloud Posse's CI functionality will modify repo files and push a commit with the modified files to the current branch. These commands can be invoked by commenting on a pull request with `/run [command_name]`.
 
   The following is a complete list of all valid run commands:
     * **rebuild-readme**
     * **terraform-fmt**
     * **all** (runs all of the above)
   #### TESTS
-  Some of Cloud Posse's Terraform CI functionality will test the current state of files in the repo, but will not modify them. The results of tests will be listed along with the other status checks at the bottom of a pull request. These tests can be invoked by commenting on a pull request with `/test [test_name]`.
+  Some of Cloud Posse's CI functionality will test the current state of files in the repo, but will not modify them. The results of tests will be listed along with the other status checks at the bottom of a pull request. These tests can be invoked by commenting on a pull request with `/test [test_name]`.
 
   The following is a complete list of all valid tests:
     * **ping**
@@ -89,7 +89,7 @@ usage: |-
 # Example usage
 examples: |-
   Here's a real world example:
-  - [`github-action-terraform-ci`](https://github.com/cloudposse/github-action-terraform-ci/.github/workflows/terraform-ci.yml) - Cloud Posse's self-testing Terraform CI GitHub Action repo
+  - [`github-action-ci-terraform`](https://github.com/cloudposse/github-action-ci-terraform/.github/workflows/ci-terraform.yml) - Cloud Posse's self-testing CI Terraform GitHub Action repo
 
 include:
   - "actions/bulk-status-update/README.md"
@@ -110,7 +110,7 @@ include:
 # How to get started quickly
 quickstart: |-
   Here's how to get started...
-  1. Copy the `.github/workflows/terraform-ci.yml` file from this repository into the `.github/workflows` folder of the target repo
+  1. Copy the `.github/workflows/ci-terraform.yml` file from this repository into the `.github/workflows` folder of the target repo
   2. Open a pull request inthe target repo
   3. Optional - use chatops commands in comments on the pull request (e.g., `/test all`) as detailed in the [usage section](#usage)
 
