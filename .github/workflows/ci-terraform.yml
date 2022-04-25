@@ -8,7 +8,7 @@ on:
 jobs:
   ci-terraform:
     # only run on pull requests so long as they don't come from forks
-    if: ( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name == github.repository) ) || (github.event_name != 'pull_request')
+    if: ${{ !( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name != github.repository) ) }}
     runs-on: ubuntu-latest
     steps:
       - name: "Handle common commands and tests, including when triggered via chatops"
