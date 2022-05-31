@@ -1,4 +1,4 @@
-name: 'terraform-ci-bats'
+name: 'ci-terraform-bats'
 description: 'Run bats tests'
 inputs:
   token:
@@ -13,8 +13,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Rearrange test files (only executes on cloudposse/github-action-terraform-ci repository)"
-      if: github.repository == 'cloudposse/github-action-terraform-ci'
+    - name: "Rearrange test files (only executes on cloudposse/github-action-ci-terraform repository)"
+      if: github.repository == 'cloudposse/github-action-ci-terraform'
       shell: bash
       run: |
         mv ./test/examples .
@@ -34,15 +34,15 @@ runs:
       with:
         args: "-C test/ examples/complete"
 
-    - name: "Restore test files to original location (only executes on cloudposse/github-action-terraform-ci repository)"
-      if: github.repository == 'cloudposse/github-action-terraform-ci'
+    - name: "Restore test files to original location (only executes on cloudposse/github-action-ci-terraform repository)"
+      if: github.repository == 'cloudposse/github-action-ci-terraform'
       shell: bash
       run: |
         mv ./examples ./test
 
     - name: "Record status"
       if: always()
-      uses: cloudposse/github-action-terraform-ci/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}

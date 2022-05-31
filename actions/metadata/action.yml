@@ -1,4 +1,4 @@
-name: 'terraform-ci-metadata'
+name: 'ci-terraform-metadata'
 description: 'Extract necessary metadata for /test and /run execution'
 outputs:
   pr-sha:

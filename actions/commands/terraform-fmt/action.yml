@@ -1,4 +1,4 @@
-name: "terraform-ci-command-terraform-fmt"
+name: "ci-terraform-command-terraform-fmt"
 description: "Format terraform files"
 inputs:
   token:

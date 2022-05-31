@@ -1,4 +1,4 @@
-name: 'terraform-ci-comment-response'
+name: 'ci-terraform-comment-response'
 description: 'Respond to chatops comments to indicate the action being taken'
 inputs:
   comment_id:
@@ -44,7 +44,7 @@ runs:
           });
           commentBody = comment.body + "\n\n";
           // Make addition to comment body
-          commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
+          commentBody = commentBody + "<b>github-action-ci-terraform response:</b>" + "\n";
           commentBody = commentBody + "All the requested actions were valid." + "\n";
           commentBody = commentBody + "Valid actions: " + "<b>${{ inputs.recognized_tests }} ${{ inputs.recognized_runs }}</b>" + "\n";
           commentBody = commentBody + "The valid actions will now be executed.";
@@ -83,7 +83,7 @@ runs:
           });
           commentBody = comment.body + "\n\n";
           // Make addition to comment body
-          commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
+          commentBody = commentBody + "<b>github-action-ci-terraform response:</b>" + "\n";
           commentBody = commentBody + "All requested actions are invalid." + "\n";
           commentBody = commentBody + "Invalid actions: " + "<b>${{ inputs.unrecognized_tests }} ${{ inputs.unrecognized_runs }}</b>" + "\n";
           commentBody = commentBody + "If you would still like to run these invalid actions, please verify that they are supported via chatops and were spelled correctly. Then, create another request comment.";
@@ -122,7 +122,7 @@ runs:
           });
           commentBody = comment.body + "\n\n";
           // Make addition to comment body
-          commentBody = commentBody + "<b>github-action-terraform-ci response:</b>" + "\n";
+          commentBody = commentBody + "<b>github-action-ci-terraform response:</b>" + "\n";
           commentBody = commentBody + "There were a mixture of valid and invalid actions requested, as follows." + "\n";
           commentBody = commentBody + "Valid actions: " + "<b>${{ inputs.recognized_tests }} ${{ inputs.recognized_runs }}</b>" + "\n";
           commentBody = commentBody + "Invalid actions: " + "<b>${{ inputs.unrecognized_tests }} ${{ inputs.unrecognized_runs }}</b>" + "\n";

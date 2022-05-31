@@ -1,4 +1,4 @@
-name: 'terraform-ci-ping'
+name: 'ci-terraform-ping'
 description: 'Acknowledge ping test'
 inputs:
   token:
@@ -14,7 +14,7 @@ runs:
   using: "composite"
   steps:
     - name: "Acknowledge ping"
-      uses: cloudposse/github-action-terraform-ci/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}

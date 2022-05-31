@@ -102,89 +102,89 @@ Here's a real world example:
 
 
 
-## Sub-action: github-action-terraform-ci-bulk-status-update
+## Sub-action: github-action-ci-terraform-bulk-status-update
 
 ### Description
 
-This action handles the dispatching of status-update commands. It is called by the top-level `cloudposse/github-action-terraform-ci` command and can call the `terraform-ci-status` sub-action with a variety of inputs.
+This action handles the dispatching of status-update commands. It is called by the top-level `cloudposse/github-action-ci-terraform` command and can call the `ci-terraform-status` sub-action with a variety of inputs.
 
-## Sub-action: github-action-terraform-ci-rebuild-readme
-
-### Description
-
-This action rebuilds the `README.md` of the target repo. It is called by the `terraform-ci-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-terraform-ci` action, and it calls the `cloudposse/github-action-atuo-format` action with an input of `script-names: readme`.
-
-## Sub-action: github-action-terraform-ci-terraform-fmt
+## Sub-action: github-action-ci-terraform-rebuild-readme
 
 ### Description
 
-This action ensures that all Terraform files in the target repo are properly formatted. It is called by the `terraform-ci-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-terraform-ci` action, and it calls the `cloudposse/github-action-auto-format` action with an input value of `script-names: terraform_format`.
+This action rebuilds the `README.md` of the target repo. It is called by the `ci-terraform-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-ci-terraform` action, and it calls the `cloudposse/github-action-atuo-format` action with an input of `script-names: readme`.
 
-## Sub-action: github-action-terraform-ci-comment-response
-
-### Description
-
-This action modifies comments left on open pull requests inthe target repo, indicating which tests and commands will be executed as a result. It is called by the top-level `cloudposse/github-action-terraform-ci` action.
-
-## Sub-action: github-action-terraform-ci-handle-commands
+## Sub-action: github-action-ci-terraform-terraform-fmt
 
 ### Description
 
-This action calls any commands (not tests) that have been triggered. It is called by the top-level `cloudposse/github-action-terraform-ci` action and calls the `terraform-ci-rebuild-readme` and `terraform-ci-terraform-fmt` sub-actions.
+This action ensures that all Terraform files in the target repo are properly formatted. It is called by the `ci-terraform-handle-commands` sub-action, which is itself called by the top-level `cloudposse/github-action-ci-terraform` action, and it calls the `cloudposse/github-action-auto-format` action with an input value of `script-names: terraform_format`.
 
-## Sub-action: github-action-terraform-ci-handle-tests
-
-### Description
-
-This action calls any tests (not commands) that have been triggered. It is called by the top-level `cloudposse/github-action-terraform-ci` action and calls the `terraform-ci-bats`, `terraform-ci-ping`, `terraform-ci-readme`, and `terraform-ci-terratest` sub-actions.
-
-## Sub-action: github-action-terraform-ci-metadata
+## Sub-action: github-action-ci-terraform-comment-response
 
 ### Description
 
-This action extracts data from the triggering event, whether `pull_request` or `chatops`, which allows the top-level `cloudposse/terraform-ci` action to determine which commands and tests to execute. It is called by the top-level `cloudposse/github-action-terraform-ci` action.
+This action modifies comments left on open pull requests inthe target repo, indicating which tests and commands will be executed as a result. It is called by the top-level `cloudposse/github-action-ci-terraform` action.
 
-## Sub-action: github-action-terraform-ci-status
-
-### Description
-
-This action changes the status of a test check on a given commit. It is called by the top-level `cloudposse/github-action-terraform-ci` action and all of the test sub-actions (`terraform-ci-bats`, `terraform-ci-ping`, `terraform-ci-readme`, `terraform-ci-terratest`).
-
-## Sub-action: github-action-terraform-ci-bats
+## Sub-action: github-action-ci-terraform-handle-commands
 
 ### Description
 
-This action runs `bats` tests against the files in the target repo. It is called by the `terraform-ci-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-terraform-ci` action.
+This action calls any commands (not tests) that have been triggered. It is called by the top-level `cloudposse/github-action-ci-terraform` action and calls the `ci-terraform-rebuild-readme` and `ci-terraform-terraform-fmt` sub-actions.
 
-## Sub-action: github-action-terraform-ci-ping
-
-### Description
-
-This action runs a positive control test against the target repo, just to prove that the CI infrastructure is functioning properly. No files are changed, only the status of the test on the current commit. It is called by the `terraform-ci-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-terraform-ci` action.
-
-## Sub-action: github-action-terraform-ci-readme
+## Sub-action: github-action-ci-terraform-handle-tests
 
 ### Description
 
-This action tests the `README.md` file in the target repo was built from the `README.yaml` file using the Cloud Posse standard `make readme` function. It is called by the `terraform-ci-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-terraform-ci` action.
+This action calls any tests (not commands) that have been triggered. It is called by the top-level `cloudposse/github-action-ci-terraform` action and calls the `ci-terraform-bats`, `ci-terraform-ping`, `ci-terraform-readme`, and `ci-terraform-terratest` sub-actions.
 
-## Sub-action: github-action-terraform-ci-terratest
-
-### Description
-
-This action sets up the environment, including the environment variables, needed to run the `terratest` functionality on the target repo. It is called by the `terraform-ci-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-terraform-ci` action, and it calls the `terraform-ci-determine-terraform-version` and `terraform-ci-execute-terratest` sub-actions.
-
-## Sub-action: github-action-terraform-ci-determine-terraform-version
+## Sub-action: github-action-ci-terraform-metadata
 
 ### Description
 
-This action is a utility actions for the `cloudposse/test-harness@latest` Docker image. It determines the version of Terraform installed on the image. It is called by the `terraform-ci-terratest` and `terraform-ci-terraform-fmt` sub-actions.
+This action extracts data from the triggering event, whether `pull_request` or `chatops`, which allows the top-level `cloudposse/ci-terraform` action to determine which commands and tests to execute. It is called by the top-level `cloudposse/github-action-ci-terraform` action.
 
-## Sub-action: github-action-terraform-ci-execute-terratest
+## Sub-action: github-action-ci-terraform-status
 
 ### Description
 
-This action executes the `terratest` functionality on the target repo. It is called by the `terraform-ci-terratest` sub-action, which is called by the `terraform-ci-handle-tests` sub-action, which in turn is called by the top-level `cloudposse/github-action-terraform-ci` action.
+This action changes the status of a test check on a given commit. It is called by the top-level `cloudposse/github-action-ci-terraform` action and all of the test sub-actions (`ci-terraform-bats`, `ci-terraform-ping`, `ci-terraform-readme`, `ci-terraform-terratest`).
+
+## Sub-action: github-action-ci-terraform-bats
+
+### Description
+
+This action runs `bats` tests against the files in the target repo. It is called by the `ci-terraform-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-ci-terraform` action.
+
+## Sub-action: github-action-ci-terraform-ping
+
+### Description
+
+This action runs a positive control test against the target repo, just to prove that the CI infrastructure is functioning properly. No files are changed, only the status of the test on the current commit. It is called by the `ci-terraform-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-ci-terraform` action.
+
+## Sub-action: github-action-ci-terraform-readme
+
+### Description
+
+This action tests the `README.md` file in the target repo was built from the `README.yaml` file using the Cloud Posse standard `make readme` function. It is called by the `ci-terraform-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-ci-terraform` action.
+
+## Sub-action: github-action-ci-terraform-terratest
+
+### Description
+
+This action sets up the environment, including the environment variables, needed to run the `terratest` functionality on the target repo. It is called by the `ci-terraform-handle-tests` sub-action, which itself is called by the top-level `cloudposse/github-action-ci-terraform` action, and it calls the `ci-terraform-determine-terraform-version` and `ci-terraform-execute-terratest` sub-actions.
+
+## Sub-action: github-action-ci-terraform-determine-terraform-version
+
+### Description
+
+This action is a utility actions for the `cloudposse/test-harness@latest` Docker image. It determines the version of Terraform installed on the image. It is called by the `ci-terraform-terratest` and `ci-terraform-terraform-fmt` sub-actions.
+
+## Sub-action: github-action-ci-terraform-execute-terratest
+
+### Description
+
+This action executes the `terratest` functionality on the target repo. It is called by the `ci-terraform-terratest` sub-action, which is called by the `ci-terraform-handle-tests` sub-action, which in turn is called by the top-level `cloudposse/github-action-ci-terraform` action.
 
 
 

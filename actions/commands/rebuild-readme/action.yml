@@ -1,4 +1,4 @@
-name: "terraform-ci-command-rebuild-readme"
+name: "ci-terraform-command-rebuild-readme"
 description: "Rebuild readme"
 inputs:
   token:
