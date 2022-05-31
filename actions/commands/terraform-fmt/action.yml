@@ -7,7 +7,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: cloudposse/github-action-auto-format@review-branch
+    - uses: cloudposse/github-action-auto-format@javascript-reorganization
       with:
         script-names: terraform_format
         workflow-token: ${{ inputs.token }}
