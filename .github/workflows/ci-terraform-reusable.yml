@@ -11,28 +11,20 @@ on:
         required: true
       CLOUDFLARE_EMAIL:
         required: false
-        default: ""
       CLOUDFLARE_API_KEY:
         required: false
-        default: ""
       DD_API_KEY:
         required: false
-        default: ""
       DD_APP_KEY:
         required: false
-        default: ""
       OPSGENIE_API_KEY:
         required: false
-        default: ""
       SPOTINST_ACCOUNT:
         required: false
-        default: ""
       SPOTINST_TOKEN:
         required: false
-        default: ""
       TFE_TOKEN:
         required: false
-        default: ""
 
 jobs:
   ci-terraform:
