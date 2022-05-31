@@ -54,7 +54,7 @@ runs:
         mv ./test/examples .
 
     - name: "Determine required Terraform version"
-      uses: cloudposse/github-action-ci-terraform/actions/utilities/determine-terraform-version@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/utilities/determine-terraform-version@javascript-reorganization
       with:
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
@@ -131,7 +131,7 @@ runs:
         CLOUDFLARE_API_KEY:    ${{ inputs.CLOUDFLARE_API_KEY }}
 
     - name: "Execute Terratest functionality"
-      uses: cloudposse/github-action-ci-terraform/actions/utilities/execute-terratest@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/utilities/execute-terratest@javascript-reorganization
 
     - name: "Restore test files to original location (only executes on cloudposse/github-action-ci-terraform repository)"
       if: github.repository == 'cloudposse/github-action-ci-terraform'
@@ -141,7 +141,7 @@ runs:
 
     - name: "Record status"
       if: always()
-      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@javascript-reorganization
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}
