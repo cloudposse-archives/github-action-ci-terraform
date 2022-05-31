@@ -42,7 +42,7 @@ runs:
 
     - name: "Record status"
       if: always()
-      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@javascript-reorganization
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}
