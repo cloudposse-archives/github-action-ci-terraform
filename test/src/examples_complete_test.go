@@ -1,7 +1,6 @@
 package test
 
 import (
-	"os"
 	"strings"
 	"testing"
 
