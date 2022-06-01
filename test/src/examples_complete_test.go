@@ -50,5 +50,5 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	clusterId := terraform.Output(t, terraformOptions, "cluster_id")
 	// Verify we're getting back the outputs we expect
-	assert.Equal(t, "eg-test-memcached-test", clusterId)
+	assert.Equal(t, "eg-test-memcached-test-"+randID, clusterId)
 }
