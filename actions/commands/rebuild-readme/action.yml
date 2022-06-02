@@ -9,6 +9,6 @@ runs:
   steps:
     - uses: cloudposse/github-action-auto-format@review-branch
       with:
-        script-names: readme
+        format-task: readme
         workflow-token: ${{ inputs.token }}
         bot-name: cloudpossebot

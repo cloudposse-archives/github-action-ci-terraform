@@ -9,6 +9,6 @@ runs:
   steps:
     - uses: cloudposse/github-action-auto-format@review-branch
       with:
-        script-names: terraform_format
+        format-task: terraform
         workflow-token: ${{ inputs.token }}
         bot-name: cloudpossebot
