@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Handle common commands and tests, including when triggered via chatops"
-        uses: cloudposse/github-action-ci-terraform@javascript-reorganization
+        uses: cloudposse/github-action-ci-terraform@review-branch
         if: always()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

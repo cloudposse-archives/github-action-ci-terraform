@@ -10,7 +10,7 @@ jobs:
   ci-terraform:
     # only run on pull requests so long as they don't come from forks
     if: ${{ !( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name != github.repository) ) }}
-    uses: cloudposse/github-action-ci-terraform/.github/workflows/ci-terraform-reusable.yml@javascript-reorganization
+    uses: cloudposse/github-action-ci-terraform/.github/workflows/ci-terraform-reusable.yml@review-branch
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

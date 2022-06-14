@@ -49,7 +49,7 @@ runs:
   steps:
     - name: "Handle bats command"
       if: (contains(inputs.tests-names, 'bats') || contains(inputs.tests-names, 'all')) && (success() || failure())
-      uses: cloudposse/github-action-ci-terraform/actions/tests/bats@javascript-reorganization
+      uses: cloudposse/github-action-ci-terraform/actions/tests/bats@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: "tests-bats"
@@ -57,7 +57,7 @@ runs:
 
     - name: "Handle ping command"
       if: contains(inputs.tests-names, 'ping') || contains(inputs.tests-names, 'all') && (success() || failure())
-      uses: cloudposse/github-action-ci-terraform/actions/tests/ping@javascript-reorganization
+      uses: cloudposse/github-action-ci-terraform/actions/tests/ping@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: "tests-ping"
@@ -65,7 +65,7 @@ runs:
 
     - name: "Handle readme command"
       if: contains(inputs.tests-names, 'readme') || contains(inputs.tests-names, 'all') && (success() || failure())
-      uses: cloudposse/github-action-ci-terraform/actions/tests/readme@javascript-reorganization
+      uses: cloudposse/github-action-ci-terraform/actions/tests/readme@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: "tests-readme"
@@ -73,7 +73,7 @@ runs:
 
     - name: "Handle terratest command"
       if: contains(inputs.tests-names, 'terratest') || contains(inputs.tests-names, 'all') && (success() || failure())
-      uses: cloudposse/github-action-ci-terraform/actions/tests/terratest@javascript-reorganization
+      uses: cloudposse/github-action-ci-terraform/actions/tests/terratest@review-branch
       with:
         token: ${{ inputs.token }}
         test-name: "tests-terratest"
