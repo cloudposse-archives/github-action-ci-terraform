@@ -20,7 +20,7 @@ runs:
   using: "composite"
   steps:
     - name: "Respond to chatops comments"
-      uses: actions/github-script@v4
+      uses: actions/github-script@v6
       with:
         script: |
           const actionContext = require('${{ github.action_path }}/../../lib/actioncontext.js')(this, context, core, github, ${{ toJSON(github) }}, ${{ toJSON(inputs) }}, ${{ toJSON(steps) }})
