@@ -12,12 +12,12 @@ runs:
   steps:
     - name: "Run rebuild-readme command"
       if: (contains(inputs.commands-names, 'rebuild-readme') || contains(inputs.commands-names, 'all')) && (success() || failure())
-      uses: cloudposse/github-action-ci-terraform/actions/commands/rebuild-readme@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/commands/rebuild-readme@main
       with:
         token: ${{ inputs.token }}
 
     - name: "Run terraform command"
       if: (contains(inputs.commands-names, 'terraform-fmt') || contains(inputs.commands-names, 'all')) && (success() || failure())
-      uses: cloudposse/github-action-ci-terraform/actions/commands/terraform-fmt@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/commands/terraform-fmt@main
       with:
         token: ${{ inputs.token }}

@@ -18,7 +18,7 @@ runs:
   steps:
     - name: "Set status of bats test"
       if: contains(inputs.test-names, 'bats') || contains(inputs.test-names, 'all')
-      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@main
       with:
         token: ${{ inputs.token }}
         test-name: 'tests-bats'
@@ -27,7 +27,7 @@ runs:
 
     - name: "Set status of ping test"
       if: contains(inputs.test-names, 'ping') || contains(inputs.test-names, 'all')
-      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@main
       with:
         token: ${{ inputs.token }}
         test-name: 'tests-ping'
@@ -36,7 +36,7 @@ runs:
 
     - name: "Set status of readme test"
       if: contains(inputs.test-names, 'readme') || contains(inputs.test-names, 'all')
-      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@main
       with:
         token: ${{ inputs.token }}
         test-name: 'tests-readme'
@@ -45,7 +45,7 @@ runs:
 
     - name: "Set status of terratest test"
       if: contains(inputs.test-names, 'terratest') || contains(inputs.test-names, 'all')
-      uses: cloudposse/github-action-ci-terraform/actions/status@review-branch
+      uses: cloudposse/github-action-ci-terraform/actions/status@main
       with:
         token: ${{ inputs.token }}
         test-name: 'tests-terratest'
