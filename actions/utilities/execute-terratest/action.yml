@@ -1,17 +1,17 @@
-name: 'terraform-ci-utilities-execute-terratest'
+name: 'ci-terraform-utilities-execute-terratest'
 description: 'Execute Terratest functionality'
 inputs:
   app_checkout_path:
     description: 'The path to checkout the application repository to during the workflow run'
-    default: ./github-action-terraform-ci
+    default: ./github-action-ci-terraform
     required: false
 runs:
   using: "composite"
   steps:
-    - name: "Checkout terraform-ci repo to load script locally on runner"
+    - name: "Checkout ci-terraform repo to load script locally on runner"
       uses: actions/checkout@v2
       with:
-        repository: cloudposse/github-action-terraform-ci
+        repository: cloudposse/github-action-ci-terraform
         path: ${{ inputs.app_checkout_path }}
 
     - name: "Determine required Terraform version"

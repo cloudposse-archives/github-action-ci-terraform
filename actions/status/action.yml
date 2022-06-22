@@ -1,4 +1,4 @@
-name: 'terraform-ci-status'
+name: 'ci-terraform-status'
 description: 'Update the status for a given commit and respond to chatops comments with a thumb up or down'
 inputs:
   token:

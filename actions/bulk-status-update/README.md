@@ -1,6 +1,6 @@
-## Sub-action: github-action-terraform-ci-bulk-status-update
+## Sub-action: github-action-ci-terraform-bulk-status-update
 
 ### Description
 
-This action handles the dispatching of status-update commands. It is called by the top-level `cloudposse/github-action-terraform-ci` command and can call the `terraform-ci-status` sub-action with a variety of inputs.
+This action handles the dispatching of status-update commands. It is called by the top-level `cloudposse/github-action-ci-terraform` command and can call the `ci-terraform-status` sub-action with a variety of inputs.
 

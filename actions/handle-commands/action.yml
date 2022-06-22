@@ -1,16 +1,23 @@
-name: 'terraform-ci-run-commands'
+name: 'ci-terraform-run-commands'
 description: 'Run all requested commands'
 inputs:
   commands-names:
     description: "Names of all commands that will be called"
+    required: true
+  token:
+    description: 'Token that will be used to checkout the repo. The standard secrets.GITHUB_TOKEN token should do.'
     required: true
 runs:
   using: "composite"
   steps:
     - name: "Run rebuild-readme command"
       if: (contains(inputs.commands-names, 'rebuild-readme') || contains(inputs.commands-names, 'all')) && (success() || failure())
-      uses: cloudposse/github-action-terraform-ci/actions/commands/rebuild-readme@main
+      uses: cloudposse/github-action-ci-terraform/actions/commands/rebuild-readme@main
+      with:
+        token: ${{ inputs.token }}
 
     - name: "Run terraform command"
       if: (contains(inputs.commands-names, 'terraform-fmt') || contains(inputs.commands-names, 'all')) && (success() || failure())
-      uses: cloudposse/github-action-terraform-ci/actions/commands/terraform-fmt@main
+      uses: cloudposse/github-action-ci-terraform/actions/commands/terraform-fmt@main
+      with:
+        token: ${{ inputs.token }}

@@ -1,18 +1,39 @@
-name: "terraform-ci"
+name: "ci-terraform-reusable"
 on:
-  issue_comment:
-    types: [created]
-  pull_request:
-    types: [opened, synchronized, reopened]
+  workflow_call:
+    secrets:
+      token:
+        description: "github token"
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      CLOUDFLARE_EMAIL:
+        required: false
+      CLOUDFLARE_API_KEY:
+        required: false
+      DD_API_KEY:
+        required: false
+      DD_APP_KEY:
+        required: false
+      OPSGENIE_API_KEY:
+        required: false
+      SPOTINST_ACCOUNT:
+        required: false
+      SPOTINST_TOKEN:
+        required: false
+      TFE_TOKEN:
+        required: false
 
 jobs:
-  terraform-ci:
+  ci-terraform:
     # only run on pull requests so long as they don't come from forks
-    if: ( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name == github.repository) ) || (github.event_name != 'pull_request')
+    if: ${{ !( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name != github.repository) ) }}
     runs-on: ubuntu-latest
     steps:
       - name: "Handle common commands and tests, including when triggered via chatops"
-        uses: cloudposse/github-action-terraform-ci@main
+        uses: cloudposse/github-action-ci-terraform@review-branch
         if: always()
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

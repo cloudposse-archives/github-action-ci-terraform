@@ -1,4 +1,4 @@
-name: 'terraform-ci-determine-terraform-version'
+name: 'ci-terraform-determine-terraform-version'
 description: 'Determine the version of Terraform installe in the latest cloudposse/test-harness Docker image'
 inputs:
   base-ref:
@@ -6,7 +6,7 @@ inputs:
     required: true
   app_checkout_path:
     description: 'The path to checkout the application repository to during the workflow run'
-    default: ./github-action-terraform-ci
+    default: ./github-action-ci-terraform
     required: false
   labels:
     description: "Labels on this PR, including associated metadata"
@@ -14,10 +14,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: "Checkout terraform-ci repo to load script locally on runner"
+    - name: "Checkout ci-terraform repo to load script locally on runner"
       uses: actions/checkout@v2
       with:
-        repository: cloudposse/github-action-terraform-ci
+        repository: cloudposse/github-action-ci-terraform
         path: ${{ inputs.app_checkout_path }}
 
     - name: "Determine required Terraform version"

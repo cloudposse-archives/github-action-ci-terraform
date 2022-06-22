@@ -1,4 +1,4 @@
-name: 'terraform-ci-readme'
+name: 'ci-terraform-readme'
 description: 'Run readme tests'
 inputs:
   token:
@@ -25,7 +25,7 @@ runs:
 
     - name: "Record status"
       if: always()
-      uses: cloudposse/github-action-terraform-ci/actions/status@main
+      uses: cloudposse/github-action-ci-terraform/actions/status@main
       with:
         token: ${{ inputs.token }}
         test-name: ${{ inputs.test-name }}

@@ -1,0 +1,25 @@
+# Please see
+# https://github.com/cloudposse/github-action-auto-release/blob/main/README.md
+# and
+# https://github.com/release-drafter/release-drafter
+# for information on customizing this action's behavior.
+name: "auto-release"
+on:
+  push:
+    branches:
+      - main
+      - master
+      - production
+  workflow_dispatch:
+
+jobs:
+  auto-release:
+    # For development reasons, this action is pinned to the `main` branch.
+    # However, we recommend that you choose a specific release to pin to.
+    # Consult https://github.com/cloudposse/github-action-auto-release/releases for a list of available releases.
+    uses: cloudposse/github-action-auto-release/.github/workflows/auto-release-reusable.yml@main
+    with:
+      prerelease: false
+      publish: true
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}

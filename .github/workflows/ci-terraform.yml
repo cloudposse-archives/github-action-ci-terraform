@@ -1,0 +1,25 @@
+name: "ci-terraform"
+on:
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [opened, synchronized, reopened]
+
+jobs:
+  # Handle common commands and tests, including when triggered via chatops
+  ci-terraform:
+    # only run on pull requests so long as they don't come from forks
+    if: ${{ !( (github.event_name == 'pull_request') && (github.event.pull_request.head.repo.full_name != github.repository) ) }}
+    uses: cloudposse/github-action-ci-terraform/.github/workflows/ci-terraform-reusable.yml@review-branch
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+      CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+      DD_API_KEY: ${{ secrets.DD_API_KEY }}
+      DD_APP_KEY: ${{ secrets.DD_APP_KEY }}
+      OPSGENIE_API_KEY: ${{ secrets.OPSGENIE_API_KEY }}
+      SPOTINST_ACCOUNT: ${{ secrets.SPOTINST_ACCOUNT }}
+      SPOTINST_TOKEN: ${{ secrets.SPOTINST_TOKEN }}
+      TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
