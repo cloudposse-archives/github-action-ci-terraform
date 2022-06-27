@@ -59,6 +59,14 @@ runs:
         base-ref: ${{ inputs.base-ref }}
         labels: ${{ inputs.labels }}
 
+    # https://github.com/marketplace/actions/configure-aws-credentials-action-for-github-actions
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        role-to-assume: ${{ env.IAM_ROLE_ARN }}
+        role-session-name: ${{ env.IAM_ROLE_SESSION_NAME }}
+
     - name: "Inject secrets"
       shell: bash
       run: |
