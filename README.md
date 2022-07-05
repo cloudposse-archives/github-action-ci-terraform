@@ -98,7 +98,7 @@ Here's how to get started...
 ## Examples
 
 Here's a real world example:
-- [`github-action-ci-terraform`](https://github.com/cloudposse/github-action-ci-terraform/.github/workflows/ci-terraform.yml) - Cloud Posse's self-testing CI Terraform GitHub Action repo
+- [`github-action-ci-terraform`](https://github.com/cloudposse/github-action-ci-terraform/blob/main/.github/workflows/ci-terraform.yml) - Cloud Posse's self-testing CI Terraform GitHub Action repo
 
 
 
